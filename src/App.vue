@@ -18,7 +18,7 @@ import { useRoute,useRouter } from 'vue-router';
     </RouterLink>
     <NavBar/>
   </header>
-  <main class="bg-zinc-900 flex justify-center items-center flex-col">
+  <main class="bg-zinc-900 flex items-center flex-col min-h-screen">
     <RouterView></RouterView>
   </main>
 </template>
