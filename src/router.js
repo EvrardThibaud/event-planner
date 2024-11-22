@@ -2,12 +2,30 @@ import { createRouter, createWebHistory } from 'vue-router';
 
 import Home from './views/Home.vue';
 import AboutUs from './views/AboutUs.vue';
+import Calendar from './views/Calendar.vue';
+import Event from './views/Event.vue';
+import Chat from './views/Chat.vue';
 
 const routes = [
   {
     path: '/',
     name: 'Home',
     component: Home,
+  },
+  {
+    path: '/calendar',
+    name: 'Calendar',
+    component: Calendar,
+  },
+  {
+    path: '/event',
+    name: 'Event',
+    component: Event,
+  },
+  {
+    path: '/chat',
+    name: 'Chat',
+    component: Chat,
   },
   {
     path: '/about',

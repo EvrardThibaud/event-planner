@@ -3,20 +3,24 @@
 </script>
 
 <template>
-  <nav class="text-1xl text-white w-full flex justify-evenly">
-    <RouterLink class="" :to="{name: 'Home'}" >
+  <nav class="text-1xl text-gray-200 w-full flex justify-evenly">
+    <RouterLink class="hover:text-green-300 " :to="{name: 'Home'}" >
         Home
     </RouterLink>
 
-    <RouterLink class="" :to="{name: 'Calendar'}" >
+    <RouterLink class="hover:text-green-300 " :to="{name: 'Calendar'}" >
         Calendar
     </RouterLink>
 
-    <RouterLink class="" :to="{name: 'Event'}" >
+    <RouterLink class="hover:text-green-300 " :to="{name: 'Event'}" >
         Event
     </RouterLink>
+
+    <RouterLink class="hover:text-green-300 " :to="{name: 'Chat'}" >
+        Chat
+    </RouterLink>
   
-    <RouterLink class="" :to="{name: 'AboutUs'}" >
+    <RouterLink class="hover:text-green-300 " :to="{name: 'AboutUs'}" >
         About Us
     </RouterLink>
   </nav>

@@ -12,13 +12,13 @@ import { useRoute,useRouter } from 'vue-router';
 </script>
 
 <template>
-  <header class="h-14 bg-zinc-800 border-b-green-200 border-b-2 flex justify-between items-center">
+  <header class="h-14 bg-zinc-900 border-b-green-200 border-b-2 flex justify-between items-center">
     <RouterLink class="font-bold text-green-300 ml-4 mr-4 min-w-fit" :to="{name: 'Home'}" >
-      Event Planner
+      EventPlanner+
     </RouterLink>
     <NavBar/>
   </header>
-  <main>
+  <main class="bg-zinc-900 flex justify-center items-center flex-col">
     <RouterView></RouterView>
   </main>
 </template>
