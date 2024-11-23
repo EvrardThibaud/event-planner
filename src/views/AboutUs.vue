@@ -10,8 +10,13 @@
     </h1>
   </section>
   
-  <section class=" w-1/2 pt-28 pb-12 flex flex-col gap-5">
-    <MemberCard></MemberCard>
+  <section class=" w-1/2 pt-28 pb-12 flex flex-wrap gap-2">
+    <h2 class="text-green-300">Our Team</h2>
+    <div class=" flex flex-wrap gap-2">
+      <MemberCard></MemberCard>
+      <MemberCard :name="'Thibaud'" :src="'../../public/thibaudevrard.svg'" ></MemberCard>
+      <MemberCard :name="'Mateo'" :src="'../../public/petitcroco.png'" ></MemberCard>
+    </div>
 
   </section>
 
