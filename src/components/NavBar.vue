@@ -3,7 +3,7 @@
 </script>
 
 <template>
-  <nav class="text-1xl text-gray-200 w-full flex justify-evenly">
+  <nav class="text-1xl text-gray-200 w-1/2 flex justify-evenly">
     <RouterLink class="hover:text-green-300 " :to="{name: 'Home'}" >
         Home
     </RouterLink>

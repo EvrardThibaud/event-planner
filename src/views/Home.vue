@@ -3,7 +3,7 @@
 </script>
 
 <template>
-    <section class=" w-1/2 pt-12 pb-12 flex flex-col gap-5">
+    <section class=" w-1/2 pt-28 pb-12 flex flex-col gap-5">
         <h1 class="w-full text-center text-7xl text-green-300">
             Welcome To <br> <bold class="font-bold">EventPlanner+</bold>
         </h1>
