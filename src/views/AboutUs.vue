@@ -1,13 +1,19 @@
 <script setup>
-
+  import MemberCard from '../components/MemberCard.vue'
 </script>
 
 <template>
+
   <section class=" w-1/2 pt-28 pb-12 flex flex-col gap-5">
-        <h1 class="w-full text-center text-5xl text-green-300">
-            About Us
-        </h1>
-    </section>
+    <h1 class="w-full text-center text-5xl text-green-300">
+      About Us
+    </h1>
+  </section>
+  
+  <section class=" w-1/2 pt-28 pb-12 flex flex-col gap-5">
+    <MemberCard></MemberCard>
+
+  </section>
 
     <section class=" w-1/2 pt-12 pb-12 flex flex-col gap-5">
         <h2 class="text-green-300">Our Mission</h2>
