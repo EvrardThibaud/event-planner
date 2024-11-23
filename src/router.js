@@ -5,6 +5,7 @@ import AboutUs from './views/AboutUs.vue';
 import Calendar from './views/Calendar.vue';
 import Event from './views/Event.vue';
 import Chat from './views/Chat.vue';
+import ContactUs from './views/ContactUs.vue';
 
 const routes = [
   {
@@ -21,6 +22,11 @@ const routes = [
     path: '/event',
     name: 'Event',
     component: Event,
+  },
+  {
+    path: '/contact',
+    name: 'ContactUs',
+    component: ContactUs,
   },
   {
     path: '/chat',

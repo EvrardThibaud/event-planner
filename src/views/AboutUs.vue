@@ -34,6 +34,12 @@
         </p>
     </section>
 
+    <section>
+      <RouterLink :to="{name: 'ContactUs'}" >
+        <button class="m-12 h-10 w-24 text-green-50 bg-green-900 rounded">Contact Us ></button>
+      </RouterLink>
+    </section>
+
 </template>
 
 <style scoped>
