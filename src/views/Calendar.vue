@@ -77,32 +77,33 @@
   }
 
   const event = {
-    'summary': 'Judo',
-    'location': '415 carrer de Valencie',
-    'description': 'on va faire du judo',
-    'start': {
-      'dateTime': '2024-11-26T09:00:00-07:00',
-      'timeZone': 'France/Paris'
+    summary: 'Judo',
+    location: '415 carrer de Valencie',
+    description: 'On va faire du judo',
+    start: {
+      dateTime: '2024-11-26T09:00:00+01:00',  // Heure correcte en Europe/Paris
+      timeZone: 'Europe/Paris',  // Corrigé la timezone
     },
-    'end': {
-      'dateTime': '2024-11-26T09:00:00-07:00',
-      'timeZone': 'France/Paris'
+    end: {
+      dateTime: '2024-11-26T10:00:00+01:00',  // Exemple: l'événement dure 1 heure
+      timeZone: 'Europe/Paris',  // Corrigé la timezone
     },
-    'recurrence': [
-      'RRULE:FREQ=DAILY;COUNT=2'
+    recurrence: [
+      'RRULE:FREQ=DAILY;COUNT=2',  // L'événement se répète tous les jours pendant 2 jours
     ],
-    'attendees': [
-      {'email': 'lpage@example.com'},
-      {'email': 'sbrin@example.com'}
+    attendees: [
+      { email: 'lpage@example.com' },
+      { email: 'sbrin@example.com' },
     ],
-    'reminders': {
-      'useDefault': false,
-      'overrides': [
-        {'method': 'email', 'minutes': 24 * 60},
-        {'method': 'popup', 'minutes': 10}
-      ]
-    }
+    reminders: {
+      useDefault: false,
+      overrides: [
+        { method: 'email', minutes: 24 * 60 },  // Rappel par email 24 heures avant
+        { method: 'popup', minutes: 10 },  // Rappel par popup 10 minutes avant
+      ],
+    },
   };
+
 
   async function handleAddEventClick() {
     let response;
