@@ -6,6 +6,7 @@ import Calendar from './views/Calendar.vue';
 import Chat from './views/Chat.vue';
 import ContactUs from './views/ContactUs.vue';
 import GoogleAuth from './views/GoogleAuth.vue';
+import Error404 from './views/Error404.vue';
 
 const routes = [
   {
@@ -38,6 +39,11 @@ const routes = [
     name: 'AboutUs',
     component: AboutUs,
   },
+  {
+    path: '/:catchAll(.*)',  // Cette route attrape toutes les autres URLs
+    name: 'Error404',
+    component: Error404,
+  }
 ];
 
 export default createRouter({
