@@ -6,6 +6,7 @@ import Calendar from './views/Calendar.vue';
 import Event from './views/Event.vue';
 import Chat from './views/Chat.vue';
 import ContactUs from './views/ContactUs.vue';
+import GoogleAuth from './views/GoogleAuth.vue';
 
 const routes = [
   {
@@ -27,6 +28,11 @@ const routes = [
     path: '/contact',
     name: 'ContactUs',
     component: ContactUs,
+  },
+  {
+    path: '/google',
+    name: 'GoogleAuth',
+    component: GoogleAuth,
   },
   {
     path: '/chat',
