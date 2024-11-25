@@ -20,11 +20,6 @@ const routes = [
     component: Calendar,
   },
   {
-    path: '/event',
-    name: 'Event',
-    component: Event,
-  },
-  {
     path: '/contact',
     name: 'ContactUs',
     component: ContactUs,

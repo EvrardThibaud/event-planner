@@ -12,10 +12,6 @@
         Calendar
     </RouterLink>
 
-    <RouterLink class="hover:text-green-300 " :to="{name: 'Event'}" >
-        Event
-    </RouterLink>
-
     <RouterLink class="hover:text-green-300 " :to="{name: 'Chat'}" >
         Chat
     </RouterLink>
