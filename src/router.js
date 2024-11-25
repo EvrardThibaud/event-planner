@@ -3,7 +3,6 @@ import { createRouter, createWebHistory } from 'vue-router';
 import Home from './views/Home.vue';
 import AboutUs from './views/AboutUs.vue';
 import Calendar from './views/Calendar.vue';
-import Event from './views/Event.vue';
 import Chat from './views/Chat.vue';
 import ContactUs from './views/ContactUs.vue';
 import GoogleAuth from './views/GoogleAuth.vue';
