@@ -72,7 +72,7 @@
       return;
     }
 
-    console.log(events[1]);
+    eventsList.value = [];
 
     const output = events.map(event => ({
       id: event.id,
@@ -113,6 +113,23 @@
     },
   };
 
+  async function handleRemoveEventClick(id){
+    let response;
+    try {
+      const request = {
+        calendarId: 'primary',
+        eventId: id
+      };
+      response = await gapi.client.calendar.events.delete(request);
+      if (response.status === 204) {
+        listUpcomingEvents();
+      }
+    } catch (err) {
+      console.log(err);
+      return;
+    }
+  }
+
   async function handleAddEventClick() {
     let response;
     try {
@@ -121,8 +138,11 @@
         resource: event
       };
       response = await gapi.client.calendar.events.insert(request);
+      if (response.status === 200) {
+        listUpcomingEvents();
+      }
     } catch (err) {
-      contentArea.value.innerText = contentArea.value.innerText + err.message ;
+      console.log(err);
       return;
     }
   }
@@ -139,13 +159,14 @@
   <div class="text-white">
     <h1 class="pt-24">Calendar</h1>
     <ul>
-      <li v-for="event in eventsList" class= "b-white border-2 m-2 p-2">
+      <li v-for="event in eventsList" class= "b-white border-2 m-2 p-2" :key="event.id">
         <p>Titre : {{ event.summary }}</p>
         <p>Id : {{ event.id }}</p>
         <p>De : {{ event.start }}</p>
         <p>A : {{ event.end }}</p>
         <p v-if="event.location">Where : {{ event.location }}</p>
         <p v-if="event.description">Description : {{ event.description }}</p>
+        <button @click="handleRemoveEventClick(event.id)">Delete this event</button>
       </li>
     </ul>
     <pre ref="contentArea" style="white-space: pre-wrap;"></pre>
