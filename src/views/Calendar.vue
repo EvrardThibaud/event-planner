@@ -81,6 +81,7 @@
       end: event.end?.dateTime || event.end?.date || null, // Ajout de la fin si nécessaire
       location: event.location || null, // Facultatif, si l'événement a une localisation
       description: event.description || null, // Facultatif, si l'événement a une description
+      viewMore: false,
     }));
     eventsList.value.push(...output);
   }
@@ -147,6 +148,11 @@
     }
   }
 
+  async function handleViewMore(id){
+    const event = eventsList.value.find(event => event.id === id);
+    event.viewMore = !event.viewMore;  
+  }
+
   onMounted(() => {
     contentArea.value.innerText = '';
 
@@ -159,13 +165,14 @@
   <div class="text-white">
     <h1 class="pt-24">Calendar</h1>
     <ul>
-      <li v-for="event in eventsList" class= "b-white border-2 m-2 p-2" :key="event.id">
+      <li v-for="event in eventsList" class= "b-white border-2 m-2 p-2" :key="event.id" @click="handleViewMore(event.id)">
         <p>Titre : {{ event.summary }}</p>
-        <p>Id : {{ event.id }}</p>
         <p>De : {{ event.start }}</p>
         <p>A : {{ event.end }}</p>
-        <p v-if="event.location">Where : {{ event.location }}</p>
-        <p v-if="event.description">Description : {{ event.description }}</p>
+        <div v-if="event.viewMore">
+          <p v-if="event.location">Where : {{ event.location }}</p>
+          <p v-if="event.description">Description : {{ event.description }}</p>
+        </div>
         <button @click="handleRemoveEventClick(event.id)">Delete this event</button>
       </li>
     </ul>
