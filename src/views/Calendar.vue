@@ -3,6 +3,8 @@
 
   const contentArea = ref(null);
 
+  const eventsList = ref([]);
+
   const DISCOVERY_DOC = 'https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest';
 
   let tokenClient;
@@ -69,11 +71,18 @@
       contentArea.value.innerText = 'No events found.';
       return;
     }
-    const output = events.reduce(
-      (str, event) => `${str}${event.summary} (${event.start.dateTime || event.start.date})\n`,
-      'Events:\n'
-    );
-    contentArea.value.innerText = output;
+
+    console.log(events[1]);
+
+    const output = events.map(event => ({
+      id: event.id,
+      summary: event.summary,
+      start: event.start.dateTime || event.start.date,
+      end: event.end?.dateTime || event.end?.date || null, // Ajout de la fin si nécessaire
+      location: event.location || null, // Facultatif, si l'événement a une localisation
+      description: event.description || null, // Facultatif, si l'événement a une description
+    }));
+    eventsList.value.push(...output);
   }
 
   const event = {
@@ -104,7 +113,6 @@
     },
   };
 
-
   async function handleAddEventClick() {
     let response;
     try {
@@ -130,6 +138,16 @@
 <template>
   <div class="text-white">
     <h1 class="pt-24">Calendar</h1>
+    <ul>
+      <li v-for="event in eventsList" class= "b-white border-2 m-2 p-2">
+        <p>Titre : {{ event.summary }}</p>
+        <p>Id : {{ event.id }}</p>
+        <p>De : {{ event.start }}</p>
+        <p>A : {{ event.end }}</p>
+        <p v-if="event.location">Where : {{ event.location }}</p>
+        <p v-if="event.description">Description : {{ event.description }}</p>
+      </li>
+    </ul>
     <pre ref="contentArea" style="white-space: pre-wrap;"></pre>
     <button class="text-white" @click="handleAddEventClick">Add event</button>
   </div>
