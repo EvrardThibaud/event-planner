@@ -1,22 +1,21 @@
 <script setup>
   import { ref, onMounted } from 'vue';
-  import {gisLoaded, gapiLoaded} from "../composable/GoogleAuth.js";
+  import {gisLoaded, gapiLoaded, loadScript} from "../composable/GoogleAuth.js";
 
+  
 
   const contentArea = ref(null);
   const showCalendar = ref(null);
 
   const eventsList = ref([]);
 
+  const newEvent = ref({
+        title: '',
+        datetime: '',
+        location: '',
+        description: ''
+    });
 
-  function loadScript(src, onload) {
-    const script = document.createElement('script');
-    script.src = src;
-    script.async = true;
-    script.defer = true;
-    script.onload = onload;
-    document.head.appendChild(script);
-  }
 
   async function listUpcomingEvents() {
     showCalendar.value.innerText = 'Loading...';
@@ -104,20 +103,22 @@
   }
 
   async function handleAddEventClick() {
-    let response;
-    try {
-      const request = {
-        calendarId: 'primary',
-        resource: event
-      };
-      response = await gapi.client.calendar.events.insert(request);
-      if (response.status === 200) {
-        listUpcomingEvents();
-      }
-    } catch (err) {
-      console.log(err);
-      return;
-    }
+    console.log(newEvent.value);
+    
+    // let response;
+    // try {
+    //   const request = {
+    //     calendarId: 'primary',
+    //     resource: event
+    //   };
+    //   response = await gapi.client.calendar.events.insert(request);
+    //   if (response.status === 200) {
+    //     listUpcomingEvents();
+    //   }
+    // } catch (err) {
+    //   console.log(err);
+    //   return;
+    // }
   }
 
   async function handleViewMore(id){
@@ -131,6 +132,14 @@
 
     loadScript('https://apis.google.com/js/api.js', gapiLoaded);
     loadScript('https://accounts.google.com/gsi/client', gisLoaded);
+
+    const input = document.getElementById('datetime');
+  const now = new Date();
+
+  // Format en 'YYYY-MM-DDTHH:mm' pour datetime-local
+  const formattedNow = now.toISOString().slice(0, 16); // Couper la partie inutilisée (secondes et fuseau horaire)
+
+  input.min = formattedNow;
   });
 </script>
 
@@ -150,7 +159,38 @@
       </li>
     </ul>
     <pre ref="contentArea" id="content_area" style="white-space: pre-wrap;">aaad</pre>
-    <button class="text-white" @click="handleAddEventClick">Add event</button>
+    
+
+    <form @submit.prevent="submitForm" class="flex flex-col text-black">
+        <label for="title">Title</label>
+        <input
+          id="title"
+          type="text"
+          v-model="newEvent.title"
+          placeholder="My future event"
+        />
+        <label for="datetime">Date</label>
+        <input
+          id="datetime"
+          type="datetime-local"
+          v-model="newEvent.datetime"
+        />
+        <label for="location">Location</label>
+        <input
+          id="location"
+          type="text"
+          v-model="newEvent.location"
+        />
+        <label for="description">Description</label>
+        <textarea
+          id="description"
+          v-model="newEvent.description"
+        ></textarea>
+      <button class="text-white" @click="handleAddEventClick">Add event</button>
+    </form>
+
+
+    
     <button ref="showCalendar" id="show_calendar" @click="listUpcomingEvents">Show Calendar</button>
   </div>
 </template>

@@ -1,18 +1,9 @@
 <script setup>
 import { ref, onMounted } from 'vue';
-import { gapiLoaded, gisLoaded, handleAuthClick, handleSignoutClick, maybeEnableButtons } from "../composable/GoogleAuth.js";
+import { gapiLoaded, gisLoaded, handleAuthClick, handleSignoutClick, loadScript } from "../composable/GoogleAuth.js";
 
 const authorize_button = ref(null);
 const signout_button = ref(null);
-
-function loadScript(src, onload) {
-  const script = document.createElement('script');
-  script.src = src;
-  script.async = true;
-  script.defer = true;
-  script.onload = onload;
-  document.head.appendChild(script);
-}
 
 onMounted(() => {
   authorize_button.value.style.visibility = 'hidden';

@@ -1,5 +1,3 @@
-import { ref } from 'vue';
-
 const API_KEY = 'AIzaSyAdn8fbCMXxyOat2ZyWkmVed54w_Q6tgqg';
 const CLIENT_ID = '241948682819-u21tselap4mi8p5u1ktvd0453begefdr.apps.googleusercontent.com';
 const SCOPES = 'https://www.googleapis.com/auth/calendar';
@@ -8,7 +6,14 @@ let tokenClient;
 let gapiInited = false;
 let gisInited = false;
 
-
+export function loadScript(src, onload) {
+    const script = document.createElement('script');
+    script.src = src;
+    script.async = true;
+    script.defer = true;
+    script.onload = onload;
+    document.head.appendChild(script);
+  }
 
 export async function gapiLoaded() {
     gapi.load('client', initializeGapiClient);
