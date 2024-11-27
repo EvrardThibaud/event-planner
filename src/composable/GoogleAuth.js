@@ -1,3 +1,5 @@
+import { ref } from 'vue';
+
 const API_KEY = 'AIzaSyAdn8fbCMXxyOat2ZyWkmVed54w_Q6tgqg';
 const CLIENT_ID = '241948682819-u21tselap4mi8p5u1ktvd0453begefdr.apps.googleusercontent.com';
 const SCOPES = 'https://www.googleapis.com/auth/calendar';
@@ -6,7 +8,9 @@ let tokenClient;
 let gapiInited = false;
 let gisInited = false;
 
-export function gapiLoaded() {
+
+
+export async function gapiLoaded() {
     gapi.load('client', initializeGapiClient);
 }
 
@@ -22,12 +26,26 @@ async function initializeGapiClient() {
     const savedToken = localStorage.getItem('google_access_token');
     if (savedToken) {
         gapi.client.setToken({ access_token: savedToken });
-        document.getElementById('signout_button').style.visibility = 'visible';
-        document.getElementById('authorize_button').innerText = 'Refresh';
+        const signoutButton = document.getElementById('signout_button')
+        const authorizeButton = document.getElementById('authorize_button')
+        if (signoutButton && authorizeButton){
+            signoutButton.style.visibility = 'visible';
+            authorizeButton.innerText = 'Refresh';
+        } 
+
+        const showCalendar = document.getElementById('show_calendar')
+        if (showCalendar){
+            showCalendar.style.visibility = 'visible'; 
+        }
+    }else {
+        const contentArea = document.getElementById('content_area')
+        if (contentArea){
+            contentArea.innerText = 'You are not connected';
+        }
     }
 }
 
-export function gisLoaded() {
+export async function gisLoaded() {
     tokenClient = google.accounts.oauth2.initTokenClient({
         client_id: CLIENT_ID,
         scope: SCOPES,
@@ -38,8 +56,9 @@ export function gisLoaded() {
 }
 
 export function maybeEnableButtons() {
-    if (gapiInited && gisInited) {
-        document.getElementById('authorize_button').style.visibility = 'visible';
+    const authorizeButton = document.getElementById('authorize_button');
+    if (authorizeButton) {
+        authorizeButton.style.visibility = 'visible';
     }
 }
 

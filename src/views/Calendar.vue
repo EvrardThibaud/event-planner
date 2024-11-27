@@ -1,13 +1,13 @@
 <script setup>
   import { ref, onMounted } from 'vue';
+  import {gisLoaded, gapiLoaded} from "../composable/GoogleAuth.js";
+
 
   const contentArea = ref(null);
+  const showCalendar = ref(null);
 
   const eventsList = ref([]);
 
-  const DISCOVERY_DOC = 'https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest';
-
-  let tokenClient;
 
   function loadScript(src, onload) {
     const script = document.createElement('script');
@@ -18,38 +18,9 @@
     document.head.appendChild(script);
   }
 
-  const API_KEY = 'AIzaSyAdn8fbCMXxyOat2ZyWkmVed54w_Q6tgqg';
-  const CLIENT_ID = '241948682819-u21tselap4mi8p5u1ktvd0453begefdr.apps.googleusercontent.com';
-  const SCOPES = 'https://www.googleapis.com/auth/calendar';
-
-  function gapiLoaded() {
-    gapi.load('client', initializeGapiClient);
-  }
-
-  function gisLoaded() {
-    tokenClient = google.accounts.oauth2.initTokenClient({
-    client_id: CLIENT_ID,
-    scope: SCOPES,
-    callback: '', 
-    });
-  }
-
-  async function initializeGapiClient() {
-    await gapi.client.init({
-    apiKey: API_KEY,
-    discoveryDocs: [DISCOVERY_DOC],
-    });
-
-    const savedToken = localStorage.getItem('google_access_token');
-    if (savedToken) {
-      gapi.client.setToken({ access_token: savedToken });
-      await listUpcomingEvents();
-    } else {
-      contentArea.value.innerText = 'You are not connected';
-    }
-  }
-
   async function listUpcomingEvents() {
+    showCalendar.value.innerText = 'Loading...';
+
     let response;
     try {
       const request = {
@@ -65,15 +36,15 @@
       contentArea.value.innerText = err.message;
       return;
     }
-
+    
     const events = response.result.items;
     if (!events || events.length === 0) {
       contentArea.value.innerText = 'No events found.';
       return;
     }
-
+    
     eventsList.value = [];
-
+    
     const output = events.map(event => ({
       id: event.id,
       summary: event.summary,
@@ -84,6 +55,7 @@
       viewMore: false,
     }));
     eventsList.value.push(...output);
+    showCalendar.value.style.visibility = 'hidden';
   }
 
   const event = {
@@ -91,16 +63,16 @@
     location: '415 carrer de Valencie',
     description: 'On va faire du judo',
     start: {
-      dateTime: '2024-11-26T09:00:00+01:00',  // Heure correcte en Europe/Paris
+      dateTime: '2024-11-28T08:00:00+01:00',  // Heure correcte en Europe/Paris
       timeZone: 'Europe/Paris',  // Corrigé la timezone
     },
     end: {
-      dateTime: '2024-11-26T10:00:00+01:00',  // Exemple: l'événement dure 1 heure
+      dateTime: '2024-11-28T10:00:00+01:00',  // Exemple: l'événement dure 1 heure
       timeZone: 'Europe/Paris',  // Corrigé la timezone
     },
-    recurrence: [
-      'RRULE:FREQ=DAILY;COUNT=2',  // L'événement se répète tous les jours pendant 2 jours
-    ],
+    // recurrence: [
+    //   'RRULE:FREQ=DAILY;COUNT=2',  // L'événement se répète tous les jours pendant 2 jours
+    // ],
     attendees: [
       { email: 'lpage@example.com' },
       { email: 'sbrin@example.com' },
@@ -155,6 +127,7 @@
 
   onMounted(() => {
     contentArea.value.innerText = '';
+    showCalendar.value.style.visibility = 'hidden';
 
     loadScript('https://apis.google.com/js/api.js', gapiLoaded);
     loadScript('https://accounts.google.com/gsi/client', gisLoaded);
@@ -176,8 +149,9 @@
         <button @click="handleRemoveEventClick(event.id)">Delete this event</button>
       </li>
     </ul>
-    <pre ref="contentArea" style="white-space: pre-wrap;"></pre>
+    <pre ref="contentArea" id="content_area" style="white-space: pre-wrap;">aaad</pre>
     <button class="text-white" @click="handleAddEventClick">Add event</button>
+    <button ref="showCalendar" id="show_calendar" @click="listUpcomingEvents">Show Calendar</button>
   </div>
 </template>
 
