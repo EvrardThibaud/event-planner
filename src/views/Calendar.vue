@@ -7,6 +7,7 @@
   const contentArea = ref(null);
   const showCalendar = ref(null);
 
+  const isAdding = ref(false);
   const eventsList = ref([]);
 
   const newEvent = ref({
@@ -56,6 +57,7 @@
     }));
     eventsList.value.push(...output);
     showCalendar.value.style.visibility = 'hidden';
+    isAdding.value = false;
   }
 
   // const event = {
@@ -104,7 +106,7 @@
   }
 
   async function handleAddEventClick() {
-    console.log(newEvent.value);
+    isAdding.value = true;
 
     const event = {
       summary: newEvent.value.title,
@@ -131,6 +133,7 @@
         listUpcomingEvents();
       }
     } catch (err) {
+      isAdding.value = false;
       console.log(err);
       return;
     }
@@ -150,10 +153,11 @@
 
     const input = document.getElementById('datetime');
     const now = new Date();
-    const formattedNow = now.toISOString().slice(0, 16); 
-      input.min = formattedNow;
-      newEvent.value.datetime = formattedNow;
-    });
+    const localDate = new Date(now.getTime() - now.getTimezoneOffset() * 60000);
+    const formattedNow = localDate.toISOString().slice(0, 16); 
+    input.min = formattedNow;
+    newEvent.value.datetime = formattedNow;
+  });
 </script>
 
 <template>
@@ -206,11 +210,9 @@
           id="description"
           v-model="newEvent.description"
         ></textarea>
-      <button class="text-white" @click="handleAddEventClick">Add event</button>
+      <button class="text-white" @click="handleAddEventClick">{{ isAdding ? "Adding..." : "Add Event" }}</button>
     </form>
 
-
-    
     <button ref="showCalendar" id="show_calendar" @click="listUpcomingEvents">Show Calendar</button>
   </div>
 </template>
