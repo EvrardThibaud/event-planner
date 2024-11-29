@@ -8,6 +8,7 @@
   const showCalendar = ref(null);
 
   const isAdding = ref(false);
+
   const eventsList = ref([]);
 
   const newEvent = ref({
@@ -21,6 +22,7 @@
 
   async function listUpcomingEvents() {
     showCalendar.value.innerText = 'Loading...';
+    eventsList.value = [];
 
     let response;
     try {
@@ -43,9 +45,7 @@
       contentArea.value.innerText = 'No events found.';
       return;
     }
-    
-    eventsList.value = [];
-    
+      
     const output = events.map(event => ({
       id: event.id,
       summary: event.summary,
@@ -88,7 +88,8 @@
   //   },
   // };
 
-  async function handleRemoveEventClick(id){
+  async function handleRemoveEventClick(event,id){
+    event.target.innerText = 'Deleting...';
     let response;
     try {
       const request = {
@@ -172,7 +173,8 @@
           <p v-if="event.location">Where : {{ event.location }}</p>
           <p v-if="event.description">Description : {{ event.description }}</p>
         </div>
-        <button @click="handleRemoveEventClick(event.id)">Delete this event</button>
+        <p>{{ event.id }}</p>
+        <button @click="handleRemoveEventClick($event, event.id)">Delete this event</button>
       </li>
     </ul>
     <pre ref="contentArea" id="content_area" style="white-space: pre-wrap;">aaad</pre>
