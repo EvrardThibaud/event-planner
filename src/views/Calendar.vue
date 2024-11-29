@@ -1,7 +1,7 @@
 <script setup>
   import { ref, onMounted } from 'vue';
   import {gisLoaded, gapiLoaded, loadScript} from "../composable/GoogleAuth.js";
-
+  import {addTimeToDateTime} from "../composable/DateTime.js";
   
 
   const contentArea = ref(null);
@@ -12,6 +12,7 @@
   const newEvent = ref({
         title: '',
         datetime: '',
+        time: '01:00',
         location: '',
         description: ''
     });
@@ -57,33 +58,33 @@
     showCalendar.value.style.visibility = 'hidden';
   }
 
-  const event = {
-    summary: 'Judo',
-    location: '415 carrer de Valencie',
-    description: 'On va faire du judo',
-    start: {
-      dateTime: '2024-11-28T08:00:00+01:00',  // Heure correcte en Europe/Paris
-      timeZone: 'Europe/Paris',  // Corrigé la timezone
-    },
-    end: {
-      dateTime: '2024-11-28T10:00:00+01:00',  // Exemple: l'événement dure 1 heure
-      timeZone: 'Europe/Paris',  // Corrigé la timezone
-    },
-    // recurrence: [
-    //   'RRULE:FREQ=DAILY;COUNT=2',  // L'événement se répète tous les jours pendant 2 jours
-    // ],
-    attendees: [
-      { email: 'lpage@example.com' },
-      { email: 'sbrin@example.com' },
-    ],
-    reminders: {
-      useDefault: false,
-      overrides: [
-        { method: 'email', minutes: 24 * 60 },  // Rappel par email 24 heures avant
-        { method: 'popup', minutes: 10 },  // Rappel par popup 10 minutes avant
-      ],
-    },
-  };
+  // const event = {
+  //   summary: 'Judo',
+  //   location: '415 carrer de Valencie',
+  //   description: 'On va faire du judo',
+  //   start: {
+  //     dateTime: '2024-11-28T08:00:00+01:00',  // Heure correcte en Europe/Paris
+  //     timeZone: 'Europe/Paris',  // Corrigé la timezone
+  //   },
+  //   end: {
+  //     dateTime: '2024-11-28T10:00:00+01:00',  // Exemple: l'événement dure 1 heure
+  //     timeZone: 'Europe/Paris',  // Corrigé la timezone
+  //   },
+  //   // recurrence: [
+  //   //   'RRULE:FREQ=DAILY;COUNT=2',  // L'événement se répète tous les jours pendant 2 jours
+  //   // ],
+  //   attendees: [
+  //     { email: 'lpage@example.com' },
+  //     { email: 'sbrin@example.com' },
+  //   ],
+  //   reminders: {
+  //     useDefault: false,
+  //     overrides: [
+  //       { method: 'email', minutes: 24 * 60 },  // Rappel par email 24 heures avant
+  //       { method: 'popup', minutes: 10 },  // Rappel par popup 10 minutes avant
+  //     ],
+  //   },
+  // };
 
   async function handleRemoveEventClick(id){
     let response;
@@ -104,21 +105,35 @@
 
   async function handleAddEventClick() {
     console.log(newEvent.value);
+
+    const event = {
+      summary: newEvent.value.title,
+      location: newEvent.value.location,
+      description: newEvent.value.description,
+      start: {
+        dateTime: newEvent.value.datetime + ':00',  
+        timeZone: 'Europe/London', 
+      },
+      end: {
+        dateTime: addTimeToDateTime(newEvent.value.datetime,newEvent.value.time) + ':00',  
+        timeZone: 'Europe/London',  
+      },
+    }
     
-    // let response;
-    // try {
-    //   const request = {
-    //     calendarId: 'primary',
-    //     resource: event
-    //   };
-    //   response = await gapi.client.calendar.events.insert(request);
-    //   if (response.status === 200) {
-    //     listUpcomingEvents();
-    //   }
-    // } catch (err) {
-    //   console.log(err);
-    //   return;
-    // }
+    let response;
+    try {
+      const request = {
+        calendarId: 'primary',
+        resource: event
+      };
+      response = await gapi.client.calendar.events.insert(request);
+      if (response.status === 200) {
+        listUpcomingEvents();
+      }
+    } catch (err) {
+      console.log(err);
+      return;
+    }
   }
 
   async function handleViewMore(id){
@@ -134,13 +149,11 @@
     loadScript('https://accounts.google.com/gsi/client', gisLoaded);
 
     const input = document.getElementById('datetime');
-  const now = new Date();
-
-  // Format en 'YYYY-MM-DDTHH:mm' pour datetime-local
-  const formattedNow = now.toISOString().slice(0, 16); // Couper la partie inutilisée (secondes et fuseau horaire)
-
-  input.min = formattedNow;
-  });
+    const now = new Date();
+    const formattedNow = now.toISOString().slice(0, 16); 
+      input.min = formattedNow;
+      newEvent.value.datetime = formattedNow;
+    });
 </script>
 
 <template>
@@ -161,7 +174,7 @@
     <pre ref="contentArea" id="content_area" style="white-space: pre-wrap;">aaad</pre>
     
 
-    <form @submit.prevent="submitForm" class="flex flex-col text-black">
+    <form @submit.prevent="submitForm" class="flex flex-col text-green-500">
         <label for="title">Title</label>
         <input
           id="title"
@@ -174,6 +187,13 @@
           id="datetime"
           type="datetime-local"
           v-model="newEvent.datetime"
+        />
+        <label for="time">Duration</label>
+        <input
+          id="time"
+          type="time"
+          v-model="newEvent.time"
+          value= "01:00"
         />
         <label for="location">Location</label>
         <input
