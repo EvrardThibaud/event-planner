@@ -3,14 +3,10 @@
   import {gisLoaded, gapiLoaded, loadScript} from "../composable/GoogleAuth.js";
   import {addTimeToDateTime} from "../composable/DateTime.js";
   
-
   const contentArea = ref(null);
   const showCalendar = ref(null);
-
   const isAdding = ref(false);
-
   const eventsList = ref([]);
-
   const newEvent = ref({
         title: '',
         datetime: '',
@@ -18,7 +14,6 @@
         location: '',
         description: ''
     });
-
 
   async function listUpcomingEvents() {
     showCalendar.value.innerText = 'Loading...';
@@ -162,62 +157,109 @@
 </script>
 
 <template>
-  <div class="text-white">
-    <h1 class="pt-24">Calendar</h1>
-    <ul>
-      <li v-for="event in eventsList" class= "b-white border-2 m-2 p-2" :key="event.id" @click="handleViewMore(event.id)">
-        <p>Titre : {{ event.summary }}</p>
-        <p>De : {{ event.start }}</p>
-        <p>A : {{ event.end }}</p>
-        <div v-if="event.viewMore">
-          <p v-if="event.location">Where : {{ event.location }}</p>
-          <p v-if="event.description">Description : {{ event.description }}</p>
-        </div>
-        <p>{{ event.id }}</p>
-        <button @click="handleRemoveEventClick($event, event.id)">Delete this event</button>
-      </li>
-    </ul>
-    <pre ref="contentArea" id="content_area" style="white-space: pre-wrap;">aaad</pre>
-    
+  <div class="pt-24 grid grid-cols-[30%,70%]">
+  <section>
+    <h2 class="text-center text-gray-300 font-bold text-2xl">Add an Event</h2>
+    <form @submit.prevent="submitForm" id="form_add_event" class="flex justify-center items-start flex-col gap-4 p-4">
+      <div>
 
-    <form @submit.prevent="submitForm" class="flex flex-col text-green-500">
         <label for="title">Title</label>
         <input
-          id="title"
-          type="text"
-          v-model="newEvent.title"
-          placeholder="My future event"
+        id="title"
+        type="text"
+        v-model="newEvent.title"
+        placeholder="My future event"
         />
+      </div>
+      <div>
+
         <label for="datetime">Date</label>
         <input
-          id="datetime"
-          type="datetime-local"
-          v-model="newEvent.datetime"
+        id="datetime"
+        type="datetime-local"
+        v-model="newEvent.datetime"
         />
+      </div>
+      <div>
+
         <label for="time">Duration</label>
         <input
-          id="time"
-          type="time"
-          v-model="newEvent.time"
-          value= "01:00"
+        id="time"
+        type="time"
+        v-model="newEvent.time"
+        value= "01:00"
         />
+      </div>
+      <div>
         <label for="location">Location</label>
         <input
-          id="location"
-          type="text"
-          v-model="newEvent.location"
+        id="location"
+        type="text"
+        v-model="newEvent.location"
         />
+      </div>
+      <div>
         <label for="description">Description</label>
         <textarea
-          id="description"
-          v-model="newEvent.description"
+        id="description"
+        v-model="newEvent.description"
         ></textarea>
-      <button class="text-white" @click="handleAddEventClick">{{ isAdding ? "Adding..." : "Add Event" }}</button>
-    </form>
-
-    <button ref="showCalendar" id="show_calendar" @click="listUpcomingEvents">Show Calendar</button>
+      </div>  
+        <button  @click="handleAddEventClick">{{ isAdding ? "Adding..." : "Add Event" }}</button>
+      </form>
+    </section>
+      
+    <section>
+      <h1 class="pt-24">Calendar</h1>
+      <ul>
+        <li v-for="event in eventsList" class= "b-white border-2 m-2 p-2" :key="event.id" @click="handleViewMore(event.id)">
+          <p>Titre : {{ event.summary }}</p>
+          <p>De : {{ event.start }}</p>
+          <p>A : {{ event.end }}</p>
+          <div v-if="event.viewMore">
+            <p v-if="event.location">Where : {{ event.location }}</p>
+            <p v-if="event.description">Description : {{ event.description }}</p>
+          </div>
+          <p>{{ event.id }}</p>
+          <button @click="handleRemoveEventClick($event, event.id)">Delete this event</button>
+        </li>
+      </ul>
+      <pre ref="contentArea" id="content_area" style="white-space: pre-wrap;">aaad</pre>
+      <button ref="showCalendar" id="show_calendar" @click="listUpcomingEvents">Show Calendar</button>
+    </section>
   </div>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
+  #form_add_event{
+    div{
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+    }
+
+    label{
+      color: #d1d5db;
+      font-weight: 500;
+      font-size: large;
+    }
+
+    input, textarea{
+      min-width: 200px;
+      max-height: 100px;
+      
+      min-height: 40px;
+      width: 80%;
+      color: #18181b;
+      padding: 2px;
+      border: 2px solid #18181b;
+      border-radius: 5px;
+      background-color: #d1d5db;
+    }
+
+    textarea{
+
+    }
+
+  }
 </style>

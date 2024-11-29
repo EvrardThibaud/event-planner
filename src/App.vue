@@ -10,7 +10,7 @@
     </RouterLink>
     <NavBar/>
   </header>
-  <main class="bg-zinc-900 flex items-center flex-col min-h-screen">
+  <main class="bg-zinc-900 ">
     <RouterView></RouterView>
   </main>
 </template>
