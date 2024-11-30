@@ -163,10 +163,10 @@
 </script>
 
 <template>
-  <div class="pt-24 grid grid-cols-[30%,70%]">
+  <div class="pt-16 grid grid-cols-[30%,70%]">
   <section>
     <h2 class="pl-4 text-gray-300 font-bold text-2xl">Add an Event</h2>
-    <form @submit.prevent="submitForm" id="form_add_event" class=" flex justify-center items-start flex-col gap-4 p-4">
+    <form @submit.prevent="submitForm" id="form_add_event" class=" flex justify-center items-start flex-col gap-2 pl-4">
       <div>
 
         <label for="title">Title</label>
@@ -224,12 +224,14 @@
               <i class="fa-solid fa-trash" @click="handeDeleteParticipantClick(i)"></i>
             </li>
           </ul>
-          <input
-          v-model="newParticipant"
-          type="email"
-          id="participants"
-          placeholder="Participants's email"
-          ></input>
+            <input
+            v-model="newParticipant"
+            type="email"
+            id="participants"
+            placeholder="Participants's email"
+            required
+            ></input>
+            <button id="secondary_button">Add this particpant</button>
         </div> 
       </form>
 
@@ -298,6 +300,11 @@
 
     button:active{
       scale: .98;
+    }
+
+    #secondary_button{
+      background-color: #d1d5db;
+      font-weight: normal;
     }
   }
 </style>
