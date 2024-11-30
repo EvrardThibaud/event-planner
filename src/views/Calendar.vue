@@ -5,14 +5,17 @@
   
   const contentArea = ref(null);
   const showCalendar = ref(null);
+  const newParticipant = ref('');
   const isAdding = ref(false);
   const eventsList = ref([]);
+  const participantsList = ref([]);
   const newEvent = ref({
         title: '',
         datetime: '',
         time: '01:00',
         location: '',
-        description: ''
+        description: '',
+        attendees: []
     });
 
   async function listUpcomingEvents() {
@@ -45,43 +48,16 @@
       id: event.id,
       summary: event.summary,
       start: event.start.dateTime || event.start.date,
-      end: event.end?.dateTime || event.end?.date || null, // Ajout de la fin si nécessaire
-      location: event.location || null, // Facultatif, si l'événement a une localisation
-      description: event.description || null, // Facultatif, si l'événement a une description
+      end: event.end?.dateTime || event.end?.date || null,
+      location: event.location || null, 
+      description: event.description || null, 
+      attendees: event.attendees || null,
       viewMore: false,
     }));
     eventsList.value.push(...output);
     showCalendar.value.style.visibility = 'hidden';
     isAdding.value = false;
   }
-
-  // const event = {
-  //   summary: 'Judo',
-  //   location: '415 carrer de Valencie',
-  //   description: 'On va faire du judo',
-  //   start: {
-  //     dateTime: '2024-11-28T08:00:00+01:00',  // Heure correcte en Europe/Paris
-  //     timeZone: 'Europe/Paris',  // Corrigé la timezone
-  //   },
-  //   end: {
-  //     dateTime: '2024-11-28T10:00:00+01:00',  // Exemple: l'événement dure 1 heure
-  //     timeZone: 'Europe/Paris',  // Corrigé la timezone
-  //   },
-  //   // recurrence: [
-  //   //   'RRULE:FREQ=DAILY;COUNT=2',  // L'événement se répète tous les jours pendant 2 jours
-  //   // ],
-  //   attendees: [
-  //     { email: 'lpage@example.com' },
-  //     { email: 'sbrin@example.com' },
-  //   ],
-  //   reminders: {
-  //     useDefault: false,
-  //     overrides: [
-  //       { method: 'email', minutes: 24 * 60 },  // Rappel par email 24 heures avant
-  //       { method: 'popup', minutes: 10 },  // Rappel par popup 10 minutes avant
-  //     ],
-  //   },
-  // };
 
   async function handleRemoveEventClick(event,id){
     event.target.innerText = 'Deleting...';
@@ -104,6 +80,12 @@
   async function handleAddEventClick() {
     isAdding.value = true;
 
+    if (!newEvent.value.datetime || !newEvent.value.time){
+      console.log("ya pas");
+      isAdding.value = false;
+      return;
+    }
+
     const event = {
       summary: newEvent.value.title,
       location: newEvent.value.location,
@@ -116,6 +98,7 @@
         dateTime: addTimeToDateTime(newEvent.value.datetime,newEvent.value.time) + ':00',  
         timeZone: 'Europe/London',  
       },
+      attendees: participantsList.value,
     }
     
     let response;
@@ -126,6 +109,16 @@
       };
       response = await gapi.client.calendar.events.insert(request);
       if (response.status === 200) {
+        newEvent.value = {
+            title: '',
+            datetime: '',
+            time: '01:00',
+            location: '',
+            description: '',
+            attendees: []
+        }
+        participantsList.value = [];
+        setDatetime();
         listUpcomingEvents();
       }
     } catch (err) {
@@ -135,9 +128,27 @@
     }
   }
 
+  async function handleAddParticipant(){
+    participantsList.value.push({email : newParticipant.value});
+    newParticipant.value = '';
+  }
+
+  async function handeDeleteParticipantClick(i){
+    participantsList.value.splice(i,1);
+  }
+
   async function handleViewMore(id){
     const event = eventsList.value.find(event => event.id === id);
     event.viewMore = !event.viewMore;  
+  }
+
+  async function setDatetime(){
+    const input = document.getElementById('datetime');
+    const now = new Date();
+    const localDate = new Date(now.getTime() - now.getTimezoneOffset() * 60000);
+    const formattedNow = localDate.toISOString().slice(0, 16); 
+    input.min = formattedNow;
+    newEvent.value.datetime = formattedNow;
   }
 
   onMounted(() => {
@@ -147,20 +158,15 @@
     loadScript('https://apis.google.com/js/api.js', gapiLoaded);
     loadScript('https://accounts.google.com/gsi/client', gisLoaded);
 
-    const input = document.getElementById('datetime');
-    const now = new Date();
-    const localDate = new Date(now.getTime() - now.getTimezoneOffset() * 60000);
-    const formattedNow = localDate.toISOString().slice(0, 16); 
-    input.min = formattedNow;
-    newEvent.value.datetime = formattedNow;
+    setDatetime();
   });
 </script>
 
 <template>
   <div class="pt-24 grid grid-cols-[30%,70%]">
   <section>
-    <h2 class="text-center text-gray-300 font-bold text-2xl">Add an Event</h2>
-    <form @submit.prevent="submitForm" id="form_add_event" class="flex justify-center items-start flex-col gap-4 p-4">
+    <h2 class="pl-4 text-gray-300 font-bold text-2xl">Add an Event</h2>
+    <form @submit.prevent="submitForm" id="form_add_event" class=" flex justify-center items-start flex-col gap-4 p-4">
       <div>
 
         <label for="title">Title</label>
@@ -168,16 +174,16 @@
         id="title"
         type="text"
         v-model="newEvent.title"
-        placeholder="My future event"
+        placeholder="A name for your event"
         />
       </div>
       <div>
-
-        <label for="datetime">Date</label>
+        <label for="datetime">Date and time</label>
         <input
         id="datetime"
         type="datetime-local"
         v-model="newEvent.datetime"
+        required
         />
       </div>
       <div>
@@ -188,6 +194,7 @@
         type="time"
         v-model="newEvent.time"
         value= "01:00"
+        required
         />
       </div>
       <div>
@@ -196,6 +203,7 @@
         id="location"
         type="text"
         v-model="newEvent.location"
+        placeholder="Where is your event ?"
         />
       </div>
       <div>
@@ -203,8 +211,28 @@
         <textarea
         id="description"
         v-model="newEvent.description"
+        placeholder="Describe your event"
         ></textarea>
-      </div>  
+      </div> 
+      
+      <form class="w-full" @submit.prevent="submitForm" @submit="handleAddParticipant">
+        <div>
+          <label for="participants">Add participants</label>
+          <ul v-if="participantsList.length !== 0" class="bg-zinc-800 my-2 p-2 w-4/5 rounded">
+            <li class="text-white flex justify-between flex-row" v-for="(participant, i) in participantsList" :key="i">
+              <p> {{ participant.email }} </p>
+              <i class="fa-solid fa-trash" @click="handeDeleteParticipantClick(i)"></i>
+            </li>
+          </ul>
+          <input
+          v-model="newParticipant"
+          type="email"
+          id="participants"
+          placeholder="Participants's email"
+          ></input>
+        </div> 
+      </form>
+
         <button  @click="handleAddEventClick">{{ isAdding ? "Adding..." : "Add Event" }}</button>
       </form>
     </section>
@@ -220,7 +248,9 @@
             <p v-if="event.location">Where : {{ event.location }}</p>
             <p v-if="event.description">Description : {{ event.description }}</p>
           </div>
-          <p>{{ event.id }}</p>
+          <p v-for="(guest, i) in event.attendees" :key="i">
+            {{ guest.email }}
+          </p>
           <button @click="handleRemoveEventClick($event, event.id)">Delete this event</button>
         </li>
       </ul>
@@ -244,22 +274,30 @@
       font-size: large;
     }
 
-    input, textarea{
+    input, textarea, button{
       min-width: 200px;
-      max-height: 100px;
-      
-      min-height: 40px;
       width: 80%;
+      min-height: 40px;
+      height: 40px;
+      max-height: 100px;
       color: #18181b;
-      padding: 2px;
+      padding: 6px;
       border: 2px solid #18181b;
       border-radius: 5px;
       background-color: #d1d5db;
+      outline: none;
     }
 
-    textarea{
-
+    button{
+      font-weight: 600;
+      background-color: #86efac;
+    }
+    input:hover, textarea:hover, button:hover{
+      opacity: .9;
     }
 
+    button:active{
+      scale: .98;
+    }
   }
 </style>
