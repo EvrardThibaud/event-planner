@@ -27,7 +27,6 @@ async function initializeGapiClient() {
     gapiInited = true;
     maybeEnableButtons();
 
-    // Si un token existe déjà dans localStorage, on le réutilise
     const savedToken = localStorage.getItem('google_access_token');
     if (savedToken) {
         gapi.client.setToken({ access_token: savedToken });
@@ -38,14 +37,15 @@ async function initializeGapiClient() {
             authorizeButton.innerText = 'Refresh';
         } 
 
+        
+        const toConnect = document.getElementById('to_connect')
+        if (toConnect){
+            toConnect.style.visibility = 'hidden'; 
+        }
+
         const showCalendar = document.getElementById('show_calendar')
         if (showCalendar){
             showCalendar.style.visibility = 'visible'; 
-        }
-    }else {
-        const contentArea = document.getElementById('content_area')
-        if (contentArea){
-            contentArea.innerText = 'You are not connected';
         }
     }
 }

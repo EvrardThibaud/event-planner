@@ -8,7 +8,10 @@
   const newParticipant = ref('');
   const isAdding = ref(false);
   const eventsList = ref([]);
+  const isConnected = ref(false);
+  const noEvent = ref(false)
   const participantsList = ref([]);
+  const sortingTime = ref('daily');
   const newEvent = ref({
         title: '',
         datetime: '',
@@ -21,6 +24,7 @@
   async function listUpcomingEvents() {
     showCalendar.value.innerText = 'Loading...';
     eventsList.value = [];
+    noEvent.value = false;
 
     let response;
     try {
@@ -34,13 +38,18 @@
       };
       response = await gapi.client.calendar.events.list(request);
     } catch (err) {
-      contentArea.value.innerText = err.message;
+       console.log(err.message);
       return;
     }
+
+    showCalendar.value.style.visibility = 'hidden';
+    isConnected.value = true;
+    isAdding.value = false;
     
     const events = response.result.items;
     if (!events || events.length === 0) {
-      contentArea.value.innerText = 'No events found.';
+      noEvent.value = true;
+      showCalendar.value.innerText = 'Loading...';
       return;
     }
       
@@ -55,8 +64,6 @@
       viewMore: false,
     }));
     eventsList.value.push(...output);
-    showCalendar.value.style.visibility = 'hidden';
-    isAdding.value = false;
   }
 
   async function handleRemoveEventClick(event,id){
@@ -118,7 +125,6 @@
             attendees: []
         }
         participantsList.value = [];
-        setDatetime();
         listUpcomingEvents();
       }
     } catch (err) {
@@ -147,26 +153,25 @@
     const now = new Date();
     const localDate = new Date(now.getTime() - now.getTimezoneOffset() * 60000);
     const formattedNow = localDate.toISOString().slice(0, 16); 
-    input.min = formattedNow;
     newEvent.value.datetime = formattedNow;
   }
 
   onMounted(() => {
-    contentArea.value.innerText = '';
     showCalendar.value.style.visibility = 'hidden';
 
     loadScript('https://apis.google.com/js/api.js', gapiLoaded);
     loadScript('https://accounts.google.com/gsi/client', gisLoaded);
 
     setDatetime();
+
   });
 </script>
 
 <template>
-  <div class="pt-16 grid grid-cols-[30%,70%]">
-  <section>
+  <div class=" min-h-max grid grid-cols-[30%,70%]">
+  <section v-if="isConnected" class="border-r-green-200 border-r-2">
     <h2 class="pl-4 text-gray-300 font-bold text-2xl">Add an Event</h2>
-    <form @submit.prevent="submitForm" id="form_add_event" class=" flex justify-center items-start flex-col gap-2 pl-4">
+    <form @submit.prevent="submitForm" id="form_add_event" class=" flex justify-center items-start flex-col gap-2 px-4">
       <div>
 
         <label for="title">Title</label>
@@ -183,6 +188,7 @@
         id="datetime"
         type="datetime-local"
         v-model="newEvent.datetime"
+        min = "newEvent.datetime"
         required
         />
       </div>
@@ -238,9 +244,17 @@
         <button  @click="handleAddEventClick">{{ isAdding ? "Adding..." : "Add Event" }}</button>
       </form>
     </section>
-      
-    <section>
-      <h1 class="pt-24">Calendar</h1>
+
+    <section class="pl-4">
+      <h1 class="text-gray-300 font-bold text-2xl">Calendar</h1>
+      <div v-if="isConnected">
+        <select name="" id="" v-model="sortingTime">
+          <option value="daily">Daily</option>
+          <option value="weekly">Weekly</option>
+          <option value="monthly">Monthly</option>
+        </select>
+        <h2>{{ sortingTime }}</h2>
+      </div>
       <ul>
         <li v-for="event in eventsList" class= "b-white border-2 m-2 p-2" :key="event.id" @click="handleViewMore(event.id)">
           <p>Titre : {{ event.summary }}</p>
@@ -256,8 +270,15 @@
           <button @click="handleRemoveEventClick($event, event.id)">Delete this event</button>
         </li>
       </ul>
-      <pre ref="contentArea" id="content_area" style="white-space: pre-wrap;">aaad</pre>
-      <button ref="showCalendar" id="show_calendar" @click="listUpcomingEvents">Show Calendar</button>
+
+      <div id="to_connect" class="text-gray-200">
+        <p>You can't see any calendar because you are not connected</p>
+        <RouterLink   class="hover:text-green-300 " :to="{name: 'GoogleAuth'}" >
+          Click here to connect.
+        </RouterLink>
+      </div>
+      <p v-if="noEvent" class="text-gray-200">Your calendar doesn't contain any event.</p>
+      <button class="bg-gray-200 p-2 rounded active:scale-95 hover:opacity-90" ref="showCalendar" id="show_calendar" @click="listUpcomingEvents">Show Calendar</button>
     </section>
   </div>
 </template>
@@ -278,7 +299,7 @@
 
     input, textarea, button{
       min-width: 200px;
-      width: 80%;
+      width: 100%;
       min-height: 40px;
       height: 40px;
       max-height: 100px;

@@ -10,6 +10,7 @@
     </RouterLink>
     <NavBar/>
   </header>
+  <div class="h-14 bg-red-500 w-full"></div>
   <main class="bg-zinc-900 ">
     <RouterView></RouterView>
   </main>
