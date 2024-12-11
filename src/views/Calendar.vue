@@ -1,7 +1,7 @@
 <script setup>
   import { ref, onMounted } from 'vue';
   import {gisLoaded, gapiLoaded, loadScript} from "../composable/GoogleAuth.js";
-  import {addTimeToDateTime} from "../composable/DateTime.js";
+  import {addTimeToDateTime, getCurrentMonthName, getCurrentWeekDetails, getTodayDetails} from "../composable/DateTime.js";
   
   const contentArea = ref(null);
   const showCalendar = ref(null);
@@ -12,6 +12,9 @@
   const noEvent = ref(false)
   const participantsList = ref([]);
   const sortingTime = ref('daily');
+  const day = ref(getTodayDetails());
+  const week = ref(getCurrentWeekDetails());
+  const month = ref(getCurrentMonthName());
   const newEvent = ref({
         title: '',
         datetime: '',
@@ -247,13 +250,19 @@
 
     <section class="pl-4">
       <h1 class="text-gray-300 font-bold text-2xl">Calendar</h1>
-      <div v-if="isConnected">
-        <select name="" id="" v-model="sortingTime">
+      <div v-if="isConnected" class="text-gray-200">
+        <select name="" id="" v-model="sortingTime" class="text-gray-800">
           <option value="daily">Daily</option>
           <option value="weekly">Weekly</option>
           <option value="monthly">Monthly</option>
         </select>
-        <h2>{{ sortingTime }}</h2>
+        <h2>
+          {{ 
+            sortingTime == "daily" ? day.dayName + " " + day.commonLanguage : 
+            sortingTime == "weekly" ? "Week " + week.weekNumber + " from : " + week.firstDay + " to : " + week.lastDay : 
+            sortingTime == "monthly" ? month : "Choose a sorting type"
+          }}
+          </h2>
       </div>
       <ul>
         <li v-for="event in eventsList" class= "b-white border-2 m-2 p-2" :key="event.id" @click="handleViewMore(event.id)">
