@@ -1,7 +1,7 @@
 <script setup>
   import { ref, onMounted } from 'vue';
   import {gisLoaded, gapiLoaded, loadScript} from "../composable/GoogleAuth.js";
-  import {addTimeToDateTime} from "../composable/DateTime.js";
+  import {addTimeToDateTime, calculTimeMin, calculTimeMax} from "../composable/DateTime.js";
   
   const contentArea = ref(null);
   const showCalendar = ref(null);
@@ -26,13 +26,16 @@
     showCalendar.value.innerText = 'Loading...';
     eventsList.value = [];
     noEvent.value = false;
-    let timeMin =  `${sortingTime.value}T00:00:00.000Z`
+    
+    let timeMin = calculTimeMin(sortingTime.value,sortingType.value)
+    let timeMax = calculTimeMax(sortingTime.value,sortingType.value)
 
     let response;
     try {
       const request = {
         calendarId: 'primary',
         timeMin: timeMin,
+        timeMax: timeMax,
         showDeleted: false,
         singleEvents: true,
         maxResults: 10,
@@ -259,15 +262,15 @@
         </select>
         <input 
           v-model="sortingTime"
+          @input="listUpcomingEvents"
           :type="sortingType === 'daily' ? 'date' : 
           sortingType === 'weekly' ? 'week' : 
           sortingType === 'monthly' ? 'month' : ''"
           class="text-gray-800"
         >
-        {{ sortingTime }}
       </div>
       <ul>
-        <li v-for="event in eventsList" class= "b-white border-2 m-2 p-2" :key="event.id" @click="handleViewMore(event.id)">
+        <li v-for="event in eventsList" class= "b-white border-2 m-2 p-2 text-white" :key="event.id" @click="handleViewMore(event.id)">
           <p>Titre : {{ event.summary }}</p>
           <p>De : {{ event.start }}</p>
           <p>A : {{ event.end }}</p>
