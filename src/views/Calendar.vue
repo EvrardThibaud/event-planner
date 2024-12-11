@@ -2,8 +2,10 @@
   import { ref, onMounted } from 'vue';
   import {gisLoaded, gapiLoaded, loadScript} from "../composable/GoogleAuth.js";
   import {addTimeToDateTime, calculTimeMin, calculTimeMax} from "../composable/DateTime.js";
+  import Event from '../components/Event.vue';
   
   const contentArea = ref(null);
+  const event = ref(null)
   const showCalendar = ref(null);
   const newParticipant = ref('');
   const isAdding = ref(false);
@@ -66,7 +68,6 @@
       location: event.location || null, 
       description: event.description || null, 
       attendees: event.attendees || null,
-      viewMore: false,
     }));
     eventsList.value.push(...output);
   }
@@ -148,9 +149,8 @@
     participantsList.value.splice(i,1);
   }
 
-  async function handleViewMore(id){
-    const event = eventsList.value.find(event => event.id === id);
-    event.viewMore = !event.viewMore;  
+  async function handleViewMore(e){
+    event.value = e
   }
 
   async function setDatetime(){
@@ -175,84 +175,84 @@
 </script>
 
 <template>
-  <div class=" min-h-max grid grid-cols-[30%,70%]">
-  <section v-if="isConnected" class="border-r-green-200 border-r-2">
-    <h2 class="pl-4 text-gray-300 font-bold text-2xl">Add an Event</h2>
-    <form @submit.prevent="submitForm" id="form_add_event" class=" flex justify-center items-start flex-col gap-2 px-4">
-      <div>
-
-        <label for="title">Title</label>
-        <input
-        id="title"
-        type="text"
-        v-model="newEvent.title"
-        placeholder="A name for your event"
-        />
-      </div>
-      <div>
-        <label for="datetime">Date and time</label>
-        <input
-        id="datetime"
-        type="datetime-local"
-        v-model="newEvent.datetime"
-        min = "newEvent.datetime"
-        required
-        />
-      </div>
-      <div>
-
-        <label for="time">Duration</label>
-        <input
-        id="time"
-        type="time"
-        v-model="newEvent.time"
-        value= "01:00"
-        required
-        />
-      </div>
-      <div>
-        <label for="location">Location</label>
-        <input
-        id="location"
-        type="text"
-        v-model="newEvent.location"
-        placeholder="Where is your event ?"
-        />
-      </div>
-      <div>
-        <label for="description">Description</label>
-        <textarea
-        id="description"
-        v-model="newEvent.description"
-        placeholder="Describe your event"
-        ></textarea>
-      </div> 
-      
-      <form class="w-full" @submit.prevent="submitForm" @submit="handleAddParticipant">
+  <div class=" min-h-max grid grid-cols-[30%,40%,30%]">
+    <section v-if="isConnected" class="border-r-green-200 border-r-2">
+      <form @submit.prevent="submitForm" id="form_add_event" class="fixed flex justify-center items-start flex-col gap-2 px-4">
+        <h2 class="text-gray-300 font-bold text-2xl">Add an Event</h2>
         <div>
-          <label for="participants">Add participants</label>
-          <ul v-if="participantsList.length !== 0" class="bg-zinc-800 my-2 p-2 w-4/5 rounded">
-            <li class="text-white flex justify-between flex-row" v-for="(participant, i) in participantsList" :key="i">
-              <p> {{ participant.email }} </p>
-              <i class="fa-solid fa-trash" @click="handeDeleteParticipantClick(i)"></i>
-            </li>
-          </ul>
-            <input
-            v-model="newParticipant"
-            type="email"
-            id="participants"
-            placeholder="Participants's email"
-            required
-            ></input>
-            <button id="secondary_button">Add this particpant</button>
-        </div> 
-      </form>
 
-        <button  @click="handleAddEventClick">{{ isAdding ? "Adding..." : "Add Event" }}</button>
+          <label for="title">Title</label>
+          <input
+          id="title"
+          type="text"
+          v-model="newEvent.title"
+          placeholder="A name for your event"
+          />
+        </div>
+        <div>
+          <label for="datetime">Date and time</label>
+          <input
+          id="datetime"
+          type="datetime-local"
+          v-model="newEvent.datetime"
+          min = "newEvent.datetime"
+          required
+          />
+        </div>
+        <div>
+
+          <label for="time">Duration</label>
+          <input
+          id="time"
+          type="time"
+          v-model="newEvent.time"
+          value= "01:00"
+          required
+          />
+        </div>
+        <div>
+          <label for="location">Location</label>
+          <input
+          id="location"
+          type="text"
+          v-model="newEvent.location"
+          placeholder="Where is your event ?"
+          />
+        </div>
+        <div>
+          <label for="description">Description</label>
+          <textarea
+          id="description"
+          v-model="newEvent.description"
+          placeholder="Describe your event"
+          ></textarea>
+        </div> 
+        
+        <form class="w-full" @submit.prevent="submitForm" @submit="handleAddParticipant">
+          <div>
+            <label for="participants">Add participants</label>
+            <ul v-if="participantsList.length !== 0" class="bg-zinc-800 my-2 p-2 w-4/5 rounded">
+              <li class="text-white flex justify-between flex-row" v-for="(participant, i) in participantsList" :key="i">
+                <p> {{ participant.email }} </p>
+                <i class="fa-solid fa-trash" @click="handeDeleteParticipantClick(i)"></i>
+              </li>
+            </ul>
+              <input
+              v-model="newParticipant"
+              type="email"
+              id="participants"
+              placeholder="Participants's email"
+              required
+              ></input>
+              <button id="secondary_button">Add this particpant</button>
+          </div> 
+        </form>
+
+          <button  @click="handleAddEventClick">{{ isAdding ? "Adding..." : "Add Event" }}</button>
       </form>
     </section>
 
-    <section class="pl-4">
+    <section class="px-4 border-r-green-200 border-r-2">
       <h1 class="text-gray-300 font-bold text-2xl">Calendar</h1>
       <div v-if="isConnected" class="text-gray-200">
         <select name="" id="" v-model="sortingType" class="text-gray-800">
@@ -270,17 +270,10 @@
         >
       </div>
       <ul>
-        <li v-for="event in eventsList" class= "b-white border-2 m-2 p-2 text-white" :key="event.id" @click="handleViewMore(event.id)">
+        <li v-for="event in eventsList" class= "b-white border-2 m-2 p-2 text-white" :key="event.id" @click="handleViewMore(event)">
           <p>Titre : {{ event.summary }}</p>
           <p>De : {{ event.start }}</p>
           <p>A : {{ event.end }}</p>
-          <div v-if="event.viewMore">
-            <p v-if="event.location">Where : {{ event.location }}</p>
-            <p v-if="event.description">Description : {{ event.description }}</p>
-          </div>
-          <p v-for="(guest, i) in event.attendees" :key="i">
-            {{ guest.email }}
-          </p>
           <button @click="handleRemoveEventClick($event, event.id)">Delete this event</button>
         </li>
       </ul>
@@ -293,6 +286,10 @@
       </div>
       <p v-if="noEvent" class="text-gray-200">Your calendar doesn't contain any event.</p>
       <button class="bg-gray-200 p-2 rounded active:scale-95 hover:opacity-90" ref="showCalendar" id="show_calendar" @click="() => listUpcomingEvents()">Show Calendar</button>
+    </section>
+
+    <section>
+      <Event :event="event"></Event>
     </section>
   </div>
 </template>
@@ -312,8 +309,7 @@
     }
 
     input, textarea, button{
-      min-width: 200px;
-      width: 100%;
+      min-width: 300px;
       min-height: 40px;
       height: 40px;
       max-height: 100px;
