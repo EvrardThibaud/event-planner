@@ -1,7 +1,7 @@
 <script setup>
   import { ref, onMounted } from 'vue';
   import {gisLoaded, gapiLoaded, loadScript} from "../composable/GoogleAuth.js";
-  import {addTimeToDateTime, getCurrentMonthName, getCurrentWeekDetails, getTodayDetails} from "../composable/DateTime.js";
+  import {addTimeToDateTime} from "../composable/DateTime.js";
   
   const contentArea = ref(null);
   const showCalendar = ref(null);
@@ -11,10 +11,8 @@
   const isConnected = ref(false);
   const noEvent = ref(false)
   const participantsList = ref([]);
-  const sortingTime = ref('daily');
-  const day = ref(getTodayDetails());
-  const week = ref(getCurrentWeekDetails());
-  const month = ref(getCurrentMonthName());
+  const sortingType = ref('daily');
+  const sortingTime = ref()
   const newEvent = ref({
         title: '',
         datetime: '',
@@ -28,12 +26,13 @@
     showCalendar.value.innerText = 'Loading...';
     eventsList.value = [];
     noEvent.value = false;
+    let timeMin =  `${sortingTime.value}T00:00:00.000Z`
 
     let response;
     try {
       const request = {
         calendarId: 'primary',
-        timeMin: new Date().toISOString(),
+        timeMin: timeMin,
         showDeleted: false,
         singleEvents: true,
         maxResults: 10,
@@ -42,6 +41,7 @@
       response = await gapi.client.calendar.events.list(request);
     } catch (err) {
        console.log(err.message);
+      showCalendar.value.innerText = 'Show Calendar';
       return;
     }
 
@@ -52,7 +52,6 @@
     const events = response.result.items;
     if (!events || events.length === 0) {
       noEvent.value = true;
-      showCalendar.value.innerText = 'Loading...';
       return;
     }
       
@@ -155,8 +154,10 @@
     const input = document.getElementById('datetime');
     const now = new Date();
     const localDate = new Date(now.getTime() - now.getTimezoneOffset() * 60000);
-    const formattedNow = localDate.toISOString().slice(0, 16); 
-    newEvent.value.datetime = formattedNow;
+    const formattedDateTime = localDate.toISOString().slice(0, 16); 
+    newEvent.value.datetime = formattedDateTime;
+    const formattedDate = localDate.toISOString().slice(0, 10);
+    sortingTime.value = formattedDate
   }
 
   onMounted(() => {
@@ -251,18 +252,19 @@
     <section class="pl-4">
       <h1 class="text-gray-300 font-bold text-2xl">Calendar</h1>
       <div v-if="isConnected" class="text-gray-200">
-        <select name="" id="" v-model="sortingTime" class="text-gray-800">
+        <select name="" id="" v-model="sortingType" class="text-gray-800">
           <option value="daily">Daily</option>
           <option value="weekly">Weekly</option>
           <option value="monthly">Monthly</option>
         </select>
-        <h2>
-          {{ 
-            sortingTime == "daily" ? day.dayName + " " + day.commonLanguage : 
-            sortingTime == "weekly" ? "Week " + week.weekNumber + " from : " + week.firstDay + " to : " + week.lastDay : 
-            sortingTime == "monthly" ? month : "Choose a sorting type"
-          }}
-          </h2>
+        <input 
+          v-model="sortingTime"
+          :type="sortingType === 'daily' ? 'date' : 
+          sortingType === 'weekly' ? 'week' : 
+          sortingType === 'monthly' ? 'month' : ''"
+          class="text-gray-800"
+        >
+        {{ sortingTime }}
       </div>
       <ul>
         <li v-for="event in eventsList" class= "b-white border-2 m-2 p-2" :key="event.id" @click="handleViewMore(event.id)">
@@ -287,7 +289,7 @@
         </RouterLink>
       </div>
       <p v-if="noEvent" class="text-gray-200">Your calendar doesn't contain any event.</p>
-      <button class="bg-gray-200 p-2 rounded active:scale-95 hover:opacity-90" ref="showCalendar" id="show_calendar" @click="listUpcomingEvents">Show Calendar</button>
+      <button class="bg-gray-200 p-2 rounded active:scale-95 hover:opacity-90" ref="showCalendar" id="show_calendar" @click="() => listUpcomingEvents()">Show Calendar</button>
     </section>
   </div>
 </template>
