@@ -143,3 +143,16 @@ export function formatEventDateTimes(startDateTime, endDateTime) {
         ];
     }
 }
+
+export function formatToDatetimeLocal(inputDateTime) {
+    const date = new Date(inputDateTime); // Convertir la chaîne en objet Date
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Mois (1-based)
+    const day = date.getDate().toString().padStart(2, '0');
+    const hours = date.getHours().toString().padStart(2, '0');
+    const minutes = date.getMinutes().toString().padStart(2, '0');
+    
+    // Reconstituer le format compatible avec datetime-local
+    return `${year}-${month}-${day}T${hours}:${minutes}`;
+}
+

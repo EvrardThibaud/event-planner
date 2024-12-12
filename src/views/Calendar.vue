@@ -180,7 +180,6 @@
       <form @submit.prevent="submitForm" id="form_add_event" class="fixed flex justify-center items-start flex-col gap-2 px-4">
         <h2 class="text-gray-300 font-bold text-2xl">Add an Event</h2>
         <div>
-
           <label for="title">Title</label>
           <input
           id="title"
@@ -195,12 +194,11 @@
           id="datetime"
           type="datetime-local"
           v-model="newEvent.datetime"
-          min = "newEvent.datetime"
+          :min = newEvent.datetime
           required
           />
         </div>
         <div>
-
           <label for="time">Duration</label>
           <input
           id="time"
