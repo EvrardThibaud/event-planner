@@ -27,6 +27,27 @@ export function formatDateCommonLanguage(inputDate) {
     return `${month} ${day}${suffix}, ${year}`;
 }
 
+export function formatDateTimeCommonLanguage(inputDateTime) {
+    const months = [
+        'January', 'February', 'March', 'April', 'May', 'June',
+        'July', 'August', 'September', 'October', 'November', 'December'
+    ];
+
+    const days = [
+        'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'
+    ];
+
+    const date = new Date(inputDateTime);
+    const dayName = days[date.getUTCDay()];
+    const day = date.getUTCDate();
+    const month = months[date.getUTCMonth()];
+    const year = date.getUTCFullYear();
+    const hours = date.getUTCHours().toString().padStart(2, '0');
+    const minutes = date.getUTCMinutes().toString().padStart(2, '0');
+
+    return `${hours}h${minutes} ${dayName} ${day} ${month} ${year}`;
+}
+
 export function calculTimeMin(sortingTime,sortingType){
     let timeMin
     if (sortingType === 'daily') {
@@ -71,4 +92,54 @@ export function calculTimeMax(sortingTime, sortingType) {
     }
 
     return timeMax;
+}
+
+export function formatEventDateTimes(startDateTime, endDateTime) {
+    const months = [
+        'January', 'February', 'March', 'April', 'May', 'June',
+        'July', 'August', 'September', 'October', 'November', 'December'
+    ];
+
+    const days = [
+        'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'
+    ];
+
+    function formatTime(date) {
+        const hours = date.getHours();
+        const minutes = date.getMinutes().toString().padStart(2, '0');
+        const amPm = hours >= 12 ? 'pm' : 'am';
+        const formattedHours = hours % 12 || 12; // Convert to 12-hour format
+        return `${formattedHours}:${minutes}${amPm}`;
+    }
+
+    function formatDate(date) {
+        const dayName = days[date.getDay()];
+        const day = date.getDate();
+        const month = months[date.getMonth()];
+        const year = date.getFullYear();
+        return `${dayName}, ${month} ${day}`;
+    }
+
+    function formatDateTime(date) {
+        const day = date.getDate();
+        const month = months[date.getMonth()];
+        const year = date.getFullYear();
+        return `${month} ${day}, ${year}, ${formatTime(date)}`;
+    }
+
+    const startDate = new Date(startDateTime);
+    const endDate = new Date(endDateTime);
+
+    if (
+        startDate.getFullYear() === endDate.getFullYear() &&
+        startDate.getMonth() === endDate.getMonth() &&
+        startDate.getDate() === endDate.getDate()
+    ) {
+        return `${formatDate(startDate)}⋅${formatTime(startDate)} – ${formatTime(endDate)}`;
+    } else {
+        return [
+            formatDateTime(startDate),
+            formatDateTime(endDate)
+        ];
+    }
 }

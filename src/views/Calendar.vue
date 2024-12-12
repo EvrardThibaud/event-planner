@@ -288,7 +288,7 @@
       <button class="bg-gray-200 p-2 rounded active:scale-95 hover:opacity-90" ref="showCalendar" id="show_calendar" @click="() => listUpcomingEvents()">Show Calendar</button>
     </section>
 
-    <section>
+    <section class="px-4">
       <Event :event="event"></Event>
     </section>
   </div>
