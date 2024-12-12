@@ -104,11 +104,11 @@
       location: newEvent.value.location,
       description: newEvent.value.description,
       start: {
-        dateTime: newEvent.value.datetime + ':00',  
+        dateTime: newEvent.value.datetime + ':00+01:00',  
         timeZone: 'Europe/London', 
       },
       end: {
-        dateTime: addTimeToDateTime(newEvent.value.datetime,newEvent.value.time) + ':00',  
+        dateTime: addTimeToDateTime(newEvent.value.datetime,newEvent.value.time) + ':00+01:00',  
         timeZone: 'Europe/London',  
       },
       attendees: participantsList.value,
@@ -141,7 +141,36 @@
   }
 
   async function modifyEvent(){
-    console.log("Modification réussi !!!!");
+    const eventModified = {
+      summary: event.value.summary,
+      location: event.value.location,
+      description: event.value.description,
+      start: {
+        dateTime: event.value.start,  
+        timeZone: 'Europe/London', 
+      },
+      end: {
+        dateTime: event.value.end,  
+        timeZone: 'Europe/London',  
+      },
+      attendees: event.attendees,
+    }
+    
+    let response;
+    try {
+      const request = {
+        calendarId: 'primary',
+        resource: eventModified,
+        eventId: event.value.id,
+      };
+      response = await gapi.client.calendar.events.update(request);
+      if (response.status === 204) {
+        listUpcomingEvents();
+      }
+    } catch (err) {
+      console.log(err);
+      return;
+    }
   }
 
   async function handleAddParticipant(){
@@ -149,7 +178,7 @@
     newParticipant.value = '';
   }
 
-  async function handeDeleteParticipantClick(i){
+  async function handleDeleteParticipantClick(i){
     participantsList.value.splice(i,1);
   }
 
@@ -236,7 +265,7 @@
             <ul v-if="participantsList.length !== 0" class="bg-zinc-800 my-2 p-2 w-4/5 rounded">
               <li class="text-white flex justify-between flex-row" v-for="(participant, i) in participantsList" :key="i">
                 <p> {{ participant.email }} </p>
-                <i class="fa-solid fa-trash" @click="handeDeleteParticipantClick(i)"></i>
+                <i class="fa-solid fa-trash" @click="handleDeleteParticipantClick(i)"></i>
               </li>
             </ul>
               <input
@@ -276,6 +305,7 @@
           <p>Titre : {{ event.summary }}</p>
           <p>De : {{ event.start }}</p>
           <p>A : {{ event.end }}</p>
+          <p>{{event}}</p>
           <button @click="handleRemoveEventClick($event, event.id)">Delete this event</button>
         </li>
       </ul>
@@ -290,7 +320,7 @@
       <button class="bg-gray-200 p-2 rounded active:scale-95 hover:opacity-90" ref="showCalendar" id="show_calendar" @click="() => listUpcomingEvents()">Show Calendar</button>
     </section>
 
-    <section class="px-4">
+    <section class="px-4 fixed right-0">
       <Event :event="event" @modifyEvent="modifyEvent"></Event>
     </section>
   </div>

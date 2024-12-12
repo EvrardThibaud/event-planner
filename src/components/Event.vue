@@ -2,31 +2,39 @@
     import {formatToDatetimeLocal, formatEventDateTimes} from "../composable/DateTime.js";
     import { defineProps, ref,computed, defineEmits } from 'vue'
 
+    const newParticipant = ref('');
     const modifying = ref(false)
     const props = defineProps({
         event: Object,
     })
     const startEndDisplayFormatted = computed(() => {
-        console.log(props.event.start);
         if (props.event && props.event.start && props.event.end) {
             return formatEventDateTimes(props.event.start, props.event.end);
         }
         return null;
     });
+
     const startEndInputFormatted = computed(() => {
         if (props.event && props.event.start && props.event.end) {
             return [formatToDatetimeLocal(props.event.start),formatToDatetimeLocal(props.event.end)]
         }
         return null;
     });
-    const emit = defineEmits();
+    const emit = defineEmits(['modifyEvent']);
     const emitEvent = () => {
         emit('modifyEvent');
     };
 
+    async function handleAddParticipant(){
+        props.event.attendees.push({email : newParticipant.value});
+        newParticipant.value = '';
+    }
+
     
     async function handleModifyEventClick(){
         if (modifying.value) {
+            props.event.start = startEndInputFormatted.value[0] + ":00+01:00"
+            props.event.end = startEndInputFormatted.value[1] + ":00+01:00"
             emitEvent()
         } else {
             
@@ -86,18 +94,34 @@
                     placeholder="Describe your event"
                     ></textarea>
                 </div> 
+                <!-- <form class="w-full" @submit.prevent="submitForm" @submit="handleAddParticipant"> 
+                    <div>
+                        <label for="participants">Add participants</label>
+                        <ul v-if="props.event.attendees" class="bg-zinc-800 my-2 p-2 w-4/5 rounded">
+                            <li class="text-white flex justify-between flex-row" v-for="(attender, i) in props.event.attendees" :key="i">
+                                <p> {{ attender.email }} </p>
+                                <i class="fa-solid fa-trash" @click="handeDeleteParticipantClick(i)"></i>
+                            </li>
+                        </ul>
+                        <input
+                            v-model="newParticipant"
+                            type="email"
+                            id="participants"
+                            placeholder="Participants's email"
+                            required
+                        ></input>
+                        <button id="secondary_button">Add this particpant</button>
+                    </div> 
+                </form> -->
                 <button @click="handleModifyEventClick">Save Modification</button>
             </form>
         </div>
         <div class="text-white" v-else>
-                <p v-if="props.event.summary">📋 {{ props.event.summary }}</p>
-                <p v-if="isSingleString">⏰ {{ startEndDisplayFormatted }}</p>
-            <div v-else>
-                <p>⏰ {{ startEndDisplayFormatted[0] + " - " + startEndDisplayFormatted[1]}}</p>
-            </div>
+            <p v-if="props.event.summary">📋 {{ props.event.summary }}</p>
+            <p v-if="startEndDisplayFormatted.length === 1">⏰ {{ startEndDisplayFormatted[0]}}</p>
+            <p v-else>⏰ {{ startEndDisplayFormatted[0] + " - " + startEndDisplayFormatted[1]}}</p>
             <p v-if="props.event.location">📍 {{ props.event.location }}</p>
             <p v-if="props.event.description">📝 {{ props.event.description }}</p>
-            
             <div v-if="props.event.attendees">
                 <p>👤 Attendees :</p>
                 <ul>

@@ -94,6 +94,8 @@ export function calculTimeMax(sortingTime, sortingType) {
     return timeMax;
 }
 
+// receive a start and end datetime from the google api
+// return datetime(s) in common language to display
 export function formatEventDateTimes(startDateTime, endDateTime) {
     const months = [
         'January', 'February', 'March', 'April', 'May', 'June',
@@ -135,7 +137,7 @@ export function formatEventDateTimes(startDateTime, endDateTime) {
         startDate.getMonth() === endDate.getMonth() &&
         startDate.getDate() === endDate.getDate()
     ) {
-        return `${formatDate(startDate)}⋅${formatTime(startDate)} – ${formatTime(endDate)}`;
+        return [`${formatDate(startDate)}⋅${formatTime(startDate)} – ${formatTime(endDate)}`];
     } else {
         return [
             formatDateTime(startDate),
@@ -144,6 +146,8 @@ export function formatEventDateTimes(startDateTime, endDateTime) {
     }
 }
 
+// receive a datetime from the google api
+// return a datetime usable in an html input
 export function formatToDatetimeLocal(inputDateTime) {
     const date = new Date(inputDateTime); // Convertir la chaîne en objet Date
     const year = date.getFullYear();
