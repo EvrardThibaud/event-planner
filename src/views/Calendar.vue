@@ -140,6 +140,10 @@
     }
   }
 
+  async function modifyEvent(){
+    console.log("Modification réussi !!!!");
+  }
+
   async function handleAddParticipant(){
     participantsList.value.push({email : newParticipant.value});
     newParticipant.value = '';
@@ -287,7 +291,7 @@
     </section>
 
     <section class="px-4">
-      <Event :event="event"></Event>
+      <Event :event="event" @modifyEvent="modifyEvent"></Event>
     </section>
   </div>
 </template>

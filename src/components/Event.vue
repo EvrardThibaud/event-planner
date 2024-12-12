@@ -1,6 +1,6 @@
 <script setup>
     import {formatToDatetimeLocal, formatEventDateTimes} from "../composable/DateTime.js";
-    import { defineProps, ref, onMounted,computed  } from 'vue'
+    import { defineProps, ref,computed, defineEmits } from 'vue'
 
     const modifying = ref(false)
     const props = defineProps({
@@ -19,9 +19,18 @@
         }
         return null;
     });
-    
+    const emit = defineEmits();
+    const emitEvent = () => {
+        emit('modifyEvent');
+    };
 
-    async function handModifyEventClick(){
+    
+    async function handleModifyEventClick(){
+        if (modifying.value) {
+            emitEvent()
+        } else {
+            
+        }
         modifying.value = !modifying.value
     }
 
@@ -77,6 +86,7 @@
                     placeholder="Describe your event"
                     ></textarea>
                 </div> 
+                <button @click="handleModifyEventClick">Save Modification</button>
             </form>
         </div>
         <div class="text-white" v-else>
@@ -97,7 +107,7 @@
                 </ul>
             </div>
         </div>
-        <button @click="handModifyEventClick">{{modifying ? "Save modification" : "Modify"}}</button>
+        <button v-if="!modifying" @click="handleModifyEventClick">Modify</button>
     </div>
 
 </template>
