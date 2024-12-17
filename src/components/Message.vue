@@ -12,7 +12,13 @@
 <template>
     
     <div class="bg-red-800 text-white min-h-32 w-1/2 p-4">
-        {{ props.content }}
+        <p>
+            {{ props.content }}
+        </p>
+        <p>
+            {{ props.sender }}
+        </p>
+        <p>{{props.datetime}}</p>
     </div>
 
 </template>

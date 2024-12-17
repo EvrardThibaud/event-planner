@@ -13,17 +13,33 @@
   const chat = model.startChat()
 
   async function handleButtonClick(){
-    
+    let now = new Date();
+    messages.value.push({ 
+        content: prompt.value, 
+        datetime: now.toLocaleString(),
+        sender : "me"
+    });
     result.value = await chat.sendMessage(prompt.value);
-    messages.value.push(result.value)
-    console.log(result.value.response);
+    now = new Date();
+    messages.value.push({ 
+        content: result.value.response.text(), 
+        datetime: now.toLocaleString(),
+        sender : "api"
+    });
+
+    console.log(messages.value);
+    prompt.value = ""
   }
 </script>
 
 <template>
   <h1 class="mt-28 text-white">Chat</h1>
   <div>
-    <Message v-if="messages.length !== 0" v-for="(message, i) in messages" :key="i" :content="message.response.text()"/>
+    <Message v-if="messages.length !== 0" v-for="(message, i) in messages" :key="i" 
+      :content="message.content"
+      :sender="message.sender"
+      :datetime="message.datetime"
+    />
     <p v-else class="text-white">pas de message</p>
   </div>
 
