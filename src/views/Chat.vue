@@ -10,9 +10,11 @@
   const result = ref(null)
   const prompt = ref("")
   const messages = ref([])
+  const chat = model.startChat()
 
   async function handleButtonClick(){
-    result.value = await model.generateContent(prompt.value);
+    
+    result.value = await chat.sendMessage(prompt.value);
     messages.value.push(result.value)
     console.log(result.value.response);
   }
