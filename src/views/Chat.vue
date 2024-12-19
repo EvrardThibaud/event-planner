@@ -87,18 +87,20 @@
 
 <template>
   <section class="w-full flex justify-center">
-    <div id="messagesBox" ref="messagesBox">
-      <Message v-if="messages.length !== 0" v-for="(message, i) in messages" :key="i" 
+    <div v-if="messages.length !== 0" id="messagesBox" ref="messagesBox">
+      <Message  v-for="(message, i) in messages" :key="i" 
         :text="message.parts[0].text"
         :role="message.role"
         :datetime="message.datetime"
       />
-      <p v-else class="text-white">pas de message</p>
       <Message v-if="typing" id="typingMessage"
-        text=""
-        role="model"
-        :datetime=null
+      text=""
+      role="model"
+      :datetime=null
       />
+    </div>
+    <div v-else id="noMessage" class="text-white w-full flex justify-center items-center opacity-70">
+      <p>It’s quiet here, send a message!</p>
     </div>
   
     <form @submit.prevent="submitForm">
@@ -111,6 +113,10 @@
 </template>
 
 <style scoped>
+  #noMessage{
+     height: calc(80vh - 56px);
+  }
+
   form{
     background-color: #18181b;
     position: fixed;
