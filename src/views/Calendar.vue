@@ -2,6 +2,7 @@
   import { ref, onMounted } from 'vue';
   import {gisLoaded, gapiLoaded, loadScript} from "../composable/GoogleAuth.js";
   import {addTimeToDateTime, calculTimeMin, calculTimeMax} from "../composable/DateTime.js";
+  import { createAlert } from '../composable/Alerts.js';
   import Event from '../components/Event.vue';
   
   const contentArea = ref(null);
@@ -45,7 +46,11 @@
       };
       response = await gapi.client.calendar.events.list(request);
     } catch (err) {
-       console.log(err.message);
+      console.log(err.result);
+      console.log(err.result.error);
+      console.log(err.result.error.code);
+      console.log(err.result.error.errors[0].message);
+      createAlert("Essaye de vous reconnecter","fail",err.result.error.code,err.result.error.errors[0].message)
       showCalendar.value.innerText = 'Show Calendar';
       return;
     }
@@ -94,7 +99,6 @@
     isAdding.value = true;
 
     if (!newEvent.value.datetime || !newEvent.value.time){
-      console.log("ya pas");
       isAdding.value = false;
       return;
     }
@@ -265,7 +269,8 @@
             <ul v-if="participantsList.length !== 0" class="bg-zinc-800 my-2 p-2 w-4/5 rounded">
               <li class="text-white flex justify-between flex-row" v-for="(participant, i) in participantsList" :key="i">
                 <p> {{ participant.email }} </p>
-                <i class="fa-solid fa-trash" @click="handleDeleteParticipantClick(i)"></i>
+                <!-- <i class="fa-solid fa-trash" @click="handleDeleteParticipantClick(i)"></i> -->
+                <p class="hover:cursor-pointer active:scale-90" @click="handleDeleteParticipantClick(i)">🗑️</p>
               </li>
             </ul>
               <input
