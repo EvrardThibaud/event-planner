@@ -19,16 +19,23 @@
 </script>
 
 <template>
-    <div>
-        <p>Titre : {{ props.event.summary }}</p>
-          <p v-for="(text, i) in formatEventDateTimes(props.event.start,event.end)" :key="i" >
+    <div id="eventCard" >
+        <p class="text-lg font-medium " >{{ props.event.summary }}</p>
+        <p class="text-sm" v-for="(text, i) in formatEventDateTimes(props.event.start,event.end)" :key="i" >
             {{text}}
-          </p>
-          <button @click="handleRemoveEventClick($event, props.event.id)">Delete this event</button>
+        </p>
+        <div @click="handleRemoveEventClick($event, props.event.id)" class="hover:cursor-pointer">
+            Click here to delete this event
+        </div>
     </div>
 
 </template>
 
 <style scoped>
-    
+    #eventCard{
+        color: white;
+        background-color: rgb(19, 60, 78);
+        padding: 6px;
+        border-radius: 10px;
+    }
 </style>

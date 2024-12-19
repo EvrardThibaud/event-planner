@@ -43,7 +43,6 @@
         timeMax: timeMax,
         showDeleted: false,
         singleEvents: true,
-        maxResults: 10,
         orderBy: 'startTime',
       };
       response = await gapi.client.calendar.events.list(request);
@@ -137,6 +136,7 @@
         }
         participantsList.value = [];
         listUpcomingEvents();
+        setDatetime()
       }
     } catch (err) {
       isAdding.value = false;
@@ -308,13 +308,12 @@
         >
       </div>
       
-      <div>
+      <div class="grid grid-cols-auto gap-2 my-4 h-auto text-white">
         <EventCard v-for="event in eventsList" 
-          class= "b-white border-2 m-2 p-2 text-white" 
           :key="event.id" 
           @click="handleViewMore(event)" 
           :event="event" 
-          @handleRemoveEventClick="handleRemoveEventClick"/>          
+          @handleRemoveEventClick="handleRemoveEventClick"/>     
       </div>
       
       <div id="to_connect" class="text-gray-200">
@@ -330,12 +329,17 @@
     </section>
 
     <section class="px-4 fixed right-0">
-      <Event :event="event" @modifyEvent="modifyEvent"></Event>
+      <Event :event="event" @modifyEvent="modifyEvent" @handleRemoveEventClick="handleRemoveEventClick"></Event>
     </section>
   </div>
 </template>
 
 <style scoped lang="scss">
+  .grid-cols-auto {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Ajustez 100px pour une taille minimale */
+  }
+
   #form_add_event{
     div{
       display: flex;
