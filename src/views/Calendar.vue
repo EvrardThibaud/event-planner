@@ -1,7 +1,7 @@
 <script setup>
   import { ref, onMounted } from 'vue';
   import {gisLoaded, gapiLoaded, loadScript,handleAuthClick} from "../composable/GoogleAuth.js";
-  import {addTimeToDateTime, calculTimeMin, calculTimeMax} from "../composable/DateTime.js";
+  import {addTimeToDateTime, calculTimeMin, calculTimeMax, formatEventDateTimes} from "../composable/DateTime.js";
   import { createAlert } from '../composable/Alerts.js';
   import Event from '../components/Event.vue';
   
@@ -309,9 +309,9 @@
       <ul>
         <li v-for="event in eventsList" class= "b-white border-2 m-2 p-2 text-white" :key="event.id" @click="handleViewMore(event)">
           <p>Titre : {{ event.summary }}</p>
-          <p>De : {{ event.start }}</p>
-          <p>A : {{ event.end }}</p>
-          <p>{{event}}</p>
+          <p v-for="(text, i) in formatEventDateTimes(event.start,event.end)" :key="i" >
+            {{text}}
+          </p>
           <button @click="handleRemoveEventClick($event, event.id)">Delete this event</button>
         </li>
       </ul>

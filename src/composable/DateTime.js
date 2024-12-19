@@ -137,7 +137,7 @@ export function formatEventDateTimes(startDateTime, endDateTime) {
         startDate.getMonth() === endDate.getMonth() &&
         startDate.getDate() === endDate.getDate()
     ) {
-        return [`${formatDate(startDate)}⋅${formatTime(startDate)} – ${formatTime(endDate)}`];
+        return [`${formatDate(startDate)} ⋅ ${formatTime(startDate)} – ${formatTime(endDate)}`];
     } else {
         return [
             formatDateTime(startDate),
