@@ -14,6 +14,8 @@ html{
    scroll-behavior: smooth;
 }
 
+/* scroll bar */
+
 ::-webkit-scrollbar {
    width: 8px; 
  }
@@ -31,3 +33,40 @@ html{
  ::-webkit-scrollbar-thumb:hover {
    background: #555; 
  }
+
+/* alerts */
+
+.alert {
+   color: white;
+   height: auto;
+   width: 20vw;
+   border-radius: 6px;
+   padding: 4px;
+   position: fixed;
+   bottom: 20px;
+   right: -25vw; 
+   background-color: #e74c3c;   
+   transition: right 0.5s ease-in-out; 
+}
+
+.alert.show {
+   right: 20px; 
+}
+
+.alert.fade-out {
+   right: -25vw; 
+}
+ 
+
+.progress-bar{
+   position: absolute;
+   left: 0;
+   bottom: 0;
+   background-color: white;
+   height: 4px;
+   border-bottom-left-radius: 6px;
+}
+
+.error{
+   background-color: #e74c3c;
+}

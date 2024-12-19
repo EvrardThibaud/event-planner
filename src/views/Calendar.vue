@@ -50,7 +50,7 @@
       console.log(err.result.error);
       console.log(err.result.error.code);
       console.log(err.result.error.errors[0].message);
-      createAlert("Essaye de vous reconnecter","fail",err.result.error.code,err.result.error.errors[0].message)
+      createAlert("Essaye de vous reconnecter","error",err.result.error.code,err.result.error.errors[0].message)
       showCalendar.value.innerText = 'Show Calendar';
       return;
     }
@@ -207,6 +207,8 @@
     loadScript('https://accounts.google.com/gsi/client', gisLoaded);
 
     setDatetime();
+
+    createAlert("Apagnan la vida","error","404","le messag est formel")
 
   });
 </script>
