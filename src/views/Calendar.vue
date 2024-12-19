@@ -75,8 +75,8 @@
     eventsList.value.push(...output);
   }
 
-  async function handleRemoveEventClick(event,id){
-    event.target.innerText = 'Deleting...';
+  async function handleRemoveEventClick(e, id){
+    e.target.innerText = 'Deleting...';
     let response;
     try {
       const request = {
@@ -86,6 +86,7 @@
       response = await gapi.client.calendar.events.delete(request);
       if (response.status === 204) {
         listUpcomingEvents();
+        event.value = null
       }
     } catch (err) {
       console.log(err);
@@ -329,7 +330,7 @@
     </section>
 
     <section class="px-4 fixed right-0">
-      <Event :event="event" @modifyEvent="modifyEvent" @handleRemoveEventClick="handleRemoveEventClick"></Event>
+      <Event v-if="event" :event="event" @modifyEvent="modifyEvent" @handleRemoveEventClick="handleRemoveEventClick"></Event>
     </section>
   </div>
 </template>
@@ -337,7 +338,7 @@
 <style scoped lang="scss">
   .grid-cols-auto {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Ajustez 100px pour une taille minimale */
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   }
 
   #form_add_event{

@@ -24,9 +24,6 @@
         <p class="text-sm" v-for="(text, i) in formatEventDateTimes(props.event.start,event.end)" :key="i" >
             {{text}}
         </p>
-        <div @click="handleRemoveEventClick($event, props.event.id)" class="hover:cursor-pointer">
-            Click here to delete this event
-        </div>
     </div>
 
 </template>

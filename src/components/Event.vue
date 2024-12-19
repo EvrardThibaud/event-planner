@@ -20,25 +20,30 @@
         }
         return null;
     });
-    const emit = defineEmits(['modifyEvent']);
-    const emitEvent = () => {
-        emit('modifyEvent');
+
+    const emit = defineEmits(['modifyEvent', 'handleRemoveEventClick']);
+
+    const emitRemoveEvent = (event, eventId) => {
+        emit('handleRemoveEventClick', event, eventId);
     };
 
+    async function handleRemoveEventClick(event, eventId) {
+        emitRemoveEvent(event, eventId);
+    }
+
+    async function handleModifyEventClick() {
+        if (modifying.value) {
+            props.event.start = startEndInputFormatted.value[0] + ":00+01:00";
+            props.event.end = startEndInputFormatted.value[1] + ":00+01:00";
+            emit('modifyEvent', props.event);
+        }
+        modifying.value = !modifying.value;
+    }
+
+    
     async function handleAddParticipant(){
         props.event.attendees.push({email : newParticipant.value});
         newParticipant.value = '';
-    }
-
-    async function handleModifyEventClick(){
-        if (modifying.value) {
-            props.event.start = startEndInputFormatted.value[0] + ":00+01:00"
-            props.event.end = startEndInputFormatted.value[1] + ":00+01:00"
-            emitEvent()
-        } else {
-            
-        }
-        modifying.value = !modifying.value
     }
 
 </script>
@@ -130,7 +135,10 @@
                 </ul>
             </div>
         </div>
-        <button v-if="!modifying" @click="handleModifyEventClick">Modify</button>
+        <div class="flex flex-col">
+            <button v-if="!modifying" @click="handleModifyEventClick">Modify this event</button>
+            <button id="deleteButton" v-if="!modifying" @click="handleRemoveEventClick($event, props.event.id)">Delete this event</button>
+        </div>
     </div>
 
 </template>
@@ -173,6 +181,10 @@
 
     button:active{
         scale: .98;
+    }
+
+    #deleteButton{
+        background-color: #fca5a5 ;
     }
 
     #secondary_button{
