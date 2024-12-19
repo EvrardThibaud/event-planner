@@ -10,7 +10,7 @@
   const result = ref(null);
   const prompt = ref("");
   const messages = ref([]); 
-  const chat = model.startChat();
+  var chat = null
 
   const handleKeyDown = (event) => {
     if (event.key === "Enter" && !event.shiftKey) {
@@ -26,9 +26,9 @@
     prompt.value = "";
 
     const newMessage = {
-      content: tempPrompt,
+      parts: [{text :tempPrompt}],
       datetime: now.toLocaleString(),
-      sender: "me",
+      role: "user",
     };
     messages.value = [...messages.value, newMessage]; 
 
@@ -36,9 +36,9 @@
 
     now = new Date();
     const apiResponse = {
-      content: result.value.response.text(),
+      parts: [{text :result.value.response.text()}],
       datetime: now.toLocaleString(),
-      sender: "api",
+      role: "model",
     };
     messages.value = [...messages.value, apiResponse];
   }
@@ -53,18 +53,29 @@
   onMounted(() => {
     const savedMessages = localStorage.getItem("messages");
     if (savedMessages) {
-      console.log(savedMessages);
       messages.value = JSON.parse(savedMessages);
+      
+      const history = messages.value.map(message => {
+        return {
+          parts: message.parts,
+          role: message.role 
+        };
+      });
+
+      chat = model.startChat({
+        history: history
+      });
     }
   });
+
 </script>
 
 <template>
   <section class="w-full flex justify-center">
     <div id="messagesBox">
       <Message v-if="messages.length !== 0" v-for="(message, i) in messages" :key="i" 
-        :content="message.content"
-        :sender="message.sender"
+        :text="message.parts[0].text"
+        :role="message.role"
         :datetime="message.datetime"
       />
       <p v-else class="text-white">pas de message</p>
@@ -125,6 +136,7 @@
 
   #messagesBox{
     /* height: calc(80vh - 56px); */
+    margin-bottom: 20vh;
     width: calc(60vw);
     display: flex;
     justify-content: end;
