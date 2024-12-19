@@ -30,7 +30,6 @@
         newParticipant.value = '';
     }
 
-    
     async function handleModifyEventClick(){
         if (modifying.value) {
             props.event.start = startEndInputFormatted.value[0] + ":00+01:00"

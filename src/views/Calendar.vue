@@ -4,6 +4,7 @@
   import {addTimeToDateTime, calculTimeMin, calculTimeMax, formatEventDateTimes} from "../composable/DateTime.js";
   import { createAlert } from '../composable/Alerts.js';
   import Event from '../components/Event.vue';
+  import EventCard from '../components/EventCard.vue';
   
   const contentArea = ref(null);
   const event = ref(null)
@@ -306,16 +307,16 @@
           class="text-gray-800"
         >
       </div>
-      <ul>
-        <li v-for="event in eventsList" class= "b-white border-2 m-2 p-2 text-white" :key="event.id" @click="handleViewMore(event)">
-          <p>Titre : {{ event.summary }}</p>
-          <p v-for="(text, i) in formatEventDateTimes(event.start,event.end)" :key="i" >
-            {{text}}
-          </p>
-          <button @click="handleRemoveEventClick($event, event.id)">Delete this event</button>
-        </li>
-      </ul>
-
+      
+      <div>
+        <EventCard v-for="event in eventsList" 
+          class= "b-white border-2 m-2 p-2 text-white" 
+          :key="event.id" 
+          @click="handleViewMore(event)" 
+          :event="event" 
+          @handleRemoveEventClick="handleRemoveEventClick"/>          
+      </div>
+      
       <div id="to_connect" class="text-gray-200">
         <p>You can't see any calendar because you are not connected</p>
         <RouterLink   class="hover:text-green-300 " :to="{name: 'GoogleAuth'}" >
