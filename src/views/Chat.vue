@@ -1,11 +1,12 @@
 <script setup>
-  import { ref, onMounted, watch } from "vue";
+  import { ref, onMounted, watch, watchEffect } from "vue";
   import { GoogleGenerativeAI } from "@google/generative-ai";
   import Message from "../components/Message.vue";
 
   const genAI = new GoogleGenerativeAI("AIzaSyAdn8fbCMXxyOat2ZyWkmVed54w_Q6tgqg");
   const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
+  const messagesBox = ref(null);
   const textarea = ref(null);
   const result = ref(null);
   const prompt = ref("");
@@ -18,6 +19,7 @@
       handleButtonClick();
     }
   };
+
   async function handleButtonClick() {
     if (!prompt.value.trim()) return; 
 
@@ -41,7 +43,17 @@
       role: "model",
     };
     messages.value = [...messages.value, apiResponse];
+    scrollToBottom()
   }
+
+  const scrollToBottom = () => {
+    setTimeout(() => {
+      // Défiler la page entière vers le bas
+      window.scrollTo(0, document.body.scrollHeight);
+    }, 0);
+  };
+
+
   watch(
     messages,
     (newMessages) => {
@@ -49,6 +61,7 @@
     },
     { deep: true } 
   );
+
 
   onMounted(() => {
     const savedMessages = localStorage.getItem("messages");
@@ -72,7 +85,7 @@
 
 <template>
   <section class="w-full flex justify-center">
-    <div id="messagesBox">
+    <div id="messagesBox" ref="messagesBox">
       <Message v-if="messages.length !== 0" v-for="(message, i) in messages" :key="i" 
         :text="message.parts[0].text"
         :role="message.role"
@@ -141,6 +154,5 @@
     display: flex;
     justify-content: end;
     flex-direction: column;
-    overflow-y: auto;
   }
 </style>
