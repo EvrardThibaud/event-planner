@@ -11,6 +11,7 @@
   const result = ref(null);
   const prompt = ref("");
   const messages = ref([]); 
+  const typing = ref(false)
   var chat = null
 
   const handleKeyDown = (event) => {
@@ -33,26 +34,27 @@
       role: "user",
     };
     messages.value = [...messages.value, newMessage]; 
+    scrollToBottom()
 
+    typing.value = true
     result.value = await chat.sendMessage(tempPrompt);
-
+    
     now = new Date();
     const apiResponse = {
       parts: [{text :result.value.response.text()}],
       datetime: now.toLocaleString(),
       role: "model",
     };
+    typing.value = false
     messages.value = [...messages.value, apiResponse];
     scrollToBottom()
   }
 
   const scrollToBottom = () => {
     setTimeout(() => {
-      // Défiler la page entière vers le bas
       window.scrollTo(0, document.body.scrollHeight);
     }, 0);
   };
-
 
   watch(
     messages,
@@ -92,6 +94,11 @@
         :datetime="message.datetime"
       />
       <p v-else class="text-white">pas de message</p>
+      <Message v-if="typing" id="typingMessage"
+        text=""
+        role="model"
+        :datetime=null
+      />
     </div>
   
     <form @submit.prevent="submitForm">
@@ -154,5 +161,30 @@
     display: flex;
     justify-content: end;
     flex-direction: column;
+  }
+
+  #typingMessage{
+    border-radius: 10px;
+    padding: 6px;
+    margin: 2px 6px 2px 6px;
+    width: fit-content;
+    height: fit-content;
+    max-width: 70%;
+    width: 40px;
+    aspect-ratio: 2;
+    --_g: no-repeat radial-gradient(circle closest-side,#fff 90%,#0000);
+    background: 
+      var(--_g) 0%   50%,
+      var(--_g) 50%  50%,
+      var(--_g) 100% 50%;
+    background-size: calc(100%/3) 50%;
+    animation: l3 1s infinite linear;
+  }
+
+  @keyframes l3 {
+      20%{background-position:0%   0%, 50%  50%,100%  50%}
+      40%{background-position:0% 100%, 50%   0%,100%  50%}
+      60%{background-position:0%  50%, 50% 100%,100%   0%}
+      80%{background-position:0%  50%, 50%  50%,100% 100%}
   }
 </style>
