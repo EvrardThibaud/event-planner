@@ -126,6 +126,8 @@
       };
       response = await gapi.client.calendar.events.insert(request);
       if (response.status === 200) {
+        console.log(response);
+        createAlert("Your event named " + newEvent.value.title + " has been added successfully.","success")
         newEvent.value = {
             title: '',
             datetime: '',
@@ -169,6 +171,7 @@
       };
       response = await gapi.client.calendar.events.update(request);
       if (response.status === 204) {
+
         listUpcomingEvents();
       }
     } catch (err) {
