@@ -10,18 +10,25 @@
 </script>
 
 <template>
-    
-    <div class="bg-red-800 text-white min-h-32 w-1/2 p-4">
-        <p>
-            {{ props.content }}
-        </p>
-        <p>
-            {{ props.sender }}
-        </p>
-        <p>{{props.datetime}}</p>
+    <div 
+        id="message"
+        :class="[
+            sender === 'me' ? 'bg-indigo-500 self-end' : 'bg-gray-300 self-start'
+        ]"
+    >
+        <p>{{ props.content }}</p>
+        <p class="text-xs my-1 opacity-70">{{props.datetime}}</p>
     </div>
 
 </template>
 
 <style scoped>
+    #message{
+        border-radius: 10px;
+        padding: 6px;
+        margin: 2px 6px 2px 6px;
+        width: fit-content;
+        height: fit-content;
+        max-width: 70%
+    }
 </style>

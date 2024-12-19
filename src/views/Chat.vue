@@ -53,8 +53,8 @@
 </script>
 
 <template>
-  <section class="bg-red-400">
-    <div div="" class="bg-purple-500">
+  <section class="w-full flex justify-center">
+    <div id="messagesBox">
       <Message v-if="messages.length !== 0" v-for="(message, i) in messages" :key="i" 
         :content="message.content"
         :sender="message.sender"
@@ -74,9 +74,11 @@
 
 <style scoped>
   form{
+    background-color: #18181b;
     position: fixed;
     top: 80vh;
     width: 100vw;
+    height: 20vh;
     display: flex;
     justify-content: center;
     gap: 2px;
@@ -99,9 +101,27 @@
     min-width: 50vw;
     overflow-y: scroll;
   }
+
   button{
     min-width: 10vw;
     font-weight: 600;
     background-color: #86efac;
+  }
+
+  button:hover{
+    opacity: .9;
+  }
+
+  button:active{
+    scale: .98;
+  }
+
+  #messagesBox{
+    /* height: calc(80vh - 56px); */
+    width: calc(60vw);
+    display: flex;
+    justify-content: end;
+    flex-direction: column;
+    overflow-y: auto;
   }
 </style>

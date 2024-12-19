@@ -357,7 +357,8 @@
       font-weight: 600;
       background-color: #86efac;
     }
-    input:hover, textarea:hover, button:hover{
+    
+    button:hover{
       opacity: .9;
     }
 
