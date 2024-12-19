@@ -1,6 +1,6 @@
 <script setup>
   import { ref, onMounted } from 'vue';
-  import {gisLoaded, gapiLoaded, loadScript} from "../composable/GoogleAuth.js";
+  import {gisLoaded, gapiLoaded, loadScript,handleAuthClick} from "../composable/GoogleAuth.js";
   import {addTimeToDateTime, calculTimeMin, calculTimeMax} from "../composable/DateTime.js";
   import { createAlert } from '../composable/Alerts.js';
   import Event from '../components/Event.vue';
@@ -8,6 +8,7 @@
   const contentArea = ref(null);
   const event = ref(null)
   const showCalendar = ref(null);
+  const refreshButton = ref(null)
   const newParticipant = ref('');
   const isAdding = ref(false);
   const eventsList = ref([]);
@@ -46,12 +47,9 @@
       };
       response = await gapi.client.calendar.events.list(request);
     } catch (err) {
-      console.log(err.result);
-      console.log(err.result.error);
-      console.log(err.result.error.code);
-      console.log(err.result.error.errors[0].message);
-      createAlert("Essaye de vous reconnecter","error",err.result.error.code,err.result.error.errors[0].message)
+      createAlert("Click on the 'refresh' button.","error",err.result.error.code,err.result.error.errors[0].message)
       showCalendar.value.innerText = 'Show Calendar';
+      refreshButton.value.style.visibility = 'visible';
       return;
     }
 
@@ -205,14 +203,12 @@
 
   onMounted(() => {
     showCalendar.value.style.visibility = 'hidden';
+    refreshButton.value.style.visibility = 'hidden';
 
     loadScript('https://apis.google.com/js/api.js', gapiLoaded);
     loadScript('https://accounts.google.com/gsi/client', gisLoaded);
 
     setDatetime();
-
-    createAlert("Apagnan la vida","error","404","le messag est formel")
-
   });
 </script>
 
@@ -327,7 +323,9 @@
         </RouterLink>
       </div>
       <p v-if="noEvent" class="text-gray-200">Your calendar doesn't contain any event.</p>
-      <button class="bg-gray-200 p-2 rounded active:scale-95 hover:opacity-90" ref="showCalendar" id="show_calendar" @click="() => listUpcomingEvents()">Show Calendar</button>
+      <button class="bg-gray-200 p-2 rounded active:scale-95 hover:opacity-90 m-6" ref="showCalendar" id="show_calendar" @click="() => listUpcomingEvents()">Show Calendar</button>
+      <button class="bg-gray-200 p-2 rounded active:scale-95 hover:opacity-90" ref="refreshButton"  @click="handleAuthClick">Refresh</button>
+
     </section>
 
     <section class="px-4 fixed right-0">
