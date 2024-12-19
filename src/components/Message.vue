@@ -4,7 +4,7 @@
     const props = defineProps({
         sender: String,
         content: String,
-        datetime: Date,   
+        datetime: String,   
     })
 
 </script>

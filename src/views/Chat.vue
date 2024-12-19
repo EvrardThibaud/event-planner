@@ -1,54 +1,61 @@
 <script setup>
+  import { ref, onMounted, watch } from "vue";
   import { GoogleGenerativeAI } from "@google/generative-ai";
   import Message from "../components/Message.vue";
-  import { ref, onMounted, watch  } from 'vue';
 
   const genAI = new GoogleGenerativeAI("AIzaSyAdn8fbCMXxyOat2ZyWkmVed54w_Q6tgqg");
   const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
   const textarea = ref(null);
-  const result = ref(null)
-  const prompt = ref("")
-  const messages = ref([])
-  const chat = model.startChat()
+  const result = ref(null);
+  const prompt = ref("");
+  const messages = ref([]); 
+  const chat = model.startChat();
 
   const handleKeyDown = (event) => {
-    if (event.key === 'Enter' && !event.shiftKey) {
+    if (event.key === "Enter" && !event.shiftKey) {
       event.preventDefault();
       handleButtonClick();
     }
   };
+  async function handleButtonClick() {
+    if (!prompt.value.trim()) return; 
 
-  async function handleButtonClick(){
     let now = new Date();
-    const tempPrompt = prompt.value
-    prompt.value = ""
-    messages.value.push({ 
-        content: tempPrompt, 
-        datetime: now.toLocaleString(),
-        sender : "me"
-    });
+    const tempPrompt = prompt.value;
+    prompt.value = "";
+
+    const newMessage = {
+      content: tempPrompt,
+      datetime: now.toLocaleString(),
+      sender: "me",
+    };
+    messages.value = [...messages.value, newMessage]; 
+
     result.value = await chat.sendMessage(tempPrompt);
+
     now = new Date();
-    messages.value.push({ 
-        content: result.value.response.text(), 
-        datetime: now.toLocaleString(),
-        sender : "api"
-    });
+    const apiResponse = {
+      content: result.value.response.text(),
+      datetime: now.toLocaleString(),
+      sender: "api",
+    };
+    messages.value = [...messages.value, apiResponse];
   }
-
-  // const autoResize = () => {
-  //   const el = textarea.value;
-  //   if (el) {
-  //     el.style.height = 'auto'; // Reset the height to calculate new height
-  //     el.style.height = `${el.scrollHeight}px`; // Adjust height based on content
-  //   }
-  // };
-
-  // watch(prompt, autoResize);
+  watch(
+    messages,
+    (newMessages) => {
+      localStorage.setItem("messages", JSON.stringify(newMessages));
+    },
+    { deep: true } 
+  );
 
   onMounted(() => {
-    // autoResize();
+    const savedMessages = localStorage.getItem("messages");
+    if (savedMessages) {
+      console.log(savedMessages);
+      messages.value = JSON.parse(savedMessages);
+    }
   });
 </script>
 
