@@ -13,3 +13,21 @@ html{
    background-color: #18181b;
    scroll-behavior: smooth;
 }
+
+::-webkit-scrollbar {
+   width: 8px; 
+ }
+ 
+ ::-webkit-scrollbar-track {
+   background: #18181b;
+   border-radius: 10px;
+ }
+ 
+ ::-webkit-scrollbar-thumb {
+   background: #888; 
+   border-radius: 10px;
+ }
+ 
+ ::-webkit-scrollbar-thumb:hover {
+   background: #555; 
+ }

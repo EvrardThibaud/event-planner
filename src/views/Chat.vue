@@ -102,7 +102,7 @@
     </div>
   
     <form @submit.prevent="submitForm">
-      <textarea v-model="prompt" ref="textarea" @keydown="handleKeyDown" @input="autoResize"></textarea>
+      <textarea v-model="prompt" ref="textarea" @keydown="handleKeyDown" @input="autoResize" placeholder="Type your message"></textarea>
       <button @click="handleButtonClick" class="text-white">Send message</button>
     </form>
 
@@ -133,13 +133,19 @@
   }
 
   textarea{
-    min-height: 40px;
-    height: 40px;
-    max-height: 100px;
+    height: 100px; 
     min-width: 50vw;
-    overflow-y: scroll;
+    resize: none;
   }
 
+  textarea::-webkit-scrollbar-track {
+    background: #d1d5db; 
+  }
+
+  textarea::-webkit-scrollbar-thumb {
+    border-radius: 2px;
+  }
+  
   button{
     min-width: 10vw;
     font-weight: 600;
