@@ -7,7 +7,7 @@
         isAdding: Boolean,
         newParticipant: String,
     })
-    const emit = defineEmits(["update:newParticipant", 'handleAddEventClick', 'handleAddParticipant']);
+    const emit = defineEmits(["update:newParticipant", 'handleAddEventClick', 'handleAddParticipant', 'handleDeleteParticipantClick']);
 
     function handleAddEventClick(){
       emit('handleAddEventClick');
@@ -15,6 +15,10 @@
 
     function handleAddParticipant(){
       emit('handleAddParticipant');
+    }
+
+    function handleDeleteParticipantClick(){
+      emit('handleDeleteParticipantClick');
     }
 
     function handleInput(event) {

@@ -223,10 +223,9 @@
         :isAdding="isAdding"
         v-model:newParticipant="newParticipant"
         @handleAddEventClick="handleAddEventClick"
-        @handleAddParticipant="handleAddParticipant"/>
-        <p class="text-white">
-          {{ newParticipant }}
-        </p>
+        @handleAddParticipant="handleAddParticipant"
+        @handleDeleteParticipantClick="handleDeleteParticipantClick"
+      />
     </section>
 
     <section class="px-4 border-r-green-200 border-r-2">
@@ -254,7 +253,6 @@
           :event="event" 
           @handleRemoveEventClick="handleRemoveEventClick"/>     
       </div>
-      
       <div id="to_connect" class="text-gray-200">
         <p>You can't see any calendar because you are not connected</p>
         <RouterLink   class="hover:text-green-300 " :to="{name: 'GoogleAuth'}" >
