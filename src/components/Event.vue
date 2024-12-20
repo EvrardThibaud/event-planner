@@ -150,45 +150,5 @@
         flex-direction: column;
         width: 100%;
         }
-    } 
-
-    label{
-        color: #d1d5db;
-        font-weight: 500;
-        font-size: large;
-    }
-
-    input, textarea, button{
-        min-width: 300px;
-        min-height: 40px;
-        height: 40px;
-        max-height: 100px;
-        color: #18181b;
-        padding: 6px;
-        border: 2px solid #18181b;
-        border-radius: 5px;
-        background-color: #d1d5db;
-        outline: none;
-    }
-
-    button{
-        font-weight: 600;
-        background-color: #86efac;
-    }
-    input:hover, textarea:hover, button:hover{
-        opacity: .9;
-    }
-
-    button:active{
-        scale: .98;
-    }
-
-    #deleteButton{
-        background-color: #fca5a5 ;
-    }
-
-    #secondary_button{
-        background-color: #d1d5db;
-        font-weight: normal;
     }
 </style>

@@ -7,6 +7,7 @@
   import EventCard from '../components/EventCard.vue';
   import FormCreateEvent from '../components/FormCreateEvent.vue';
 
+  const isCreating = ref(false)
   const event = ref(null)
   const showCalendar = ref(null);
   const refreshButton = ref(null)
@@ -137,7 +138,8 @@
         }
         participantsList.value = [];
         listUpcomingEvents();
-        setDatetime()
+        setDatetime();
+        toggleIsCreating();
       }
     } catch (err) {
       isAdding.value = false;
@@ -203,22 +205,31 @@
     sortingTime.value = formattedDate
   }
 
+  async function toggleIsCreating(){
+    console.log(isCreating.value); 
+    isCreating.value = !isCreating.value
+    console.log(isCreating.value); 
+  }
+
   onMounted(() => {
     showCalendar.value.style.visibility = 'hidden';
     refreshButton.value.style.visibility = 'hidden';
 
     loadScript('https://apis.google.com/js/api.js', gapiLoaded);
     loadScript('https://accounts.google.com/gsi/client', gisLoaded);
-
     setDatetime();
   });
 </script>
 
 <template>
-  <div v-if="isConnected" id="buttonOpenAddEventForm">
-    <i class="fa-solid fa-plus pb-2"></i>
-  </div>
-  <section v-if="isConnected" class="border-r-green-200 border-r-2">
+  <button v-if="isConnected" class="primary_button" id="buttonOpenAddEventForm" @click="toggleIsCreating">
+    <div class="flex items-center">
+      <span class="material-symbols-outlined">add</span>
+      <p>Create a new event</p>
+    </div>
+  </button>
+
+  <section v-if="isCreating" class="border-r-green-200 border-r-2">
     <FormCreateEvent 
       :newEvent="newEvent" 
       :participantsList="participantsList" 
@@ -227,6 +238,7 @@
       @handleAddEventClick="handleAddEventClick"
       @handleAddParticipant="handleAddParticipant"
       @handleDeleteParticipantClick="handleDeleteParticipantClick"
+      @toggleIsCreating="toggleIsCreating"
     />
   </section>
   <div class=" min-h-max grid grid-cols-[70%,30%]">
@@ -282,15 +294,12 @@
 
   #buttonOpenAddEventForm{
     position: fixed;
-    bottom: 2px;
-    left: 2px;
-    height: 60px;
-    width: 60px;
-    background-color: red;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 4rem;
-    border-radius: 100%;
+    bottom: 20px;
+    left: calc(50vw );
+    transform: translateX(-50%);
+    transform-origin: center;
+    &:active{
+      transform: translateX(-50%) scale(0.98);
+    }
   }
 </style>

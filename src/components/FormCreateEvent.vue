@@ -7,10 +7,20 @@
         isAdding: Boolean,
         newParticipant: String,
     })
-    const emit = defineEmits(["update:newParticipant", 'handleAddEventClick', 'handleAddParticipant', 'handleDeleteParticipantClick']);
+    const emit = defineEmits([
+        "update:newParticipant", 
+        'handleAddEventClick', 
+        'handleAddParticipant', 
+        'handleDeleteParticipantClick',
+        'toggleIsCreating'
+      ]);
 
     function handleAddEventClick(){
       emit('handleAddEventClick');
+    }
+
+    function toggleIsCreating(){
+      emit('toggleIsCreating');
     }
 
     function handleAddParticipant(){
@@ -77,7 +87,7 @@
           ></textarea>
         </div> 
         
-        <form class="w-full" @submit.prevent="submitForm" @submit="handleAddParticipant">
+        <form @submit.prevent="submitForm" @submit="handleAddParticipant">
           <div>
             <label for="participants">Add participants</label>
             <ul v-if="participantsList.length !== 0" class="bg-zinc-800 my-2 p-2 w-4/5 rounded">
@@ -95,57 +105,30 @@
               placeholder="Participants's email"
               required
               ></input>
-              <button id="secondary_button" @click="handleAddParticipant">Add this particpant</button>
-          </div> 
-        </form>
-
-          <button  @click="handleAddEventClick">{{ isAdding ? "Adding..." : "Add Event" }}</button>
+              <button class="secondary_button mt-2" @click="handleAddParticipant">Add this particpant</button>
+            </div> 
+          </form>
+          <span class="gap-1 flex ">
+            <button class="primary_button" @click="handleAddEventClick">{{ isAdding ? "Adding..." : "Add Event" }}</button>
+            <button class="red_button" @click="toggleIsCreating">Cancel</button>
+          </span>
       </form>
 </template>
 
 <style scoped>
-#form_add_event{
+  #form_add_event{
+    background-color: #18181b;
+    width: 100%;
+    height: calc(100vh);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
     div{
       display: flex;
       flex-direction: column;
-      width: 100%;
     }
 
-    label{
-      color: #d1d5db;
-      font-weight: 500;
-      font-size: large;
-    }
-
-    input, textarea, button{
-      min-width: 300px;
-      min-height: 40px;
-      height: 40px;
-      max-height: 100px;
-      color: #18181b;
-      padding: 6px;
-      border: 2px solid #18181b;
-      border-radius: 5px;
-      background-color: #d1d5db;
-      outline: none;
-    }
-
-    button{
-      font-weight: 600;
-      background-color: #86efac;
-    }
     
-    button:hover{
-      opacity: .9;
-    }
-
-    button:active{
-      scale: .98;
-    }
-
-    #secondary_button{
-      background-color: #d1d5db;
-      font-weight: normal;
-    }
   }
 </style>
