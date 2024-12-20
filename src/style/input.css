@@ -4,7 +4,7 @@ label{
     font-size: large;
 }
 
-input, textarea{
+input, textarea, select{
     min-width: 300px;
     min-height: 40px;
     height: 40px;

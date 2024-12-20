@@ -222,6 +222,43 @@
 </script>
 
 <template>
+  <section class="px-4 border-r-green-200 border-r-2">
+    <h1 class="text-gray-300 font-bold text-2xl">Calendar</h1>
+    <div v-if="isConnected" class="text-gray-200">
+      <select name="" id="" v-model="sortingType" class="text-gray-800">
+        <option value="daily">Daily</option>
+        <option value="weekly">Weekly</option>
+        <option value="monthly">Monthly</option>
+      </select>
+      <input 
+        v-model="sortingTime"
+        @input="listUpcomingEvents"
+        :type="sortingType === 'daily' ? 'date' : 
+        sortingType === 'weekly' ? 'week' : 
+        sortingType === 'monthly' ? 'month' : ''"
+        class="text-gray-800"
+      >
+    </div>
+    
+    <div class="grid grid-cols-auto gap-2 my-4 h-auto text-white">
+      <EventCard v-for="event in eventsList" 
+        :key="event.id" 
+        @click="handleViewMore(event)" 
+        :event="event" 
+        @handleRemoveEventClick="handleRemoveEventClick"/>     
+    </div>
+    <div id="to_connect" class="text-gray-200">
+      <p>You can't see any calendar because you are not connected</p>
+      <RouterLink   class="hover:text-green-300 " :to="{name: 'GoogleAuth'}" >
+        Click here to connect.
+      </RouterLink>
+    </div>
+    <p v-if="noEvent" class="text-gray-200">Your calendar doesn't contain any event.</p>
+    <button class="bg-gray-200 p-2 rounded active:scale-95 hover:opacity-90 m-6" ref="showCalendar" id="show_calendar" @click="() => listUpcomingEvents()">Show Calendar</button>
+    <button class="bg-gray-200 p-2 rounded active:scale-95 hover:opacity-90" ref="refreshButton"  @click="handleAuthClick">Refresh</button>
+
+  </section>
+
   <button v-if="isConnected" class="primary_button" id="buttonOpenAddEventForm" @click="toggleIsCreating">
     <div class="flex items-center">
       <span class="material-symbols-outlined">add</span>
@@ -229,61 +266,20 @@
     </div>
   </button>
 
-  <section v-if="isCreating" class="border-r-green-200 border-r-2">
-    <FormCreateEvent 
-      :newEvent="newEvent" 
-      :participantsList="participantsList" 
-      :isAdding="isAdding"
-      v-model:newParticipant="newParticipant"
-      @handleAddEventClick="handleAddEventClick"
-      @handleAddParticipant="handleAddParticipant"
-      @handleDeleteParticipantClick="handleDeleteParticipantClick"
-      @toggleIsCreating="toggleIsCreating"
-    />
-  </section>
-  <div class=" min-h-max grid grid-cols-[70%,30%]">
+  <FormCreateEvent 
+    v-if="isCreating"
+    :newEvent="newEvent" 
+    :participantsList="participantsList" 
+    :isAdding="isAdding"
+    v-model:newParticipant="newParticipant"
+    @handleAddEventClick="handleAddEventClick"
+    @handleAddParticipant="handleAddParticipant"
+    @handleDeleteParticipantClick="handleDeleteParticipantClick"
+    @toggleIsCreating="toggleIsCreating"
+  />
 
-    <section class="px-4 border-r-green-200 border-r-2">
-      <h1 class="text-gray-300 font-bold text-2xl">Calendar</h1>
-      <div v-if="isConnected" class="text-gray-200">
-        <select name="" id="" v-model="sortingType" class="text-gray-800">
-          <option value="daily">Daily</option>
-          <option value="weekly">Weekly</option>
-          <option value="monthly">Monthly</option>
-        </select>
-        <input 
-          v-model="sortingTime"
-          @input="listUpcomingEvents"
-          :type="sortingType === 'daily' ? 'date' : 
-          sortingType === 'weekly' ? 'week' : 
-          sortingType === 'monthly' ? 'month' : ''"
-          class="text-gray-800"
-        >
-      </div>
-      
-      <div class="grid grid-cols-auto gap-2 my-4 h-auto text-white">
-        <EventCard v-for="event in eventsList" 
-          :key="event.id" 
-          @click="handleViewMore(event)" 
-          :event="event" 
-          @handleRemoveEventClick="handleRemoveEventClick"/>     
-      </div>
-      <div id="to_connect" class="text-gray-200">
-        <p>You can't see any calendar because you are not connected</p>
-        <RouterLink   class="hover:text-green-300 " :to="{name: 'GoogleAuth'}" >
-          Click here to connect.
-        </RouterLink>
-      </div>
-      <p v-if="noEvent" class="text-gray-200">Your calendar doesn't contain any event.</p>
-      <button class="bg-gray-200 p-2 rounded active:scale-95 hover:opacity-90 m-6" ref="showCalendar" id="show_calendar" @click="() => listUpcomingEvents()">Show Calendar</button>
-      <button class="bg-gray-200 p-2 rounded active:scale-95 hover:opacity-90" ref="refreshButton"  @click="handleAuthClick">Refresh</button>
-
-    </section>
-
-    <section class="px-4 fixed right-0">
-      <Event v-if="event" :event="event" @modifyEvent="modifyEvent" @handleRemoveEventClick="handleRemoveEventClick"></Event>
-    </section>
-  </div>
+  <Event v-if="event" :event="event" @modifyEvent="modifyEvent" @handleRemoveEventClick="handleRemoveEventClick"></Event>
+  
 </template>
 
 <style scoped lang="scss">

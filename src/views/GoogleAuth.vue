@@ -17,8 +17,8 @@ onMounted(() => {
 <template>
   <div class="text-white">
     <h1 class="pt-24">Google Auth with Persistence</h1>
-    <button ref="refreshButton" id="authorize_button" @click="handleAuthClick">Authorize</button>
-    <button ref="signout_button" id="signout_button" @click="handleSignoutClick">Sign Out</button>
+    <button ref="refreshButton" id="authorize_button" class="primary_button" @click="handleAuthClick">Authorize</button>
+    <button ref="signout_button" id="signout_button" class="red_button" @click="handleSignoutClick">Sign Out</button>
   </div>
 </template>
 

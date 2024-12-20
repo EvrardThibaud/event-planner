@@ -49,98 +49,98 @@
 </script>
 
 <template>
-    <h1 class="text-gray-300 font-bold text-2xl">Event</h1>
-    <div v-if="event">
-        <div v-if="modifying">
-            <form @submit.prevent="submitForm" id="form_modify_event">
-                <div>
-                    <label for="title">Title</label>
-                    <input
-                    id="title"
-                    type="text"
-                    v-model="props.event.summary"
-                    placeholder="A name for your event"
-                    />
-                </div>
-                <div>
-                    <label for="datetime">Date & time Start </label>
-                    <input
-                    id="datetime"
-                    type="datetime-local"
-                    v-model="startEndInputFormatted[0]"
-                    required
-                    />
-                </div>
-                <div>
-                    <label for="datetime">Date & time End </label>
-                    <input
-                    id="datetime"
-                    type="datetime-local"
-                    v-model="startEndInputFormatted[1]"
-                    :min = startEndInputFormatted[0]
-                    required
-                    />
-                </div>
-                <div>
-                    <label for="location">Location</label>
-                    <input
-                    id="location"
-                    type="text"
-                    v-model="props.event.location"
-                    placeholder="Where is your event ?"
-                    />
-                </div>
-                <div>
-                    <label for="description">Description</label>
-                    <textarea
-                    id="description"
-                    v-model="props.event.description"
-                    placeholder="Describe your event"
-                    ></textarea>
-                </div> 
-                <!-- <form class="w-full" @submit.prevent="submitForm" @submit="handleAddParticipant"> 
+    <section>
+        <div v-if="event">
+            <div v-if="modifying">
+                <form @submit.prevent="submitForm" id="form_modify_event">
                     <div>
-                        <label for="participants">Add participants</label>
-                        <ul v-if="props.event.attendees" class="bg-zinc-800 my-2 p-2 w-4/5 rounded">
-                            <li class="text-white flex justify-between flex-row" v-for="(attender, i) in props.event.attendees" :key="i">
-                                <p> {{ attender.email }} </p>
-                                <i class="fa-solid fa-trash" @click="handeDeleteParticipantClick(i)"></i>
-                            </li>
-                        </ul>
+                        <label for="title">Title</label>
                         <input
-                            v-model="newParticipant"
-                            type="email"
-                            id="participants"
-                            placeholder="Participants's email"
-                            required
-                        ></input>
-                        <button id="secondary_button">Add this particpant</button>
+                        id="title"
+                        type="text"
+                        v-model="props.event.summary"
+                        placeholder="A name for your event"
+                        />
+                    </div>
+                    <div>
+                        <label for="datetime">Date & time Start </label>
+                        <input
+                        id="datetime"
+                        type="datetime-local"
+                        v-model="startEndInputFormatted[0]"
+                        required
+                        />
+                    </div>
+                    <div>
+                        <label for="datetime">Date & time End </label>
+                        <input
+                        id="datetime"
+                        type="datetime-local"
+                        v-model="startEndInputFormatted[1]"
+                        :min = startEndInputFormatted[0]
+                        required
+                        />
+                    </div>
+                    <div>
+                        <label for="location">Location</label>
+                        <input
+                        id="location"
+                        type="text"
+                        v-model="props.event.location"
+                        placeholder="Where is your event ?"
+                        />
+                    </div>
+                    <div>
+                        <label for="description">Description</label>
+                        <textarea
+                        id="description"
+                        v-model="props.event.description"
+                        placeholder="Describe your event"
+                        ></textarea>
                     </div> 
-                </form> -->
-                <button @click="handleModifyEventClick">Save Modification</button>
-            </form>
-        </div>
-        <div class="text-white" v-else>
-            <p v-if="props.event.summary">📋 {{ props.event.summary }}</p>
-            <p v-if="startEndDisplayFormatted.length === 1">⏰ {{ startEndDisplayFormatted[0]}}</p>
-            <p v-else>⏰ {{ startEndDisplayFormatted[0] + " - " + startEndDisplayFormatted[1]}}</p>
-            <p v-if="props.event.location">📍 {{ props.event.location }}</p>
-            <p v-if="props.event.description">📝 {{ props.event.description }}</p>
-            <div v-if="props.event.attendees">
-                <p>👤 Attendees :</p>
-                <ul>
-                    <li v-for="(attender, i) in props.event.attendees" :key="i">
-                        - {{ attender.email }}
-                    </li>
-                </ul>
+                    <!-- <form class="w-full" @submit.prevent="submitForm" @submit="handleAddParticipant"> 
+                        <div>
+                            <label for="participants">Add participants</label>
+                            <ul v-if="props.event.attendees" class="bg-zinc-800 my-2 p-2 w-4/5 rounded">
+                                <li class="text-white flex justify-between flex-row" v-for="(attender, i) in props.event.attendees" :key="i">
+                                    <p> {{ attender.email }} </p>
+                                    <i class="fa-solid fa-trash" @click="handeDeleteParticipantClick(i)"></i>
+                                </li>
+                            </ul>
+                            <input
+                                v-model="newParticipant"
+                                type="email"
+                                id="participants"
+                                placeholder="Participants's email"
+                                required
+                            ></input>
+                            <button id="secondary_button">Add this particpant</button>
+                        </div> 
+                    </form> -->
+                    <button class="primary_button" @click="handleModifyEventClick">Save Modification</button>
+                </form>
+            </div>
+            <div class="text-white" v-else>
+                <p v-if="props.event.summary">📋 {{ props.event.summary }}</p>
+                <p v-if="startEndDisplayFormatted.length === 1">⏰ {{ startEndDisplayFormatted[0]}}</p>
+                <p v-else>⏰ {{ startEndDisplayFormatted[0] + " - " + startEndDisplayFormatted[1]}}</p>
+                <p v-if="props.event.location">📍 {{ props.event.location }}</p>
+                <p v-if="props.event.description">📝 {{ props.event.description }}</p>
+                <div v-if="props.event.attendees">
+                    <p>👤 Attendees :</p>
+                    <ul>
+                        <li v-for="(attender, i) in props.event.attendees" :key="i">
+                            - {{ attender.email }}
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="flex flex-col">
+                <button class="primary_button" v-if="!modifying" @click="handleModifyEventClick">Modify this event</button>
+                <button class="red_button" id="deleteButton" v-if="!modifying" @click="handleRemoveEventClick($event, props.event.id)">Delete this event</button>
             </div>
         </div>
-        <div class="flex flex-col">
-            <button v-if="!modifying" @click="handleModifyEventClick">Modify this event</button>
-            <button id="deleteButton" v-if="!modifying" @click="handleRemoveEventClick($event, props.event.id)">Delete this event</button>
-        </div>
-    </div>
-
+    </section>
 </template>
 
 <style scoped>
@@ -150,5 +150,20 @@
         flex-direction: column;
         width: 100%;
         }
+    }
+
+    section{
+        background-color: #343435;
+        width: fit-content;
+        height: fit-content;
+        border-radius: 10px;
+        padding: 10px;
+        position: absolute;
+        top: 50vh;
+        left: 50vw;
+        transform: translateY(-50%) translateX(-50%);
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
 </style>

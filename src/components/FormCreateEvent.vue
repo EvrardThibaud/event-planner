@@ -120,6 +120,9 @@
     background-color: #18181b;
     width: 100%;
     height: calc(100vh);
+    position: absolute;
+    top: 0;
+    left: 0;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -128,7 +131,5 @@
       display: flex;
       flex-direction: column;
     }
-
-    
   }
 </style>
