@@ -215,18 +215,21 @@
 </script>
 
 <template>
-  <div class=" min-h-max grid grid-cols-[30%,40%,30%]">
-    <section v-if="isConnected" class="border-r-green-200 border-r-2">
-      <FormCreateEvent 
-        :newEvent="newEvent" 
-        :participantsList="participantsList" 
-        :isAdding="isAdding"
-        v-model:newParticipant="newParticipant"
-        @handleAddEventClick="handleAddEventClick"
-        @handleAddParticipant="handleAddParticipant"
-        @handleDeleteParticipantClick="handleDeleteParticipantClick"
-      />
-    </section>
+  <div v-if="isConnected" id="buttonOpenAddEventForm">
+    <i class="fa-solid fa-plus pb-2"></i>
+  </div>
+  <section v-if="isConnected" class="border-r-green-200 border-r-2">
+    <FormCreateEvent 
+      :newEvent="newEvent" 
+      :participantsList="participantsList" 
+      :isAdding="isAdding"
+      v-model:newParticipant="newParticipant"
+      @handleAddEventClick="handleAddEventClick"
+      @handleAddParticipant="handleAddParticipant"
+      @handleDeleteParticipantClick="handleDeleteParticipantClick"
+    />
+  </section>
+  <div class=" min-h-max grid grid-cols-[70%,30%]">
 
     <section class="px-4 border-r-green-200 border-r-2">
       <h1 class="text-gray-300 font-bold text-2xl">Calendar</h1>
@@ -275,5 +278,19 @@
   .grid-cols-auto {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  }
+
+  #buttonOpenAddEventForm{
+    position: fixed;
+    bottom: 2px;
+    left: 2px;
+    height: 60px;
+    width: 60px;
+    background-color: red;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 4rem;
+    border-radius: 100%;
   }
 </style>
