@@ -2,7 +2,7 @@
   import { ref, onMounted } from 'vue';
   import {handleAuthClick} from "../composable/GoogleAuth.js";
   import { loadScript, gisLoaded, gapiLoaded } from '../composable/GoogleAuth.js';
-  import {addTimeToDateTime, calculTimeMin, calculTimeMax, getSortingTime} from "../composable/DateTime.js";
+  import {addTimeToDateTime, calculTimeMin, calculTimeMax, getSortingTime, formatToTimeName} from "../composable/DateTime.js";
   import { createAlert } from '../composable/Alerts.js';
   import Event from '../components/Event.vue';
   import EventCard from '../components/EventCard.vue';
@@ -215,13 +215,11 @@
     newEvent.value.datetime = formattedDateTime;
 
     const formattedDate = localDate.toISOString().slice(0, 10);
-    sortingTime.value = formattedDate; // yyyy-mm-dd
+    sortingTime.value = formattedDate;
   }
 
   async function toggleIsCreating(){
-    console.log(isCreating.value); 
     isCreating.value = !isCreating.value
-    console.log(isCreating.value); 
   }
 
   onMounted(() => {
@@ -255,6 +253,10 @@
         sortingType === 'monthly' ? 'month' : ''"
         class="text-gray-800"
       >
+    </div>
+
+    <div v-if="sortingTime && sortingType" class="text-center">
+      <h1>{{formatToTimeName(sortingTime, sortingType)}}</h1>
     </div>
     
     <div class="grid grid-cols-auto gap-2 my-4 h-auto text-white">

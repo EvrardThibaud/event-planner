@@ -161,7 +161,7 @@ export function formatToDatetimeLocal(inputDateTime) {
 }
 
 
-// receive a sortingTpe
+// receive a sortingType
 // return the sortingTime of today for html input
 export function getSortingTime(sortingType) {
     const localDate = new Date();
@@ -183,4 +183,35 @@ export function getSortingTime(sortingType) {
     }
   }
   
+// receive sortingTime and a sortingType
+// return the time in common language for display
+export function formatToTimeName(sortingTime, sortingType) {
+    const months = [
+        'January', 'February', 'March', 'April', 'May', 'June',
+        'July', 'August', 'September', 'October', 'November', 'December'
+    ];
 
+    const days = [
+        'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'
+    ];
+
+    if (sortingType === "weekly") {
+        const [year, weekNumber] = sortingTime.split('-W');
+        return `Week ${weekNumber}, ${year}`;
+    } else if (sortingType === "daily") {
+        const date = new Date(sortingTime);  
+        const dayName = days[date.getDay()];
+        const day = date.getDate();
+        const month = months[date.getMonth()];
+        const year = date.getFullYear();
+        return `${dayName}, ${month} ${day}, ${year}`;
+    } else if (sortingType === "monthly") {
+        const [year, month] = sortingTime.split('-');
+        return `${months[parseInt(month, 10) - 1]} ${year}`;
+    } else {
+        return "Invalid sorting type";
+    }
+}
+
+  
+  
