@@ -2,6 +2,7 @@
   import { ref, onMounted, watch, watchEffect } from "vue";
   import { GoogleGenerativeAI } from "@google/generative-ai";
   import Message from "../components/Message.vue";
+  import { createAlert } from "../composable/Alerts";
 
   const genAI = new GoogleGenerativeAI("AIzaSyAdn8fbCMXxyOat2ZyWkmVed54w_Q6tgqg");
   const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
@@ -37,7 +38,12 @@
     scrollToBottom()
 
     typing.value = true
-    result.value = await chat.sendMessage(tempPrompt);
+    if (chat) {
+      result.value = await chat.sendMessage(tempPrompt);
+    }
+    else {
+      createAlert("Try to refresh the page","error",undefined,"Chat not created")
+    }
     
     now = new Date();
     const apiResponse = {
@@ -67,20 +73,20 @@
 
   onMounted(() => {
     const savedMessages = localStorage.getItem("messages");
+    let history = []
     if (savedMessages) {
       messages.value = JSON.parse(savedMessages);
       
-      const history = messages.value.map(message => {
+      history = messages.value.map(message => {
         return {
           parts: message.parts,
           role: message.role 
         };
       });
-
-      chat = model.startChat({
-        history: history
-      });
     }
+    chat = model.startChat({
+      history: history
+    });
   });
 
 </script>
@@ -105,7 +111,7 @@
   
     <form @submit.prevent="submitForm">
       <textarea v-model="prompt" ref="textarea" @keydown="handleKeyDown" @input="autoResize" placeholder="Type your message"></textarea>
-      <button @click="handleButtonClick" class="text-white">Send message</button>
+      <button @click="handleButtonClick" class="text-white" :disabled="prompt === ''">Send message</button>
     </form>
 
   </section>
