@@ -8,7 +8,7 @@
   import EventCard from '../components/EventCard.vue';
   import FormCreateEvent from '../components/FormCreateEvent.vue';
 
-  
+  const eventLoading = ref(true)
   const isCreating = ref(false)
   const event = ref(null)
   const refreshButton = ref(null)
@@ -36,7 +36,7 @@
     let timeMin = calculTimeMin(sortingTime.value,sortingType.value)
     let timeMax = calculTimeMax(sortingTime.value,sortingType.value)
     let response;
-    console.log(gapi);
+
     try {
       const request = {
         calendarId: 'primary',
@@ -53,9 +53,11 @@
       createAlert("Click on the 'refresh' button.","error",err.result.error.code,err.result.error.errors[0].message)
       
       refreshButton.value.style.visibility = 'visible';
+      
       return;
     }
 
+    eventLoading.value = false
     refreshButton.value.style.visibility = 'hidden';
     isAdding.value = false;
     
@@ -229,7 +231,7 @@
 </script>
 
 <template>
-  <section v-if="isConnected" class="px-4">
+  <section id="section_calendar" v-if="isConnected" >
     <h1 class="text-gray-300 font-bold text-2xl">Calendar</h1>
     
     <div  class="text-gray-200">
@@ -238,7 +240,6 @@
         <option value="weekly">Weekly</option>
         <option value="monthly">Monthly</option>
       </select>
-      <p class="text-white">{{ sortingTime }}</p>
       <input 
         v-model="sortingTime"
         @input="listUpcomingEvents"
@@ -248,7 +249,10 @@
         class="text-gray-800"
       >
     </div>
-
+    
+    <div v-if="eventLoading" class="w-full h-screen absolute top-0 right-0 flex items-center justify-center">
+      <div class="loader"  ></div> 
+    </div>
     <div class="grid grid-cols-auto gap-2 my-4 h-auto text-white">
       <EventCard v-for="event in eventsList" 
         :key="event.id" 
@@ -264,6 +268,7 @@
       </div>
     </button>
     
+
     <p v-if="noEvent" class="text-gray-200">Your calendar doesn't contain any event.</p>
     
     <button 
@@ -273,7 +278,7 @@
       Refresh
     </button>
   </section>
-  
+
   <div v-else class="text-gray-200">
       <p>You can't see any calendar because you are not connected</p>
       <RouterLink    :to="{name: 'GoogleAuth'}" >
@@ -305,6 +310,10 @@
 </template>
 
 <style scoped lang="scss">
+  #section_calendar{
+    min-height: calc(100vh - 56px);
+  }
+
   .grid-cols-auto {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -320,4 +329,29 @@
       transform: translateX(-50%) scale(0.98);
     }
   }
+
+.loader {
+  width: 50px;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  border: 8px solid #133c4e;
+  animation:
+    l20-1 0.8s infinite linear alternate,
+    l20-2 1.6s infinite linear;
+}
+@keyframes l20-1{
+   0%    {clip-path: polygon(50% 50%,0       0,  50%   0%,  50%    0%, 50%    0%, 50%    0%, 50%    0% )}
+   12.5% {clip-path: polygon(50% 50%,0       0,  50%   0%,  100%   0%, 100%   0%, 100%   0%, 100%   0% )}
+   25%   {clip-path: polygon(50% 50%,0       0,  50%   0%,  100%   0%, 100% 100%, 100% 100%, 100% 100% )}
+   50%   {clip-path: polygon(50% 50%,0       0,  50%   0%,  100%   0%, 100% 100%, 50%  100%, 0%   100% )}
+   62.5% {clip-path: polygon(50% 50%,100%    0, 100%   0%,  100%   0%, 100% 100%, 50%  100%, 0%   100% )}
+   75%   {clip-path: polygon(50% 50%,100% 100%, 100% 100%,  100% 100%, 100% 100%, 50%  100%, 0%   100% )}
+   100%  {clip-path: polygon(50% 50%,50%  100%,  50% 100%,   50% 100%,  50% 100%, 50%  100%, 0%   100% )}
+}
+@keyframes l20-2{ 
+  0%    {transform:scaleY(1)  rotate(0deg)}
+  49.99%{transform:scaleY(1)  rotate(135deg)}
+  50%   {transform:scaleY(-1) rotate(0deg)}
+  100%  {transform:scaleY(-1) rotate(-135deg)}
+}
 </style>
