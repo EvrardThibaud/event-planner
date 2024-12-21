@@ -250,9 +250,8 @@
       >
     </div>
     
-    <div v-if="eventLoading" class="w-full h-screen absolute top-0 right-0 flex items-center justify-center">
-      <div class="loader"  ></div> 
-    </div>
+    
+
     <div class="grid grid-cols-auto gap-2 my-4 h-auto text-white">
       <EventCard v-for="event in eventsList" 
         :key="event.id" 
@@ -277,6 +276,10 @@
       @click="handleAuthClick">
       Refresh
     </button>
+
+    <div v-if="eventLoading" class="w-full top-0 right-0 flex items-center justify-center ">
+      <div class="loader"  ></div> 
+    </div>
   </section>
 
   <div v-else class="text-gray-200">
