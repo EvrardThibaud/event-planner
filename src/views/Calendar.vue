@@ -202,6 +202,28 @@
     event.value = e
   }
 
+  async function handleSortingChange(){
+    console.log(sortingType.value);
+    const localDate = new Date();
+    const formattedDate = localDate.toISOString().slice(0, 10);
+    if (sortingType.value === "daily") {
+      sortingTime.value = formattedDate;
+    } else if (sortingType.value === "weekly"){
+      const year = localDate.getFullYear();
+      const firstDayOfYear = new Date(localDate.getFullYear(), 0, 1);
+      const pastDaysOfYear = (localDate - firstDayOfYear) / 86400000;
+      const weekNumber = Math.ceil((pastDaysOfYear + firstDayOfYear.getDay() + 1) / 7);
+      const formattedWeek = `${year}-W${String(weekNumber).padStart(2, '0')}`;
+      sortingTime.value = formattedWeek
+    } else if (sortingType.value === "monthly"){
+      console.log("lllala");
+      const year = localDate.getFullYear();
+
+      const formattedMonth = `${year}-${String(localDate.getMonth() + 1).padStart(2, '0')}`;
+      sortingTime.value = formattedMonth
+    }
+  }
+
   async function setDatetime(){
     const now = new Date();
     const localDate = new Date(now.getTime() - now.getTimezoneOffset() * 60000);
@@ -231,15 +253,16 @@
 </script>
 
 <template>
-  <section id="section_calendar" v-if="isConnected" >
+  <section id="section_calendar" class="px-4" v-if="isConnected" >
     <h1 class="text-gray-300 font-bold text-2xl">Calendar</h1>
     
     <div  class="text-gray-200">
-      <select name="" id="" v-model="sortingType" class="text-gray-800">
+      <select name="" id="" v-model="sortingType" class="text-gray-800" @change="handleSortingChange" >
         <option value="daily">Daily</option>
         <option value="weekly">Weekly</option>
         <option value="monthly">Monthly</option>
       </select>
+
       <input 
         v-model="sortingTime"
         @input="listUpcomingEvents"
@@ -250,8 +273,6 @@
       >
     </div>
     
-    
-
     <div class="grid grid-cols-auto gap-2 my-4 h-auto text-white">
       <EventCard v-for="event in eventsList" 
         :key="event.id" 
@@ -268,7 +289,13 @@
     </button>
     
 
-    <p v-if="noEvent" class="text-gray-200">Your calendar doesn't contain any event.</p>
+    <p v-if="noEvent" class="text-gray-200">
+      {{
+        sortingType === "daily" ? "You don't have any event this day" :
+        sortingType === "weekly" ? "You don't have any event this week" :
+        sortingType === "monthly" ? "You don't have any event this month" : "error"
+      }}
+    </p>
     
     <button 
       class="bg-gray-200 p-2 rounded active:scale-95 hover:opacity-90" 

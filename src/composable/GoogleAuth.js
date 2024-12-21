@@ -1,4 +1,4 @@
-
+import { createAlert } from "./Alerts";
 const API_KEY = 'AIzaSyAdn8fbCMXxyOat2ZyWkmVed54w_Q6tgqg';
 const CLIENT_ID = '241948682819-u21tselap4mi8p5u1ktvd0453begefdr.apps.googleusercontent.com';
 const SCOPES = 'https://www.googleapis.com/auth/calendar';
@@ -75,22 +75,28 @@ export function maybeEnableButtons() {
 }
 
 export async function handleAuthClick() {
-    tokenClient.callback = async (resp) => {
-        if (resp.error !== undefined) {
-        throw resp;
+    console.log(tokenClient);
+    if (tokenClient) {
+        tokenClient.callback = async (resp) => {
+            if (resp.error !== undefined) {
+            throw resp;
+            }
+            // Sauvegarder le token dans localStorage
+            const token = gapi.client.getToken().access_token;
+            localStorage.setItem('google_access_token', token);
+    
+            document.getElementById('signout_button').style.visibility = 'visible';
+            document.getElementById('authorize_button').innerText = 'Refresh';
+        };
+    
+        if (gapi.client.getToken() === null) {
+            tokenClient.requestAccessToken({ prompt: 'consent' });
+        } else {
+            tokenClient.requestAccessToken({ prompt: '' });
         }
-        // Sauvegarder le token dans localStorage
-        const token = gapi.client.getToken().access_token;
-        localStorage.setItem('google_access_token', token);
-
-        // document.getElementById('signout_button').style.visibility = 'visible';
-        // document.getElementById('authorize_button').innerText = 'Refresh';
-    };
-
-    if (gapi.client.getToken() === null) {
-        tokenClient.requestAccessToken({ prompt: 'consent' });
-    } else {
-        tokenClient.requestAccessToken({ prompt: '' });
+    }
+    else{
+        createAlert("Try to reconnect on the google auth page","error",undefined,"Undefined tockenClient")
     }
 }
 
