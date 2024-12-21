@@ -13,7 +13,7 @@ export function loadScript(src, onload) {
     script.defer = true;
     script.onload = onload;
     document.head.appendChild(script);
-  }
+}
 
 export async function gapiLoaded() {
     gapi.load('client', initializeGapiClient);
@@ -37,7 +37,6 @@ async function initializeGapiClient() {
             authorizeButton.innerText = 'Refresh';
         } 
 
-        
         const toConnect = document.getElementById('to_connect')
         if (toConnect){
             toConnect.style.visibility = 'hidden'; 
@@ -68,7 +67,6 @@ export function maybeEnableButtons() {
 }
 
 export async function handleAuthClick() {
-    console.log("handleAuthClick0");
     tokenClient.callback = async (resp) => {
         if (resp.error !== undefined) {
         throw resp;
@@ -77,10 +75,8 @@ export async function handleAuthClick() {
         const token = gapi.client.getToken().access_token;
         localStorage.setItem('google_access_token', token);
 
-        console.log("handleAuthClick1");
-
-        document.getElementById('signout_button').style.visibility = 'visible';
-        document.getElementById('authorize_button').innerText = 'Refresh';
+        // document.getElementById('signout_button').style.visibility = 'visible';
+        // document.getElementById('authorize_button').innerText = 'Refresh';
     };
 
     if (gapi.client.getToken() === null) {

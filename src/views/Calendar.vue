@@ -1,11 +1,19 @@
 <script setup>
   import { ref, onMounted } from 'vue';
-  import {gisLoaded, gapiLoaded, loadScript,handleAuthClick} from "../composable/GoogleAuth.js";
+  import {handleAuthClick} from "../composable/GoogleAuth.js";
+  import { loadScript, gapiLoaded, gisLoaded } from '../composable/GoogleAuth.js';
   import {addTimeToDateTime, calculTimeMin, calculTimeMax, formatEventDateTimes} from "../composable/DateTime.js";
   import { createAlert } from '../composable/Alerts.js';
   import Event from '../components/Event.vue';
   import EventCard from '../components/EventCard.vue';
   import FormCreateEvent from '../components/FormCreateEvent.vue';
+
+  const API_KEY = 'AIzaSyAdn8fbCMXxyOat2ZyWkmVed54w_Q6tgqg';
+  const DISCOVERY_DOC = 'https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest';
+const CLIENT_ID = '241948682819-u21tselap4mi8p5u1ktvd0453begefdr.apps.googleusercontent.com';
+const SCOPES = 'https://www.googleapis.com/auth/calendar';
+let tokenClient;
+
 
   const isCreating = ref(false)
   const event = ref(null)
@@ -18,7 +26,7 @@
   const noEvent = ref(false)
   const participantsList = ref([]);
   const sortingType = ref('daily');
-  const sortingTime = ref()
+  const sortingTime = ref([])
   const newEvent = ref({
         title: '',
         datetime: '',
@@ -35,19 +43,21 @@
     
     let timeMin = calculTimeMin(sortingTime.value,sortingType.value)
     let timeMax = calculTimeMax(sortingTime.value,sortingType.value)
-
     let response;
+    console.log(gapi);
     try {
       const request = {
         calendarId: 'primary',
-        timeMin: timeMin,
-        timeMax: timeMax,
+        // timeMin: timeMin,
+        // timeMax: timeMax,
         showDeleted: false,
         singleEvents: true,
         orderBy: 'startTime',
       };
       response = await gapi.client.calendar.events.list(request);
-    } catch (err) {
+    } 
+    catch (err) {
+      console.log(err);
       createAlert("Click on the 'refresh' button.","error",err.result.error.code,err.result.error.errors[0].message)
       showCalendar.value.innerText = 'Show Calendar';
       refreshButton.value.style.visibility = 'visible';
@@ -76,6 +86,25 @@
     }));
     eventsList.value.push(...output);
   }
+
+  // async function listUpcomingEvents() {
+  //   let response;
+  //   console.log(gapi);
+  //   try {
+  //     const request = {
+  //       calendarId: 'primary',
+  //       showDeleted: false,
+  //       singleEvents: true,
+  //       orderBy: 'startTime',
+  //     };
+  //     response = await gapi.client.calendar.events.list(request);
+  //     console.log(response);
+  //   } 
+  //   catch (err) {
+  //     console.log(err);
+  //     return;
+  //   }
+  // }
 
   async function unselectEvent(){
     event.value = null
@@ -201,13 +230,27 @@
   }
 
   async function setDatetime(){
-    const input = document.getElementById('datetime');
     const now = new Date();
     const localDate = new Date(now.getTime() - now.getTimezoneOffset() * 60000);
     const formattedDateTime = localDate.toISOString().slice(0, 16); 
     newEvent.value.datetime = formattedDateTime;
+
     const formattedDate = localDate.toISOString().slice(0, 10);
-    sortingTime.value = formattedDate
+
+    // // yyyy-ww (semaine ISO)
+    // const year = localDate.getFullYear();
+    // const firstDayOfYear = new Date(localDate.getFullYear(), 0, 1);
+    // const pastDaysOfYear = (localDate - firstDayOfYear) / 86400000;
+    // const weekNumber = Math.ceil((pastDaysOfYear + firstDayOfYear.getDay() + 1) / 7);
+    // const formattedWeek = `${year}-W${String(weekNumber).padStart(2, '0')}`;
+
+    // // yyyy-mm (mois)
+    // const formattedMonth = `${year}-${String(localDate.getMonth() + 1).padStart(2, '0')}`;
+
+    // // Affectation des valeurs
+    // sortingTime.value[0] = formattedDate; // yyyy-mm-dd
+    // sortingTime.value[1] = formattedWeek; // yyyy-ww
+    // sortingTime.value[2] = formattedMonth; // yyyy-mm
   }
 
   async function toggleIsCreating(){
@@ -215,6 +258,7 @@
     isCreating.value = !isCreating.value
     console.log(isCreating.value); 
   }
+
 
   onMounted(() => {
     showCalendar.value.style.visibility = 'hidden';
@@ -235,6 +279,7 @@
         <option value="weekly">Weekly</option>
         <option value="monthly">Monthly</option>
       </select>
+      <p class="text-white">{{ sortingTime }}</p>
       <input 
         v-model="sortingTime"
         @input="listUpcomingEvents"
