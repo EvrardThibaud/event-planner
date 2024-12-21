@@ -1,32 +1,25 @@
 <script setup>
   import { ref, onMounted } from 'vue';
   import {handleAuthClick} from "../composable/GoogleAuth.js";
-  import { loadScript, gapiLoaded, gisLoaded } from '../composable/GoogleAuth.js';
+  import { loadScript, gisLoaded, gapiLoaded } from '../composable/GoogleAuth.js';
   import {addTimeToDateTime, calculTimeMin, calculTimeMax, formatEventDateTimes} from "../composable/DateTime.js";
   import { createAlert } from '../composable/Alerts.js';
   import Event from '../components/Event.vue';
   import EventCard from '../components/EventCard.vue';
   import FormCreateEvent from '../components/FormCreateEvent.vue';
 
-  const API_KEY = 'AIzaSyAdn8fbCMXxyOat2ZyWkmVed54w_Q6tgqg';
-  const DISCOVERY_DOC = 'https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest';
-const CLIENT_ID = '241948682819-u21tselap4mi8p5u1ktvd0453begefdr.apps.googleusercontent.com';
-const SCOPES = 'https://www.googleapis.com/auth/calendar';
-let tokenClient;
-
-
+  
   const isCreating = ref(false)
   const event = ref(null)
-  const showCalendar = ref(null);
   const refreshButton = ref(null)
   const newParticipant = ref('');
   const isAdding = ref(false);
   const eventsList = ref([]);
-  const isConnected = ref(false);
+  const isConnected = ref(localStorage.getItem('google_access_token') !== null);
   const noEvent = ref(false)
   const participantsList = ref([]);
   const sortingType = ref('daily');
-  const sortingTime = ref([])
+  const sortingTime = ref()
   const newEvent = ref({
         title: '',
         datetime: '',
@@ -37,7 +30,6 @@ let tokenClient;
     });
 
   async function listUpcomingEvents() {
-    showCalendar.value.innerText = 'Loading...';
     eventsList.value = [];
     noEvent.value = false;
     
@@ -48,8 +40,8 @@ let tokenClient;
     try {
       const request = {
         calendarId: 'primary',
-        // timeMin: timeMin,
-        // timeMax: timeMax,
+        timeMin: timeMin,
+        timeMax: timeMax,
         showDeleted: false,
         singleEvents: true,
         orderBy: 'startTime',
@@ -59,14 +51,12 @@ let tokenClient;
     catch (err) {
       console.log(err);
       createAlert("Click on the 'refresh' button.","error",err.result.error.code,err.result.error.errors[0].message)
-      showCalendar.value.innerText = 'Show Calendar';
+      
       refreshButton.value.style.visibility = 'visible';
       return;
     }
 
     refreshButton.value.style.visibility = 'hidden';
-    showCalendar.value.style.visibility = 'hidden';
-    isConnected.value = true;
     isAdding.value = false;
     
     const events = response.result.items;
@@ -86,25 +76,6 @@ let tokenClient;
     }));
     eventsList.value.push(...output);
   }
-
-  // async function listUpcomingEvents() {
-  //   let response;
-  //   console.log(gapi);
-  //   try {
-  //     const request = {
-  //       calendarId: 'primary',
-  //       showDeleted: false,
-  //       singleEvents: true,
-  //       orderBy: 'startTime',
-  //     };
-  //     response = await gapi.client.calendar.events.list(request);
-  //     console.log(response);
-  //   } 
-  //   catch (err) {
-  //     console.log(err);
-  //     return;
-  //   }
-  // }
 
   async function unselectEvent(){
     event.value = null
@@ -236,21 +207,7 @@ let tokenClient;
     newEvent.value.datetime = formattedDateTime;
 
     const formattedDate = localDate.toISOString().slice(0, 10);
-
-    // // yyyy-ww (semaine ISO)
-    // const year = localDate.getFullYear();
-    // const firstDayOfYear = new Date(localDate.getFullYear(), 0, 1);
-    // const pastDaysOfYear = (localDate - firstDayOfYear) / 86400000;
-    // const weekNumber = Math.ceil((pastDaysOfYear + firstDayOfYear.getDay() + 1) / 7);
-    // const formattedWeek = `${year}-W${String(weekNumber).padStart(2, '0')}`;
-
-    // // yyyy-mm (mois)
-    // const formattedMonth = `${year}-${String(localDate.getMonth() + 1).padStart(2, '0')}`;
-
-    // // Affectation des valeurs
-    // sortingTime.value[0] = formattedDate; // yyyy-mm-dd
-    // sortingTime.value[1] = formattedWeek; // yyyy-ww
-    // sortingTime.value[2] = formattedMonth; // yyyy-mm
+    sortingTime.value = formattedDate; // yyyy-mm-dd
   }
 
   async function toggleIsCreating(){
@@ -259,13 +216,14 @@ let tokenClient;
     console.log(isCreating.value); 
   }
 
-
   onMounted(() => {
-    showCalendar.value.style.visibility = 'hidden';
     refreshButton.value.style.visibility = 'hidden';
 
-    loadScript('https://apis.google.com/js/api.js', gapiLoaded);
-    loadScript('https://accounts.google.com/gsi/client', gisLoaded);
+
+    loadScript('https://apis.google.com/js/api.js', () => {
+      gapiLoaded(listUpcomingEvents); 
+    });
+    // loadScript('https://accounts.google.com/gsi/client', gisLoaded);
     setDatetime();
   });
 </script>
@@ -289,6 +247,12 @@ let tokenClient;
         class="text-gray-800"
       >
     </div>
+    <div v-else class="text-gray-200">
+      <p>You can't see any calendar because you are not connected</p>
+      <RouterLink    :to="{name: 'GoogleAuth'}" >
+        <button class="primary_button">Click here to connect.</button>
+      </RouterLink>
+    </div>
     
     <div class="grid grid-cols-auto gap-2 my-4 h-auto text-white">
       <EventCard v-for="event in eventsList" 
@@ -298,15 +262,8 @@ let tokenClient;
         @handleRemoveEventClick="handleRemoveEventClick"/>     
     </div>
 
-    <div id="to_connect" class="text-gray-200">
-      <p>You can't see any calendar because you are not connected</p>
-      <RouterLink   class="primary_button" :to="{name: 'GoogleAuth'}" >
-        Click here to connect.
-      </RouterLink>
-    </div>
+    
     <p v-if="noEvent" class="text-gray-200">Your calendar doesn't contain any event.</p>
-
-    <button class="bg-gray-200 p-2 rounded active:scale-95 hover:opacity-90 m-6" ref="showCalendar" id="show_calendar" @click="() => listUpcomingEvents()">Show Calendar</button>
     <button class="bg-gray-200 p-2 rounded active:scale-95 hover:opacity-90" ref="refreshButton"  @click="handleAuthClick">Refresh</button>
   </section>
 

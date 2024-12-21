@@ -1,3 +1,4 @@
+
 const API_KEY = 'AIzaSyAdn8fbCMXxyOat2ZyWkmVed54w_Q6tgqg';
 const CLIENT_ID = '241948682819-u21tselap4mi8p5u1ktvd0453begefdr.apps.googleusercontent.com';
 const SCOPES = 'https://www.googleapis.com/auth/calendar';
@@ -15,11 +16,13 @@ export function loadScript(src, onload) {
     document.head.appendChild(script);
 }
 
-export async function gapiLoaded() {
-    gapi.load('client', initializeGapiClient);
+export async function gapiLoaded(listUpcomingEvents) {
+    gapi.load('client', async () => {
+        await initializeGapiClient(listUpcomingEvents);
+    });
 }
 
-async function initializeGapiClient() {
+async function initializeGapiClient(listUpcomingEvents) {
     await gapi.client.init({
         apiKey: API_KEY,
         discoveryDocs: [DISCOVERY_DOC],
@@ -47,6 +50,11 @@ async function initializeGapiClient() {
             showCalendar.style.visibility = 'visible'; 
         }
     }
+
+    if (listUpcomingEvents) {
+        listUpcomingEvents();
+    }
+
 }
 
 export async function gisLoaded() {
