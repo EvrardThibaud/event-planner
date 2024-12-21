@@ -229,9 +229,10 @@
 </script>
 
 <template>
-  <section class="px-4">
+  <section v-if="isConnected" class="px-4">
     <h1 class="text-gray-300 font-bold text-2xl">Calendar</h1>
-    <div v-if="isConnected" class="text-gray-200">
+    
+    <div  class="text-gray-200">
       <select name="" id="" v-model="sortingType" class="text-gray-800">
         <option value="daily">Daily</option>
         <option value="weekly">Weekly</option>
@@ -247,13 +248,7 @@
         class="text-gray-800"
       >
     </div>
-    <div v-else class="text-gray-200">
-      <p>You can't see any calendar because you are not connected</p>
-      <RouterLink    :to="{name: 'GoogleAuth'}" >
-        <button class="primary_button">Click here to connect.</button>
-      </RouterLink>
-    </div>
-    
+
     <div class="grid grid-cols-auto gap-2 my-4 h-auto text-white">
       <EventCard v-for="event in eventsList" 
         :key="event.id" 
@@ -261,18 +256,32 @@
         :event="event" 
         @handleRemoveEventClick="handleRemoveEventClick"/>     
     </div>
-
+    
+    <button class="primary_button" id="buttonOpenAddEventForm" @click="toggleIsCreating">
+      <div class="flex items-center">
+        <span class="material-symbols-outlined">add</span>
+        <p>Create a new event</p>
+      </div>
+    </button>
     
     <p v-if="noEvent" class="text-gray-200">Your calendar doesn't contain any event.</p>
-    <button class="bg-gray-200 p-2 rounded active:scale-95 hover:opacity-90" ref="refreshButton"  @click="handleAuthClick">Refresh</button>
+    
+    <button 
+      class="bg-gray-200 p-2 rounded active:scale-95 hover:opacity-90" 
+      ref="refreshButton"  
+      @click="handleAuthClick">
+      Refresh
+    </button>
   </section>
-
-  <button v-if="isConnected" class="primary_button" id="buttonOpenAddEventForm" @click="toggleIsCreating">
-    <div class="flex items-center">
-      <span class="material-symbols-outlined">add</span>
-      <p>Create a new event</p>
+  
+  <div v-else class="text-gray-200">
+      <p>You can't see any calendar because you are not connected</p>
+      <RouterLink    :to="{name: 'GoogleAuth'}" >
+        <button class="primary_button">Click here to connect.</button>
+      </RouterLink>
     </div>
-  </button>
+
+  
 
   <FormCreateEvent 
     v-if="isCreating"
