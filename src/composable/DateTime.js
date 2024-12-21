@@ -160,3 +160,27 @@ export function formatToDatetimeLocal(inputDateTime) {
     return `${year}-${month}-${day}T${hours}:${minutes}`;
 }
 
+
+// receive a sortingTpe
+// return the sortingTime of today for html input
+export function getSortingTime(sortingType) {
+    const localDate = new Date();
+    const year = localDate.getFullYear();
+  
+    switch (sortingType) {
+      case "daily":
+        return localDate.toISOString().slice(0, 10);
+  
+      case "weekly":
+        const firstDayOfYear = new Date(year, 0, 1);
+        const pastDaysOfYear = Math.floor((localDate - firstDayOfYear) / 86400000);
+        const weekNumber = Math.ceil((pastDaysOfYear + firstDayOfYear.getDay() + 1) / 7);
+        return `${year}-W${String(weekNumber).padStart(2, '0')}`;
+  
+      case "monthly":
+        const month = String(localDate.getMonth() + 1).padStart(2, '0');
+        return `${year}-${month}`;
+    }
+  }
+  
+

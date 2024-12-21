@@ -2,7 +2,7 @@
   import { ref, onMounted } from 'vue';
   import {handleAuthClick} from "../composable/GoogleAuth.js";
   import { loadScript, gisLoaded, gapiLoaded } from '../composable/GoogleAuth.js';
-  import {addTimeToDateTime, calculTimeMin, calculTimeMax, formatEventDateTimes} from "../composable/DateTime.js";
+  import {addTimeToDateTime, calculTimeMin, calculTimeMax, getSortingTime} from "../composable/DateTime.js";
   import { createAlert } from '../composable/Alerts.js';
   import Event from '../components/Event.vue';
   import EventCard from '../components/EventCard.vue';
@@ -203,25 +203,9 @@
   }
 
   async function handleSortingChange(){
-    console.log(sortingType.value);
-    const localDate = new Date();
-    const formattedDate = localDate.toISOString().slice(0, 10);
-    if (sortingType.value === "daily") {
-      sortingTime.value = formattedDate;
-    } else if (sortingType.value === "weekly"){
-      const year = localDate.getFullYear();
-      const firstDayOfYear = new Date(localDate.getFullYear(), 0, 1);
-      const pastDaysOfYear = (localDate - firstDayOfYear) / 86400000;
-      const weekNumber = Math.ceil((pastDaysOfYear + firstDayOfYear.getDay() + 1) / 7);
-      const formattedWeek = `${year}-W${String(weekNumber).padStart(2, '0')}`;
-      sortingTime.value = formattedWeek
-    } else if (sortingType.value === "monthly"){
-      console.log("lllala");
-      const year = localDate.getFullYear();
+    sortingTime.value = getSortingTime(sortingType.value)
 
-      const formattedMonth = `${year}-${String(localDate.getMonth() + 1).padStart(2, '0')}`;
-      sortingTime.value = formattedMonth
-    }
+    listUpcomingEvents()
   }
 
   async function setDatetime(){
