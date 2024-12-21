@@ -21,7 +21,7 @@
         return null;
     });
 
-    const emit = defineEmits(['modifyEvent', 'handleRemoveEventClick']);
+    const emit = defineEmits(['modifyEvent', 'handleRemoveEventClick','unselectEvent']);
 
     const emitRemoveEvent = (event, eventId) => {
         emit('handleRemoveEventClick', event, eventId);
@@ -29,6 +29,10 @@
 
     async function handleRemoveEventClick(event, eventId) {
         emitRemoveEvent(event, eventId);
+    }
+
+    async function unselectEvent(){
+        emit('unselectEvent')
     }
 
     async function handleModifyEventClick() {
@@ -40,7 +44,6 @@
         modifying.value = !modifying.value;
     }
 
-    
     async function handleAddParticipant(){
         props.event.attendees.push({email : newParticipant.value});
         newParticipant.value = '';
@@ -49,8 +52,8 @@
 </script>
 
 <template>
-    <section>
-        <div v-if="event">
+    <section @click="unselectEvent">
+        <div id="event" @click.stop>
             <div v-if="modifying">
                 <form @submit.prevent="submitForm" id="form_modify_event">
                     <div>
@@ -153,17 +156,22 @@
     }
 
     section{
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100vh;
+        background-color: rgba(0, 0, 0, 0.7);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    #event{
         background-color: #343435;
         width: fit-content;
         height: fit-content;
         border-radius: 10px;
         padding: 10px;
-        position: absolute;
-        top: 50vh;
-        left: 50vw;
-        transform: translateY(-50%) translateX(-50%);
-        display: flex;
-        justify-content: center;
-        align-items: center;
     }
 </style>

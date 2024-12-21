@@ -54,6 +54,7 @@
       return;
     }
 
+    refreshButton.value.style.visibility = 'hidden';
     showCalendar.value.style.visibility = 'hidden';
     isConnected.value = true;
     isAdding.value = false;
@@ -74,6 +75,10 @@
       attendees: event.attendees || null,
     }));
     eventsList.value.push(...output);
+  }
+
+  async function unselectEvent(){
+    event.value = null
   }
 
   async function handleRemoveEventClick(e, id){
@@ -222,7 +227,7 @@
 </script>
 
 <template>
-  <section class="px-4 border-r-green-200 border-r-2">
+  <section class="px-4">
     <h1 class="text-gray-300 font-bold text-2xl">Calendar</h1>
     <div v-if="isConnected" class="text-gray-200">
       <select name="" id="" v-model="sortingType" class="text-gray-800">
@@ -247,16 +252,17 @@
         :event="event" 
         @handleRemoveEventClick="handleRemoveEventClick"/>     
     </div>
+
     <div id="to_connect" class="text-gray-200">
       <p>You can't see any calendar because you are not connected</p>
-      <RouterLink   class="hover:text-green-300 " :to="{name: 'GoogleAuth'}" >
+      <RouterLink   class="primary_button" :to="{name: 'GoogleAuth'}" >
         Click here to connect.
       </RouterLink>
     </div>
     <p v-if="noEvent" class="text-gray-200">Your calendar doesn't contain any event.</p>
+
     <button class="bg-gray-200 p-2 rounded active:scale-95 hover:opacity-90 m-6" ref="showCalendar" id="show_calendar" @click="() => listUpcomingEvents()">Show Calendar</button>
     <button class="bg-gray-200 p-2 rounded active:scale-95 hover:opacity-90" ref="refreshButton"  @click="handleAuthClick">Refresh</button>
-
   </section>
 
   <button v-if="isConnected" class="primary_button" id="buttonOpenAddEventForm" @click="toggleIsCreating">
@@ -278,7 +284,12 @@
     @toggleIsCreating="toggleIsCreating"
   />
 
-  <Event v-if="event" :event="event" @modifyEvent="modifyEvent" @handleRemoveEventClick="handleRemoveEventClick"></Event>
+  <Event v-if="event" 
+    :event="event" 
+    @modifyEvent="modifyEvent" 
+    @handleRemoveEventClick="handleRemoveEventClick"
+    @unselectEvent="unselectEvent"
+  ></Event>
   
 </template>
 
