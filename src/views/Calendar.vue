@@ -2,7 +2,7 @@
   import { ref, onMounted } from 'vue';
   import {handleAuthClick} from "../composable/GoogleAuth.js";
   import { loadScript, gisLoaded, gapiLoaded } from '../composable/GoogleAuth.js';
-  import {addTimeToDateTime, calculTimeMin, calculTimeMax, getSortingTime, formatToTimeName, stepSortingTime} from "../composable/DateTime.js";
+  import {addTimeToDateTime, calculTimeMin, calculTimeMax, getSortingTime, formatToTimeName, stepSortingTime, extractHour} from "../composable/DateTime.js";
   import { createAlert } from '../composable/Alerts.js';
   import Event from '../components/Event.vue';
   import EventCard from '../components/EventCard.vue';
@@ -258,12 +258,31 @@ import { list } from 'postcss';
       <span class="material-symbols-outlined hover:cursor-pointer active:scale-95" @click="handleChevronClick(+1)">arrow_forward_ios</span>
     </div>
     
+    <table id="table_event_daily" v-if="sortingType === 'daily'">
+      <tr v-for="i in 24" :key="index">
+        <td>{{ i }}</td>
+        <td>
+          <div v-for="event in eventsList">
+            <EventCard   
+            v-if="extractHour(event.start) === i"
+            :key="event.id" 
+            @click="handleViewMore(event)" 
+            :event="event" 
+            @handleRemoveEventClick="handleRemoveEventClick"
+            />
+          </div>
+        </td>
+      </tr>
+    </table>
+
     <div class="grid grid-cols-auto gap-2 my-4 h-auto text-white">
-      <EventCard v-for="event in eventsList" 
+      
+      <!-- <EventCard v-for="event in eventsList" 
         :key="event.id" 
         @click="handleViewMore(event)" 
         :event="event" 
-        @handleRemoveEventClick="handleRemoveEventClick"/>     
+        @handleRemoveEventClick="handleRemoveEventClick"
+      />      -->
     </div>
     
     <button class="primary_button" id="buttonOpenAddEventForm" @click="toggleIsCreating">
@@ -273,7 +292,6 @@ import { list } from 'postcss';
       </div>
     </button>
     
-
     <p v-if="noEvent" class="text-gray-200">
       {{
         sortingType === "daily" ? "You don't have any event this day" :
@@ -293,8 +311,6 @@ import { list } from 'postcss';
         <button class="primary_button">Click here to connect.</button>
       </RouterLink>
     </div>
-
-  
 
   <FormCreateEvent 
     v-if="isCreating"
@@ -336,6 +352,12 @@ import { list } from 'postcss';
     &:active{
       transform: translateX(-50%) scale(0.98);
     }
+  }
+
+  #table_event_daily{
+    max-height: 100px;
+    background-color: red;
+    overflow: hidden;
   }
 
 .loader {

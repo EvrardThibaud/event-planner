@@ -212,7 +212,8 @@ export function formatToTimeName(sortingTime, sortingType) {
     }
 }
 
-
+// receive sortingType sortingTime and step (+1 -1)
+// return sortingTime for html input increase or decrease by one 
 export function stepSortingTime(sortingType, sortingTime, step) {
     if (sortingType === "daily") {
         const date = new Date(sortingTime);
@@ -265,6 +266,10 @@ export function stepSortingTime(sortingType, sortingTime, step) {
     } else {
         throw new Error("Invalid sortingType. Use 'daily', 'weekly', or 'monthly'.");
     }
+}
+
+export function extractHour(dateTime) {
+    return new Date(dateTime).getHours();
 }
 
   
