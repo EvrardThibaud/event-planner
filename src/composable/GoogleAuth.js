@@ -75,28 +75,22 @@ export function maybeEnableButtons() {
 }
 
 export async function handleAuthClick() {
-    console.log(tokenClient);
-    if (tokenClient) {
-        tokenClient.callback = async (resp) => {
-            if (resp.error !== undefined) {
-            throw resp;
-            }
-            // Sauvegarder le token dans localStorage
-            const token = gapi.client.getToken().access_token;
-            localStorage.setItem('google_access_token', token);
-    
-            document.getElementById('signout_button').style.visibility = 'visible';
-            document.getElementById('authorize_button').innerText = 'Refresh';
-        };
-    
-        if (gapi.client.getToken() === null) {
-            tokenClient.requestAccessToken({ prompt: 'consent' });
-        } else {
-            tokenClient.requestAccessToken({ prompt: '' });
+    tokenClient.callback = async (resp) => {
+        if (resp.error !== undefined) {
+        throw resp;
         }
-    }
-    else{
-        createAlert("Try to reconnect on the google auth page","error",undefined,"Undefined tockenClient")
+        // Sauvegarder le token dans localStorage
+        const token = gapi.client.getToken().access_token;
+        localStorage.setItem('google_access_token', token);
+
+        document.getElementById('signout_button').style.visibility = 'visible';
+        document.getElementById('authorize_button').innerText = 'Refresh';
+    };
+
+    if (gapi.client.getToken() === null) {
+        tokenClient.requestAccessToken({ prompt: 'consent' });
+    } else {
+        tokenClient.requestAccessToken({ prompt: '' });
     }
 }
 

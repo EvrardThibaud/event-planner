@@ -11,7 +11,6 @@
   const eventLoading = ref(true)
   const isCreating = ref(false)
   const event = ref(null)
-  const refreshButton = ref(null)
   const newParticipant = ref('');
   const isAdding = ref(false);
   const eventsList = ref([]);
@@ -49,16 +48,12 @@
       response = await gapi.client.calendar.events.list(request);
     } 
     catch (err) {
-      console.log(err);
-      createAlert("Click on the 'refresh' button.","error",err.result.error.code,err.result.error.errors[0].message)
-      
-      refreshButton.value.style.visibility = 'visible';
+      createAlert("Try to reconnect on the google auth page","error",undefined,"Undefined tockenClient")
       
       return;
     }
 
     eventLoading.value = false
-    refreshButton.value.style.visibility = 'hidden';
     isAdding.value = false;
     
     const events = response.result.items;
@@ -284,13 +279,6 @@
         sortingType === "monthly" ? "You don't have any event this month" : "error"
       }}
     </p>
-    
-    <button 
-      class="bg-gray-200 p-2 rounded active:scale-95 hover:opacity-90" 
-      ref="refreshButton"  
-      @click="handleAuthClick">
-      Refresh
-    </button>
 
     <div v-if="eventLoading" class="w-full top-0 right-0 flex items-center justify-center ">
       <div class="loader"  ></div> 
