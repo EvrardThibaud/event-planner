@@ -93,7 +93,7 @@
             <ul v-if="participantsList.length !== 0" class="bg-zinc-800 my-2 p-2 w-4/5 rounded">
               <li class="text-white flex justify-between flex-row" v-for="(participant, i) in participantsList" :key="i">
                 <p> {{ participant.email }} </p>
-                <p class="hover:cursor-pointer active:scale-90" @click="handleDeleteParticipantClick(i)">X</p>
+                <span class="material-symbols-outlined hover:cursor-pointer active:scale-90" @click="handleDeleteParticipantClick(i)">delete</span>
               </li>
             </ul>
               <input

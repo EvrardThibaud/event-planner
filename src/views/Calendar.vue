@@ -256,7 +256,9 @@
     </div>
 
     <div v-if="sortingTime && sortingType" class="text-center">
+      <span class="material-symbols-outlined">chevron_left</span>
       <h1>{{formatToTimeName(sortingTime, sortingType)}}</h1>
+      <span class="material-symbols-outlined">chevron_right</span>
     </div>
     
     <div class="grid grid-cols-auto gap-2 my-4 h-auto text-white">
