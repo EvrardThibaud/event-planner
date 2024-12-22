@@ -2,11 +2,12 @@
   import { ref, onMounted } from 'vue';
   import {handleAuthClick} from "../composable/GoogleAuth.js";
   import { loadScript, gisLoaded, gapiLoaded } from '../composable/GoogleAuth.js';
-  import {addTimeToDateTime, calculTimeMin, calculTimeMax, getSortingTime, formatToTimeName} from "../composable/DateTime.js";
+  import {addTimeToDateTime, calculTimeMin, calculTimeMax, getSortingTime, formatToTimeName, stepSortingTime} from "../composable/DateTime.js";
   import { createAlert } from '../composable/Alerts.js';
   import Event from '../components/Event.vue';
   import EventCard from '../components/EventCard.vue';
   import FormCreateEvent from '../components/FormCreateEvent.vue';
+import { list } from 'postcss';
 
   const eventLoading = ref(true)
   const isCreating = ref(false)
@@ -197,6 +198,11 @@
     event.value = e
   }
 
+  async function handleChevronClick(step){
+    sortingTime.value = stepSortingTime(sortingType.value,sortingTime.value,step)
+    listUpcomingEvents()
+  }
+
   async function handleSortingChange(){
     sortingTime.value = getSortingTime(sortingType.value)
 
@@ -218,13 +224,9 @@
   }
 
   onMounted(() => {
-    refreshButton.value.style.visibility = 'hidden';
-
-
     loadScript('https://apis.google.com/js/api.js', () => {
       gapiLoaded(listUpcomingEvents); 
     });
-    // loadScript('https://accounts.google.com/gsi/client', gisLoaded);
     setDatetime();
   });
 </script>
@@ -250,10 +252,10 @@
       >
     </div>
 
-    <div v-if="sortingTime && sortingType" class="text-center">
-      <span class="material-symbols-outlined">chevron_left</span>
+    <div v-if="sortingTime && sortingType" class="flex justify-center pt-4 gap-4 select-none">
+      <span class="material-symbols-outlined hover:cursor-pointer active:scale-95" @click="handleChevronClick(-1)">arrow_back_ios</span>
       <h1>{{formatToTimeName(sortingTime, sortingType)}}</h1>
-      <span class="material-symbols-outlined">chevron_right</span>
+      <span class="material-symbols-outlined hover:cursor-pointer active:scale-95" @click="handleChevronClick(+1)">arrow_forward_ios</span>
     </div>
     
     <div class="grid grid-cols-auto gap-2 my-4 h-auto text-white">

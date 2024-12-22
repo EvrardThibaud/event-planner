@@ -160,7 +160,6 @@ export function formatToDatetimeLocal(inputDateTime) {
     return `${year}-${month}-${day}T${hours}:${minutes}`;
 }
 
-
 // receive a sortingType
 // return the sortingTime of today for html input
 export function getSortingTime(sortingType) {
@@ -210,6 +209,61 @@ export function formatToTimeName(sortingTime, sortingType) {
         return `${months[parseInt(month, 10) - 1]} ${year}`;
     } else {
         return "Invalid sorting type";
+    }
+}
+
+
+export function stepSortingTime(sortingType, sortingTime, step) {
+    if (sortingType === "daily") {
+        const date = new Date(sortingTime);
+        date.setDate(date.getDate() + step);
+        return date.toISOString().slice(0, 10);
+        
+    } else if (sortingType === "weekly") {
+        const [year, week] = sortingTime.split('-W').map(Number);
+
+        function getISOFirstWeekStart(year) {
+            const firstDayOfYear = new Date(year, 0, 1);
+            const dayOfWeek = firstDayOfYear.getDay();
+            const offset = (dayOfWeek <= 4 ? 1 : 8) - dayOfWeek;
+            firstDayOfYear.setDate(firstDayOfYear.getDate() + offset);
+            return firstDayOfYear;
+        }
+        const firstWeekStart = getISOFirstWeekStart(year);
+        const currentWeekStart = new Date(firstWeekStart);
+        currentWeekStart.setDate(firstWeekStart.getDate() + (week - 1) * 7);
+        currentWeekStart.setDate(currentWeekStart.getDate() + step * 7);
+        const adjustedYear = currentWeekStart.getFullYear();
+        const adjustedFirstWeekStart = getISOFirstWeekStart(adjustedYear);
+        const adjustedWeek = Math.ceil(
+        (currentWeekStart - adjustedFirstWeekStart) / (7 * 24 * 60 * 60 * 1000) + 1
+        );
+        if (adjustedWeek === 0) {
+            const previousYear = adjustedYear - 1;
+            const previousYearFirstWeekStart = getISOFirstWeekStart(previousYear);
+            const lastDayOfPreviousYear = new Date(previousYear, 11, 31);
+            const lastWeek = Math.ceil(
+                (lastDayOfPreviousYear - previousYearFirstWeekStart) / (7 * 24 * 60 * 60 * 1000) + 1
+            );
+            return `${previousYear}-W${String(lastWeek).padStart(2, '0')}`;
+        }
+
+        if (adjustedWeek > 52) {
+            const nextYear = adjustedYear + 1;
+            const nextYearFirstWeekStart = getISOFirstWeekStart(nextYear);
+            if (currentWeekStart >= nextYearFirstWeekStart) {
+                return `${nextYear}-W01`;
+            }
+        }
+        return `${adjustedYear}-W${String(adjustedWeek).padStart(2, '0')}`;        
+    } else if (sortingType === "monthly") {
+        const [year, month] = sortingTime.split('-');
+        const date = new Date(Number(year), Number(month) - 1 + step);
+        const adjustedYear = date.getFullYear();
+        const adjustedMonth = String(date.getMonth() + 1).padStart(2, '0');
+        return `${adjustedYear}-${adjustedMonth}`;        
+    } else {
+        throw new Error("Invalid sortingType. Use 'daily', 'weekly', or 'monthly'.");
     }
 }
 
