@@ -24,6 +24,7 @@
 
 <style scoped>
     #message{
+        color: black;
         border-radius: 10px;
         padding: 6px;
         margin: 2px 6px 2px 6px;
