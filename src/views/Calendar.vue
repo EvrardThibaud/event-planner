@@ -257,8 +257,8 @@ import { list } from 'postcss';
       <h1>{{formatToTimeName(sortingTime, sortingType)}}</h1>
       <span class="material-symbols-outlined hover:cursor-pointer active:scale-95" @click="handleChevronClick(+1)">arrow_forward_ios</span>
     </div>
-    
-    <table id="table_event_daily" v-if="sortingType === 'daily'">
+
+    <table id="table_event_daily" v-if="!eventLoading && sortingType === 'daily'">
       <tr v-for="i in 24" :key="index">
         <td>{{ i }}</td>
         <td>
@@ -267,7 +267,7 @@ import { list } from 'postcss';
             v-if="extractHour(event.start) === i"
             :key="event.id" 
             @click="handleViewMore(event)" 
-            :event="event" 
+            :event="event"  
             @handleRemoveEventClick="handleRemoveEventClick"
             />
           </div>
