@@ -1,5 +1,6 @@
 <script setup>
     import { ref } from 'vue';
+    import axios from 'axios';
 
     const form = ref({
         title: '',
@@ -7,12 +8,15 @@
         content: ''
     });
 
-    const submitForm = () => {
-        console.log('Form Data:', form.value);
+    const submitForm = async () => {
+      console.log('send');
+      try {
+        const response = await axios.post('http://localhost:3000/send-email', form.value);
+        console.log('Email sent successfully:', response.data);
+      } catch (error) {
+        console.error('Failed to send email:', error.response ? error.response.data : error.message);
+      }
     };
-
-    // secret key 1052cd416041d3ddb900bb0939cbadd7
-    //  api key 5a1e5a4e5a8c32c044fd53f7b095f1ea
 </script>
 
 <template>
