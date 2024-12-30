@@ -2,6 +2,8 @@
     import { ref } from 'vue';
     import axios from 'axios';
 
+   
+
     const form = ref({
         title: '',
         email: '',
@@ -9,9 +11,9 @@
     });
 
     const submitForm = async () => {
-      console.log('send');
+      console.log('Sending email...');
       try {
-        const response = await axios.post('http://localhost:3000/send-email', form.value);
+        const response = await axios.post('http://localhost:3000/send-email');
         console.log('Email sent successfully:', response.data);
       } catch (error) {
         console.error('Failed to send email:', error.response ? error.response.data : error.message);
