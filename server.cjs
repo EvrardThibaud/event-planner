@@ -5,18 +5,18 @@ const Mailjet = require('node-mailjet');
 const app = express();
 const PORT = 3000;
 
-// Middleware
 app.use(cors());
 app.use(express.json());
 
-// Connexion à Mailjet
 const mailjet = Mailjet.apiConnect(
     '5a1e5a4e5a8c32c044fd53f7b095f1ea', // API Key
     '1052cd416041d3ddb900bb0939cbadd7'  // Secret Key
 );
 
-// Route pour envoyer un e-mail
 app.post('/send-email', async (req, res) => {
+    const { email, title, content } = req.body; 
+    console.log(email);
+    console.log(content);
 
     try {
         const request = mailjet.post('send', { version: 'v3.1' }).request({
@@ -28,13 +28,13 @@ app.post('/send-email', async (req, res) => {
                     },
                     To: [
                         {
-                            Email: 'thibaudevrard@outlook.com',
+                            Email: email,
                             Name: 'Recipient',
                         },
                     ],
                     Subject: 'Default Subject',
                     TextPart: 'Default Content',
-                    HTMLPart: `<h3>blablbalabal</h3>`,
+                    HTMLPart: content,
                 },
             ],
         });
@@ -48,7 +48,6 @@ app.post('/send-email', async (req, res) => {
     }
 });
 
-// Lancer le serveur
 app.listen(PORT, () => {
     console.log(`🚀 Serveur en cours d'exécution sur http://localhost:${PORT}`);
 });
