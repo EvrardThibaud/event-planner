@@ -52,16 +52,3 @@ app.post('/send-email', async (req, res) => {
 app.listen(PORT, () => {
     console.log(`🚀 Serveur en cours d'exécution sur http://localhost:${PORT}`);
 });
-
-
-// const request = mailjet
-//   .get('message')
-//   .id("288230403907636678")
-//   .request()
-// request
-//   .then(result => {
-//     console.log(result.body)
-//   })
-//   .catch(err => {
-//     console.log(err.statusCode)
-//   })
