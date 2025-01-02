@@ -1,4 +1,4 @@
-export function createAlert(content, type, code, message) {
+export function createAlert(content, type) {
     const alertsBox = document.getElementById("alertsBox");
   
     const alertDiv = document.createElement("div");
@@ -8,14 +8,7 @@ export function createAlert(content, type, code, message) {
     const progressBar = document.createElement("div");
     progressBar.classList.add("progress-bar");
 
-    console.log(type);
-
-    if (type == "error") {
-        alertDiv.innerHTML = `<strong>Error ${code} - ${message}</strong> : ${content}`;
-    }
-    else if(type == "success"){
-        alertDiv.innerHTML = `${content}`;
-    }
+    alertDiv.innerHTML = `${content}`;
 
     alertDiv.appendChild(progressBar);
   

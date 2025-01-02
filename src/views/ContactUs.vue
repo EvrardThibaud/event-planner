@@ -1,6 +1,7 @@
 <script setup>
     import { ref } from 'vue';
     import axios from 'axios';
+    import { createAlert } from '../composable/Alerts';
 
     const form = ref({
         title: '',
@@ -10,7 +11,7 @@
 
     const submitForm = async () => {
       try {
-        const response = await axios.post('http://localhost:3000/send-email',
+        await axios.post('http://localhost:3000/send-email',
           {
             from : {email : 'webprojecteventplanner@gmail.com', name : 'EventPlanner+ Support'},
             to : {email : form.value.email, name : 'client'},
@@ -18,9 +19,9 @@
             HTMLPart: `<div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;"><h2 style="color: #4CAF50;">Thank You for Contacting Us!</h2><p>Hello <strong>Valued User</strong>,</p><p>We have received your inquiry and our team will get back to you as soon as possible. Below is a summary of your message:</p><div style="background-color: #f9f9f9; padding: 15px; border-left: 4px solid #4CAF50; margin: 20px 0;"><p><strong>Your Message:</strong></p><p>${form.value.content}</p></div><p>In the meantime, feel free to explore our website or reach out if you have any urgent questions.</p><p>Best regards,<br><strong>The Event Planner Team</strong></p><hr><p style="font-size: 0.9em; color: #888;">This is an automated email, please do not reply directly to this message.</p></div>`
           }
         );
-        console.log('Email sent successfully:', response.data);
+        createAlert('Your message has been successfully sent. You should receive a confirmation email shortly.','success')
       } catch (error) {
-        console.error('Failed to send email:', error.response ? error.response.data : error.message);
+        createAlert('Failed to send email, try again','error');
       }
 
       try {
@@ -34,7 +35,7 @@
         );
         console.log('Email sent successfully:', response.data);
       } catch (error) {
-        console.error('Failed to send email:', error.response ? error.response.data : error.message);
+         console.error('Failed to send email:', error.response ? error.response.data : error.message);
       }
     };
 </script>

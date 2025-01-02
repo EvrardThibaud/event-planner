@@ -38,14 +38,11 @@ app.post('/send-email', async (req, res) => {
         });
 
         const result = await request;
-        console.log('Email envoyé avec succès:', result.body);
-        res.status(200).json({ message: 'Email sent successfully', data: result.body });
     } catch (err) {
-        console.error('Erreur lors de l\'envoi de l\'e-mail:', err.statusCode, err.response?.text);
-        res.status(500).json({ message: 'Failed to send email', error: err.response?.text || err.message });
+        console.error('Error while sending the email:', err.statusCode, err.response?.text);
     }
 });
 
 app.listen(PORT, () => {
-    console.log(`🚀 Serveur en cours d'exécution sur http://localhost:${PORT}`);
+    console.log(`server working on http://localhost:${PORT}`);
 });
