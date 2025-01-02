@@ -14,27 +14,25 @@ const mailjet = Mailjet.apiConnect(
 );
 
 app.post('/send-email', async (req, res) => {
-    const { email, title, content } = req.body; 
-    console.log(email);
-    console.log(content);
+    const { from, to, subject, HTMLPart } = req.body; 
+    console.log(from);
 
     try {
         const request = mailjet.post('send', { version: 'v3.1' }).request({
             Messages: [
                 {
                     From: {
-                        Email: 'webprojecteventplanner@gmail.com',
-                        Name: 'Me',
+                        Email: from.email,
+                        Name: from.name,
                     },
                     To: [
                         {
-                            Email: email,
-                            Name: 'Recipient',
+                            Email: to.email,
+                            Name: to.name,
                         },
                     ],
-                    Subject: 'Default Subject',
-                    TextPart: 'Default Content',
-                    HTMLPart: content,
+                    Subject: subject,
+                    HTMLPart: HTMLPart,
                 },
             ],
         });
