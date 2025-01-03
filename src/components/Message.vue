@@ -17,7 +17,7 @@
         ]"
     >
         <p>{{ props.text }}</p>
-        <p class="text-xs my-1 opacity-70">{{props.datetime}}</p>
+        <p class="text-xs my-1 font-light">{{props.datetime}}</p>
     </div>
 
 </template>
