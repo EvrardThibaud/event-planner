@@ -111,7 +111,7 @@
   
     <form @submit.prevent="submitForm">
       <textarea v-model="prompt" ref="textarea" @keydown="handleKeyDown" @input="autoResize" placeholder="Type your message"></textarea>
-      <button @click="handleButtonClick" class="text-white" :disabled="prompt === ''">Send message</button>
+      <button @click="handleButtonClick" class="primary_button" :disabled="prompt === ''">Send message</button>
     </form>
 
   </section>
@@ -132,44 +132,6 @@
     display: flex;
     justify-content: center;
     gap: 2px;
-  }
-
-  input, textarea, button{
-    height: 40px;
-    color: #18181b;
-    padding: 6px;
-    border: 2px solid #18181b;
-    border-radius: 5px;
-    background-color: #d1d5db;
-    outline: none;
-  }
-
-  textarea{
-    height: 100px; 
-    min-width: 50vw;
-    resize: none;
-  }
-
-  textarea::-webkit-scrollbar-track {
-    background: #d1d5db; 
-  }
-
-  textarea::-webkit-scrollbar-thumb {
-    border-radius: 2px;
-  }
-  
-  button{
-    min-width: 10vw;
-    font-weight: 600;
-    background-color: #86efac;
-  }
-
-  button:hover{
-    opacity: .9;
-  }
-
-  button:active{
-    scale: .98;
   }
 
   #messagesBox{
