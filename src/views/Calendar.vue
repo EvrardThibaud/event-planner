@@ -221,6 +221,7 @@ import { list } from 'postcss';
 
   async function toggleIsCreating(){
     isCreating.value = !isCreating.value
+    document.body.classList.toggle('no-scroll')
   }
 
   onMounted(() => {
@@ -305,11 +306,11 @@ import { list } from 'postcss';
   </section>
 
   <div v-else class="text-gray-200">
-      <p>You can't see any calendar because you are not connected</p>
-      <RouterLink    :to="{name: 'GoogleAuth'}" >
-        <button class="primary_button">Click here to connect.</button>
-      </RouterLink>
-    </div>
+    <p>You can't see any calendar because you are not connected</p>
+    <RouterLink    :to="{name: 'GoogleAuth'}" >
+      <button class="primary_button">Click here to connect.</button>
+    </RouterLink>
+  </div>
 
   <FormCreateEvent 
     v-if="isCreating"

@@ -13,6 +13,11 @@ html{
    background-color: #18181b;
 }
 
+.no-scroll {
+  overflow: hidden;
+}
+
+
 /* scroll bar */
 
 ::-webkit-scrollbar {
