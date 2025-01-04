@@ -2,7 +2,7 @@
   import { ref, onMounted } from 'vue';
   import {handleAuthClick} from "../composable/GoogleAuth.js";
   import { loadScript, gisLoaded, gapiLoaded } from '../composable/GoogleAuth.js';
-  import {addTimeToDateTime, calculTimeMin, calculTimeMax, getSortingTime, formatToTimeName, stepSortingTime, extractHour} from "../composable/DateTime.js";
+  import {addTimeToDateTime, calculTimeMin, calculTimeMax, getDayOfWeek, getSortingTime, daysOfTheWeek, formatToTimeName, stepSortingTime, extractHour} from "../composable/DateTime.js";
   import { createAlert } from '../composable/Alerts.js';
   import Event from '../components/Event.vue';
   import EventCard from '../components/EventCard.vue';
@@ -267,10 +267,10 @@ import { list } from 'postcss';
       }}
     </p>
 
-    <table id="table_event_daily" v-if="!eventLoading && sortingType === 'daily'">
-      <tr v-for="i in 24" :key="index">
-        <td class="w-10" >{{ i - 1 }}:00</td>
-        <td id="second_row">
+    <table id="table_event" v-if="!eventLoading">
+      <tr v-if="sortingType === 'daily'" v-for="i in 24">
+        <td class="w-1" >{{ i - 1 }}:00</td>
+        <td class="second_row">
           <div v-for="event in eventsList">
             <EventCard   
             v-if="extractHour(event.start) === (i-1)"
@@ -282,7 +282,24 @@ import { list } from 'postcss';
           </div>
         </td>
       </tr>
+
+    <tr v-if="sortingType === 'weekly'" v-for="(day, i) in daysOfTheWeek()" :key="i">
+      <td class="w-1" >{{day}}</td>
+      <td class="second_row">
+        <template v-for="event in eventsList">
+          <EventCard
+          v-if="event && event.start && getDayOfWeek(event.start) === day"
+          :key="event.id"
+          @click="handleViewMore(event)"
+          :event="event"
+          @handleRemoveEventClick="handleRemoveEventClick"
+          />
+        </template>
+      </td>
+    </tr>
+
     </table>
+
 
     <div class="grid grid-cols-auto gap-2 my-4 h-auto text-white">
       <!-- <EventCard v-for="event in eventsList" 
@@ -354,12 +371,12 @@ import { list } from 'postcss';
     }
   }
 
-  #table_event_daily{
+  #table_event{
     max-height: 100px;
     overflow: hidden;
     width: 100%;
 
-    #second_row{
+    .second_row{
       display: flex;
       align-items: center;
       gap: 10px;

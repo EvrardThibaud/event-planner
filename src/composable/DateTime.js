@@ -268,9 +268,20 @@ export function stepSortingTime(sortingType, sortingTime, step) {
     }
 }
 
+// receive dateTime from event
+// return the hour of this datetime
 export function extractHour(dateTime) {
     return new Date(dateTime).getHours();
 }
 
+export function daysOfTheWeek(){
+    return ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+}
   
-  
+
+export function getDayOfWeek(dateTime) {
+    const days = daysOfTheWeek();  
+    const date = new Date(dateTime); 
+    const dayIndex = (date.getDay() + 6) % 7;
+    return days[dayIndex]; 
+}
