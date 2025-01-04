@@ -5,17 +5,6 @@
     const props = defineProps({
         event : Object
     })
-
-    const emit = defineEmits(['handleRemoveEventClick']);
-    const emitEvent = (event, eventId) => {
-        emit('handleRemoveEventClick', event, eventId);
-    };
-
-    async function handleRemoveEventClick(event, eventId) {
-        emitEvent(event, eventId);
-    }
-
-
 </script>
 
 <template>

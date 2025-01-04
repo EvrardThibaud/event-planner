@@ -1,8 +1,8 @@
 <script setup>
-  import { ref, onMounted } from 'vue';
+  import { ref, onMounted, computed } from 'vue';
   import {handleAuthClick} from "../composable/GoogleAuth.js";
   import { loadScript, gisLoaded, gapiLoaded } from '../composable/GoogleAuth.js';
-  import {addTimeToDateTime, calculTimeMin, calculTimeMax, getDayOfWeek, getMonthInfo, getSortingTime, daysOfTheWeek, formatToTimeName, stepSortingTime, extractHour} from "../composable/DateTime.js";
+  import {addTimeToDateTime, calculTimeMin, calculTimeMax, getDayOfWeek,getDayFromDateTime, getMonthInfo, getSortingTime, daysOfTheWeek, formatToTimeName, stepSortingTime, extractHour} from "../composable/DateTime.js";
   import { createAlert } from '../composable/Alerts.js';
   import Event from '../components/Event.vue';
   import EventCard from '../components/EventCard.vue';
@@ -228,6 +228,31 @@ import { list } from 'postcss';
     document.body.classList.toggle('no-scroll')
   }
 
+  const calendarData = computed(() => {
+    const { firstDayIndex, daysInMonth } = getMonthInfo(sortingTime.value);
+    const calendar = [];
+    let currentDay = 1;
+    const firstWeek = Array(7).fill(null).map((_, index) => {
+      if (index >= firstDayIndex - 1) {
+        return currentDay++;
+      }
+      return null;
+    });
+    calendar.push(firstWeek);
+    while (currentDay <= daysInMonth) {
+      const week = Array(7).fill(null).map(() => {
+        if (currentDay <= daysInMonth) {
+          return currentDay++;
+        }
+        return null;
+      });
+      calendar.push(week);
+    }
+
+    return calendar
+  })
+
+
   onMounted(() => {
     loadScript('https://apis.google.com/js/api.js', () => {
       gapiLoaded(listUpcomingEvents); 
@@ -272,25 +297,33 @@ import { list } from 'postcss';
       }}
     </p>
 
+
     <table id="table_event" v-if="sortingType === 'monthly'">
-      <tr>
-        <td v-for="day in daysOfTheWeek()">{{ day }}</td>
-      </tr>
-      <tr>
-        <td v-for="_ in getMonthInfo(sortingTime).firstDayIndex -1" :key="index">
-        </td>
-        <td v-for="d in 7 - (getMonthInfo(sortingTime).firstDayIndex - 1)">
-          {{ d }}
-        </td>
-      </tr>
-      <tr v-for="w in Math.ceil(getMonthInfo(sortingTime).daysInMonth / 8)">
-        <td v-for="d in 7">
-          <!-- getMonthInfo(sortingTime).firstDayIndex - 1 -->
-          <p v-if="d + 7 - (getMonthInfo(sortingTime).firstDayIndex - 1) + 7 * (w - 1) <= getMonthInfo(sortingTime).daysInMonth" >
-            {{ d + 7 - (getMonthInfo(sortingTime).firstDayIndex - 1) + 7 * (w - 1) }}
-          </p>
-        </td>
-      </tr>
+      <thead>
+        <tr>
+          <th v-for="day in daysOfTheWeek()" :key="day">{{ day }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="(week, weekIndex) in calendarData" :key="weekIndex">
+          <td v-for="(day, dayIndex) in week" :key="dayIndex" >
+            <p v-if="day">{{ day }}</p>
+            <template v-for="event in eventsList">
+              <div
+                v-if="getDayFromDateTime(event.start) === day"
+                @click="handleViewMore(event)" 
+                class="colo"
+              >
+              <!-- color: white;
+        background-color: rgb(19, 60, 78);
+        padding: 6px;
+        border-radius: 10px;
+                {{ event.summary }} -->
+              </div>
+            </template>
+          </td>
+        </tr>
+      </tbody>
     </table>
 
     <table v-else id="table_event" v-if="!eventLoading">
@@ -299,11 +332,10 @@ import { list } from 'postcss';
         <td class="second_row">
           <template v-for="event in eventsList">
             <EventCard   
-            v-if="extractHour(event.start) === (i-1)"
-            :key="event.id" 
-            @click="handleViewMore(event)" 
-            :event="event"  
-            @handleRemoveEventClick="handleRemoveEventClick"
+              v-if="extractHour(event.start) === (i-1)"
+              :key="event.id" 
+              @click="handleViewMore(event)" 
+              :event="event"  
             />
           </template>
         </td>
@@ -314,11 +346,10 @@ import { list } from 'postcss';
         <td class="second_row">
           <template v-for="event in eventsList">
             <EventCard
-            v-if="event && event.start && getDayOfWeek(event.start) === day"
-            :key="event.id"
-            @click="handleViewMore(event)"
-            :event="event"
-            @handleRemoveEventClick="handleRemoveEventClick"
+              v-if="event && event.start && getDayOfWeek(event.start) === day"
+              :key="event.id"
+              @click="handleViewMore(event)"
+              :event="event"
             />
           </template>
         </td>
