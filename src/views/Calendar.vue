@@ -258,9 +258,17 @@ import { list } from 'postcss';
       <span class="material-symbols-outlined hover:cursor-pointer active:scale-95" @click="handleChevronClick(+1)">arrow_forward_ios</span>
     </div>
 
+    <p v-if="noEvent" class="flex justify-center pt-4 gap-4">
+      {{
+        sortingType === "daily" ? "You don't have any event this day" :
+        sortingType === "weekly" ? "You don't have any event this week" :
+        sortingType === "monthly" ? "You don't have any event this month" : "error"
+      }}
+    </p>
+
     <table id="table_event_daily" v-if="!eventLoading && sortingType === 'daily'">
       <tr v-for="i in 24" :key="index">
-        <td>{{ i - 1 }}:00</td>
+        <td class="w-10" >{{ i - 1 }}:00</td>
         <td id="second_row">
           <div v-for="event in eventsList">
             <EventCard   
@@ -290,14 +298,6 @@ import { list } from 'postcss';
         <p>Create a new event</p>
       </div>
     </button>
-    
-    <p v-if="noEvent" class="text-gray-200">
-      {{
-        sortingType === "daily" ? "You don't have any event this day" :
-        sortingType === "weekly" ? "You don't have any event this week" :
-        sortingType === "monthly" ? "You don't have any event this month" : "error"
-      }}
-    </p>
 
     <div v-if="eventLoading" class="w-full top-0 right-0 flex items-center justify-center ">
       <div class="loader"  ></div> 
