@@ -2,7 +2,7 @@
   import { ref, onMounted } from 'vue';
   import {handleAuthClick} from "../composable/GoogleAuth.js";
   import { loadScript, gisLoaded, gapiLoaded } from '../composable/GoogleAuth.js';
-  import {addTimeToDateTime, calculTimeMin, calculTimeMax, getDayOfWeek, getSortingTime, daysOfTheWeek, formatToTimeName, stepSortingTime, extractHour} from "../composable/DateTime.js";
+  import {addTimeToDateTime, calculTimeMin, calculTimeMax, getDayOfWeek, getMonthInfo, getSortingTime, daysOfTheWeek, formatToTimeName, stepSortingTime, extractHour} from "../composable/DateTime.js";
   import { createAlert } from '../composable/Alerts.js';
   import Event from '../components/Event.vue';
   import EventCard from '../components/EventCard.vue';
@@ -272,11 +272,32 @@ import { list } from 'postcss';
       }}
     </p>
 
-    <table id="table_event" v-if="!eventLoading">
+    <table id="table_event" v-if="sortingType === 'monthly'">
+      <tr>
+        <td v-for="day in daysOfTheWeek()">{{ day }}</td>
+      </tr>
+      <tr>
+        <td v-for="_ in getMonthInfo(sortingTime).firstDayIndex -1" :key="index">
+        </td>
+        <td v-for="d in 7 - (getMonthInfo(sortingTime).firstDayIndex - 1)">
+          {{ d }}
+        </td>
+      </tr>
+      <tr v-for="w in Math.ceil(getMonthInfo(sortingTime).daysInMonth / 8)">
+        <td v-for="d in 7">
+          <!-- getMonthInfo(sortingTime).firstDayIndex - 1 -->
+          <p v-if="d + 7 - (getMonthInfo(sortingTime).firstDayIndex - 1) + 7 * (w - 1) <= getMonthInfo(sortingTime).daysInMonth" >
+            {{ d + 7 - (getMonthInfo(sortingTime).firstDayIndex - 1) + 7 * (w - 1) }}
+          </p>
+        </td>
+      </tr>
+    </table>
+
+    <table v-else id="table_event" v-if="!eventLoading">
       <tr v-if="sortingType === 'daily'" v-for="i in 24">
         <td class="w-1" >{{ i - 1 }}:00</td>
         <td class="second_row">
-          <div v-for="event in eventsList">
+          <template v-for="event in eventsList">
             <EventCard   
             v-if="extractHour(event.start) === (i-1)"
             :key="event.id" 
@@ -284,35 +305,26 @@ import { list } from 'postcss';
             :event="event"  
             @handleRemoveEventClick="handleRemoveEventClick"
             />
-          </div>
+          </template>
         </td>
       </tr>
 
-    <tr v-if="sortingType === 'weekly'" v-for="(day, i) in daysOfTheWeek()" :key="i">
-      <td class="w-1" >{{day}}</td>
-      <td class="second_row">
-        <template v-for="event in eventsList">
-          <EventCard
-          v-if="event && event.start && getDayOfWeek(event.start) === day"
-          :key="event.id"
-          @click="handleViewMore(event)"
-          :event="event"
-          @handleRemoveEventClick="handleRemoveEventClick"
-          />
-        </template>
-      </td>
-    </tr>
-
+      <tr v-if="sortingType === 'weekly'" v-for="day in daysOfTheWeek()">
+        <td class="w-1" >{{day}}</td>
+        <td class="second_row">
+          <template v-for="event in eventsList">
+            <EventCard
+            v-if="event && event.start && getDayOfWeek(event.start) === day"
+            :key="event.id"
+            @click="handleViewMore(event)"
+            :event="event"
+            @handleRemoveEventClick="handleRemoveEventClick"
+            />
+          </template>
+        </td>
+      </tr>
     </table>
 
-    <div class="grid grid-cols-auto gap-2 my-4 h-auto text-white">
-      <!-- <EventCard v-for="event in eventsList" 
-        :key="event.id" 
-        @click="handleViewMore(event)" 
-        :event="event" 
-        @handleRemoveEventClick="handleRemoveEventClick"
-      />      -->
-    </div>
     
     <button class="primary_button" id="buttonOpenAddEventForm" @click="toggleIsCreating">
       <div class="flex items-center">

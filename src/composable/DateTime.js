@@ -274,14 +274,33 @@ export function extractHour(dateTime) {
     return new Date(dateTime).getHours();
 }
 
+// return a array with the days of the week in common language
 export function daysOfTheWeek(){
     return ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
 }
   
-
+// receive a dateTime form event
+// return the day of thi datetime in common language
 export function getDayOfWeek(dateTime) {
     const days = daysOfTheWeek();  
     const date = new Date(dateTime); 
     const dayIndex = (date.getDay() + 6) % 7;
     return days[dayIndex]; 
+}
+
+// receive a month in html input type
+// return its firstDayIndex in the week and its number of days
+export function getMonthInfo(month) {
+    const [year, monthIndex] = month.split('-').map(Number);
+    
+    const firstDay = new Date(year, monthIndex - 1, 1);
+    const firstDayIndex = (firstDay.getDay() === 0) ? 7 : firstDay.getDay(); 
+    
+    const lastDay = new Date(year, monthIndex, 0);
+    const daysInMonth = lastDay.getDate();
+
+    return {
+        firstDayIndex,
+        daysInMonth
+    };
 }
