@@ -38,7 +38,7 @@
 </script>
 
 <template>
-    <form @submit.prevent="submitForm" id="form_add_event" class="fixed flex justify-center items-start flex-col gap-2 px-4">
+    <form @submit.prevent="submitForm" id="form_add_event">
         <h2 class="text-gray-300 font-bold text-2xl">Add an Event</h2>
         <div>
           <label for="title">Title</label>
@@ -119,12 +119,13 @@
     background-color: #18181b;
     width: 100%;
     height: calc(100vh);
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-direction: column;
 
     div{
       display: flex;

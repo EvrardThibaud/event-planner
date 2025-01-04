@@ -300,7 +300,6 @@ import { list } from 'postcss';
 
     </table>
 
-
     <div class="grid grid-cols-auto gap-2 my-4 h-auto text-white">
       <!-- <EventCard v-for="event in eventsList" 
         :key="event.id" 
@@ -329,8 +328,7 @@ import { list } from 'postcss';
     </RouterLink>
   </div>
 
-  <FormCreateEvent 
-    v-if="isCreating"
+  <FormCreateEvent v-if="isCreating"
     :newEvent="newEvent" 
     :participantsList="participantsList" 
     :isAdding="isAdding"
