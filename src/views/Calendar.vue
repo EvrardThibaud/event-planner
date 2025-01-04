@@ -141,7 +141,7 @@ import { list } from 'postcss';
         }
         participantsList.value = [];
         listUpcomingEvents();
-        setDatetime();
+        setNewEventDateTime();
         toggleIsCreating();
       }
     } catch (err) {
@@ -209,12 +209,16 @@ import { list } from 'postcss';
     listUpcomingEvents()
   }
 
-  async function setDatetime(){
+  async function setNewEventDateTime(){
     const now = new Date();
     const localDate = new Date(now.getTime() - now.getTimezoneOffset() * 60000);
     const formattedDateTime = localDate.toISOString().slice(0, 16); 
     newEvent.value.datetime = formattedDateTime;
+  }
 
+  async function setSortingTime(){
+    const now = new Date();
+    const localDate = new Date(now.getTime() - now.getTimezoneOffset() * 60000);
     const formattedDate = localDate.toISOString().slice(0, 10);
     sortingTime.value = formattedDate;
   }
@@ -228,7 +232,8 @@ import { list } from 'postcss';
     loadScript('https://apis.google.com/js/api.js', () => {
       gapiLoaded(listUpcomingEvents); 
     });
-    setDatetime();
+    setNewEventDateTime();
+    setSortingTime();
   });
 </script>
 
