@@ -319,8 +319,8 @@
       </tbody>
     </table>
 
-    <table v-else id="table_event" v-if="!eventLoading">
-      <tr v-if="sortingType === 'daily'" v-for="i in 24">
+    <table v-else-if="sortingType == 'daily'" id="table_event_daily" v-if="!eventLoading">
+      <tr v-for="i in 24">
         <td class="w-14 text-right pr-2 text-xs" >{{ i - 1 <= 11 ? i - 1 + " AM" : i - 1 + " PM" }}</td>
         <td class="second_row">
           <template v-for="event in eventsList">
@@ -333,20 +333,29 @@
           </template>
         </td>
       </tr>
+    </table>
 
-      <tr v-if="sortingType === 'weekly'" v-for="day in daysOfTheWeek()">
-        <td class="w-1" >{{day}}</td>
-        <td class="second_row">
-          <template v-for="event in eventsList">
-            <EventCard
-              v-if="event && event.start && getDayOfWeek(event.start) === day"
-              :key="event.id"
-              @click="handleViewMore(event)"
-              :event="event"
-            />
-          </template>
-        </td>
-      </tr>
+    <table v-else-if="sortingType == 'weekly'" id="table_event_weekly">
+      <thead>
+        <tr>
+          <th v-for="day in daysOfTheWeek()">{{ day }}</th>
+        </tr>
+      </thead>
+      <tbody >
+        <tr>
+          <td class="second_row" v-for="day in daysOfTheWeek()">
+            <template v-for="event in eventsList">
+              <EventCard
+                v-if="event && event.start && getDayOfWeek(event.start) === day"
+                :key="event.id"
+                @click="handleViewMore(event)"
+                :event="event"
+                class="my-2"
+              />
+            </template>
+          </td>
+        </tr>
+      </tbody>
     </table>
 
     <button class="primary_button" id="buttonOpenAddEventForm" @click="toggleIsCreating">
@@ -409,7 +418,7 @@
     }
   }
 
-  #table_event{
+  #table_event_daily{
     max-height: 100px;
     overflow: hidden;
     width: 100%;
@@ -423,6 +432,10 @@
       min-height: 50px;
       border-bottom: white 1px solid;
     }
+  }
+
+  #table_event_weekly{
+
   }
 
   .loader {
@@ -460,16 +473,16 @@
     
     thead tr th {
       padding: 10px;
-      border: 1px solid white;
+      border: 1px solid rgba(255, 255, 255, 0.5);
       text-transform: uppercase;
       font-size: 1.2vw;
     }
     
     tbody tr {
-      border-bottom: 1px solid white;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.5);
 
       td {
-        border: 1px solid white;
+        border: 1px solid rgba(255, 255, 255, 0.5);
         vertical-align: top;
         text-align: left;
         padding: 5px;
@@ -500,4 +513,40 @@
       }
     }
   }
+
+  #table_event_weekly {
+    table-layout: fixed; 
+    width: 100%;
+    border-collapse: collapse;
+
+    thead {
+      font-weight: bold;
+
+      th {
+        padding: 10px;
+        text-align: center;
+        text-transform: uppercase;
+        font-size: 1.2vw;
+      }
+    }
+
+    td {
+      padding: 10px;
+      text-align: center;
+      vertical-align: top;
+      border-right: 1px solid #e0e0e0;
+      border-left: 1px solid #e0e0e0;
+      
+      &:first-child {
+        border-left: none;  /* Retirer la bordure gauche du premier <td> */
+      }
+  
+      &:last-child {
+        border-right: none;  /* Retirer la bordure droite du dernier <td> */
+      }
+    }
+  }
+
+
+
 </style>
