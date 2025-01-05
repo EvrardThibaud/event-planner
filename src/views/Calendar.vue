@@ -261,30 +261,28 @@
 </script>
 
 <template>
-  <section id="section_calendar" class="px-4 " v-if="isConnected" >
+  <section v-if="isConnected" id="section_calendar" class="px-4 " >
     <h1 class="text-gray-300 font-bold text-2xl">Calendar</h1>
     
-    <div  class="text-gray-200">
-      <select name="" id="" v-model="sortingType" class="text-gray-800" @change="handleSortingChange" >
+    <div class="flex justify-center">
+      <select name="" id="" v-model="sortingType" class="text-gray-800 " @change="handleSortingChange" >
         <option value="daily">Daily</option>
         <option value="weekly">Weekly</option>
         <option value="monthly">Monthly</option>
       </select>
-
+    </div>
+    
+    <div v-if="sortingTime && sortingType" class="flex justify-center  pt-4 gap-4 select-none">
+      <span class="material-symbols-outlined hover:cursor-pointer active:scale-95 flex items-center" @click="handleChevronClick(-1)">arrow_back_ios</span>
       <input 
         v-model="sortingTime"
         @input="listUpcomingEvents"
         :type="sortingType === 'daily' ? 'date' : 
         sortingType === 'weekly' ? 'week' : 
         sortingType === 'monthly' ? 'month' : ''"
-        class="text-gray-800"
+        class="text-gray-400 min-w-fit uppercase font-semibold p-0 bg-zinc-900 "
       >
-    </div>
-
-    <div v-if="sortingTime && sortingType" class="flex justify-center pt-4 gap-4 select-none">
-      <span class="material-symbols-outlined hover:cursor-pointer active:scale-95" @click="handleChevronClick(-1)">arrow_back_ios</span>
-      <h1>{{formatToTimeName(sortingTime, sortingType)}}</h1>
-      <span class="material-symbols-outlined hover:cursor-pointer active:scale-95" @click="handleChevronClick(+1)">arrow_forward_ios</span>
+      <span class="material-symbols-outlined hover:cursor-pointer active:scale-95 flex items-center" @click="handleChevronClick(+1)">arrow_forward_ios</span>
     </div>
 
     <p v-if="noEvent" class="flex justify-center pt-4 gap-4">
@@ -411,7 +409,7 @@
     position: fixed;
     bottom: 20px;
     left: calc(50vw );
-    // transform: translateX(-50%); define in coposable/addEventButton.js
+    transform: translateX(-50%); 
     transform-origin: center;
     &:active{
       transform: translateX(-50%) scale(0.98);
