@@ -295,8 +295,7 @@
       }}
     </p>
 
-
-    <table id="table_event_monthly" v-if="sortingType === 'monthly'">
+    <table v-if="sortingType === 'monthly'" id="table_event_monthly" >
       <thead>
         <tr>
           <th v-for="day in daysOfTheWeek()" :key="day">{{ day }}</th>
@@ -322,7 +321,7 @@
 
     <table v-else id="table_event" v-if="!eventLoading">
       <tr v-if="sortingType === 'daily'" v-for="i in 24">
-        <td class="w-1" >{{ i - 1 }}:00</td>
+        <td class="w-14 text-right pr-2 text-xs" >{{ i - 1 <= 11 ? i - 1 + " AM" : i - 1 + " PM" }}</td>
         <td class="second_row">
           <template v-for="event in eventsList">
             <EventCard   
