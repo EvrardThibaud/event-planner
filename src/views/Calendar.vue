@@ -1,13 +1,11 @@
 <script setup>
   import { ref, onMounted, computed } from 'vue';
-  import {handleAuthClick} from "../composable/GoogleAuth.js";
-  import { loadScript, gisLoaded, gapiLoaded } from '../composable/GoogleAuth.js';
+  import { loadScript, gapiLoaded } from '../composable/GoogleAuth.js';
   import {addTimeToDateTime, calculTimeMin, calculTimeMax, getDayOfWeek,getDayFromDateTime, getMonthInfo, getSortingTime, daysOfTheWeek, formatToTimeName, stepSortingTime, extractHour} from "../composable/DateTime.js";
   import { createAlert } from '../composable/Alerts.js';
   import Event from '../components/Event.vue';
   import EventCard from '../components/EventCard.vue';
   import FormCreateEvent from '../components/FormCreateEvent.vue';
-import { list } from 'postcss';
 
   const eventLoading = ref(true)
   const isCreating = ref(false)
@@ -263,7 +261,7 @@ import { list } from 'postcss';
 </script>
 
 <template>
-  <section id="section_calendar" class="px-4" v-if="isConnected" >
+  <section id="section_calendar" class="px-4 " v-if="isConnected" >
     <h1 class="text-gray-300 font-bold text-2xl">Calendar</h1>
     
     <div  class="text-gray-200">
@@ -312,7 +310,7 @@ import { list } from 'postcss';
               <div
                 v-if="getDayFromDateTime(event.start) === day"
                 @click="handleViewMore(event)" 
-                class="colo"
+                class="bg-red-50"
               >
               <!-- color: white;
         background-color: rgb(19, 60, 78);
@@ -364,7 +362,7 @@ import { list } from 'postcss';
       </div>
     </button>
 
-    <div v-if="eventLoading" class="w-full top-0 right-0 flex items-center justify-center ">
+    <div v-if="eventLoading" class="w-full fixed top-52 right-0 flex items-center justify-center ">
       <div class="loader"  ></div> 
     </div>
   </section>
@@ -398,7 +396,7 @@ import { list } from 'postcss';
 
 <style scoped lang="scss">
   #section_calendar{
-    min-height: calc(100vh - 56px);
+    min-height: calc(100vh - 56px); 
   }
 
   .grid-cols-auto {
@@ -410,7 +408,7 @@ import { list } from 'postcss';
     position: fixed;
     bottom: 20px;
     left: calc(50vw );
-    transform: translateX(-50%);
+    // transform: translateX(-50%); define in coposable/addEventButton.js
     transform-origin: center;
     &:active{
       transform: translateX(-50%) scale(0.98);
