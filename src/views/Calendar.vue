@@ -296,27 +296,23 @@
     </p>
 
 
-    <table id="table_event" v-if="sortingType === 'monthly'">
+    <table id="table_event_monthly" v-if="sortingType === 'monthly'">
       <thead>
         <tr>
           <th v-for="day in daysOfTheWeek()" :key="day">{{ day }}</th>
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(week, weekIndex) in calendarData" :key="weekIndex">
+        <tr v-for="(week, weekIndex) in calendarData" :key="weekIndex" >
           <td v-for="(day, dayIndex) in week" :key="dayIndex" >
             <p v-if="day">{{ day }}</p>
             <template v-for="event in eventsList">
               <div
                 v-if="getDayFromDateTime(event.start) === day"
                 @click="handleViewMore(event)" 
-                class="bg-red-50"
+                class="bg-teal-900 rounded-lg m-1 p-1 "
               >
-              <!-- color: white;
-        background-color: rgb(19, 60, 78);
-        padding: 6px;
-        border-radius: 10px;
-                {{ event.summary }} -->
+              {{event.summary?event.summary:'Unamed Event'}}
               </div>
             </template>
           </td>
@@ -354,7 +350,6 @@
       </tr>
     </table>
 
-    
     <button class="primary_button" id="buttonOpenAddEventForm" @click="toggleIsCreating">
       <div class="flex items-center">
         <span class="material-symbols-outlined">add</span>
@@ -455,5 +450,55 @@
     49.99%{transform:scaleY(1)  rotate(135deg)}
     50%   {transform:scaleY(-1) rotate(0deg)}
     100%  {transform:scaleY(-1) rotate(-135deg)}
+  }
+
+  #table_event_monthly {
+    width: 100%;
+    table-layout: fixed;
+    text-align: center;
+    margin-top: 20px;
+    margin-bottom: 100px;
+    
+    thead tr th {
+      padding: 10px;
+      border: 1px solid white;
+      text-transform: uppercase;
+      font-size: 1.2vw;
+    }
+    
+    tbody tr {
+      border-bottom: 1px solid white;
+
+      td {
+        border: 1px solid white;
+        vertical-align: top;
+        text-align: left;
+        padding: 5px;
+
+        div {
+          background-color: #134c5f;
+          color: #fff;
+          border-radius: 5px;
+          margin: 2px 0;
+          padding: 4px;
+          font-size: 0.8rem;
+          cursor: pointer;
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+
+          &:hover {
+            opacity: .9;
+          }
+        }
+
+        p {
+          font-size: 0.9rem;
+          font-weight: bold;
+          margin-bottom: 5px;
+        }
+
+      }
+    }
   }
 </style>
