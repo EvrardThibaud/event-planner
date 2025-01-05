@@ -201,7 +201,10 @@
     listUpcomingEvents()
   }
 
-  async function handleSortingChange(){
+  async function handleSortingChange(newValue){
+    if(newValue == 'weekly' || newValue == 'monthly' ||newValue == 'daily'){
+      sortingType.value = newValue
+    }
     sortingTime.value = getSortingTime(sortingType.value)
 
     listUpcomingEvents()
@@ -265,12 +268,19 @@
     <h1 class="text-gray-300 font-bold text-2xl">Calendar</h1>
     
     <div class="flex justify-center">
-      <select name="" id="" v-model="sortingType" class="text-gray-800 " @change="handleSortingChange" >
+      <!-- <select name="" id="" v-model="sortingType" class="text-gray-800 " @change="handleSortingChange" >
         <option value="daily">Daily</option>
         <option value="weekly">Weekly</option>
         <option value="monthly">Monthly</option>
-      </select>
+      </select> -->
+
+      <div class="menu menu-vertical lg:menu-horizontal bg-base-200 rounded-box">
+        <li @click="handleSortingChange('daily')"><a :class="{'active': sortingType === 'daily'}">Daily</a></li>
+        <li @click="handleSortingChange('weekly')"><a :class="{'active': sortingType === 'weekly'}">Weekly</a></li>
+        <li @click="handleSortingChange('monthly')"><a :class="{'active': sortingType === 'monthly'}">Monthly</a></li>
+      </div>
     </div>
+
     
     <div v-if="sortingTime && sortingType" class="flex justify-center  pt-4 gap-4 select-none">
       <span class="material-symbols-outlined hover:cursor-pointer active:scale-95 flex items-center" @click="handleChevronClick(-1)">arrow_back_ios</span>
@@ -286,10 +296,11 @@
     </div>
 
     <p v-if="noEvent" class="flex justify-center pt-4 gap-4">
+      You don't have any event this 
       {{
-        sortingType === "daily" ? "You don't have any event this day" :
-        sortingType === "weekly" ? "You don't have any event this week" :
-        sortingType === "monthly" ? "You don't have any event this month" : "error"
+        sortingType === "daily" ? " day" :
+        sortingType === "weekly" ? " week" :
+        sortingType === "monthly" ? " month" : "error"
       }}
     </p>
 
