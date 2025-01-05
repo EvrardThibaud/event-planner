@@ -202,11 +202,7 @@
   }
 
   async function handleSortingChange(newValue){
-    if(newValue == 'weekly' || newValue == 'monthly' ||newValue == 'daily'){
-      sortingType.value = newValue
-    }
     sortingTime.value = getSortingTime(sortingType.value)
-
     listUpcomingEvents()
   }
 
@@ -268,17 +264,12 @@
     <h1 class="text-gray-300 font-bold text-2xl">Calendar</h1>
     
     <div class="flex justify-center">
-      <!-- <select name="" id="" v-model="sortingType" class="text-gray-800 " @change="handleSortingChange" >
+      <select name="" id="" v-model="sortingType" class="text-gray-800 " @change="handleSortingChange" >
         <option value="daily">Daily</option>
         <option value="weekly">Weekly</option>
         <option value="monthly">Monthly</option>
-      </select> -->
+      </select>
 
-      <div class="menu menu-vertical lg:menu-horizontal bg-base-200 rounded-box">
-        <li @click="handleSortingChange('daily')"><a :class="{'active': sortingType === 'daily'}">Daily</a></li>
-        <li @click="handleSortingChange('weekly')"><a :class="{'active': sortingType === 'weekly'}">Weekly</a></li>
-        <li @click="handleSortingChange('monthly')"><a :class="{'active': sortingType === 'monthly'}">Monthly</a></li>
-      </div>
     </div>
 
     
