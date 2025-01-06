@@ -48,7 +48,6 @@
     } 
     catch (err) {
       createAlert("Try to reconnect on the google auth page","error",undefined,"Undefined tockenClient")
-      
       return;
     }
 
@@ -216,6 +215,13 @@
     listUpcomingEvents()
   }
 
+  async function handleDateClick(day){
+    sortingType.value = 'daily';
+    const [year, month] = sortingTime.value.split('-');
+    sortingTime.value = `${year}-${month}-${String(day).padStart(2, '0')}`;
+    listUpcomingEvents()
+  }
+
   async function setNewEventDateTime(){
     const now = new Date();
     const localDate = new Date(now.getTime() - now.getTimezoneOffset() * 60000);
@@ -281,7 +287,6 @@
       </select>
 
     </div>
-
     
     <div v-if="sortingTime && sortingType" class="flex justify-center  pt-4 gap-4 select-none">
       <span class="material-symbols-outlined hover:cursor-pointer active:scale-95 flex items-center" @click="handleChevronClick(-1)">arrow_back_ios</span>
@@ -313,12 +318,16 @@
       </thead>
       <tbody>
         <tr v-for="(week, weekIndex) in calendarData" :key="weekIndex" >
-          <td v-for="(day, dayIndex) in week" :key="dayIndex" >
+          <td v-for="(day, dayIndex) in week" 
+            :key="dayIndex" 
+            :class="{ 'hover:bg-zinc-800': day }"
+            @click="day && handleDateClick(day)"
+          >
             <p v-if="day">{{ day }}</p>
             <template v-for="event in eventsList">
               <div
                 v-if="getDayFromDateTime(event.start) === day"
-                @click="handleViewMore(event)" 
+                @click.stop="handleViewMore(event)"  
                 class="bg-teal-900 rounded-lg m-1 p-1 "
               >
               {{event.summary?event.summary:'Unamed Event'}}
@@ -419,13 +428,9 @@
 
   #buttonOpenAddEventForm{
     position: fixed;
-    bottom: 20px;
-    left: calc(50vw );
-    transform: translateX(-50%); 
+    right: 12px;
+    top: 90px;
     transform-origin: center;
-    &:active{
-      transform: translateX(-50%) scale(0.98);
-    }
   }
 
   #table_event_daily{
