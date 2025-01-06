@@ -87,7 +87,7 @@
       };
       response = await gapi.client.calendar.events.delete(request);
       if (response.status === 204) {
-        listUpcomingEvents();
+        eventsList.value = eventsList.value.filter(event => event.id !== id);
         event.value = null
       }
     } catch (err) {
@@ -127,7 +127,6 @@
       };
       response = await gapi.client.calendar.events.insert(request);
       if (response.status === 200) {
-        console.log(response);
         createAlert("Your event named " + newEvent.value.title + " has been added successfully.","success")
         newEvent.value = {
             title: '',
@@ -138,7 +137,18 @@
             attendees: []
         }
         participantsList.value = [];
-        listUpcomingEvents();
+      
+        eventsList.value.push(
+          {
+            summary : event.summary,
+            start: event.start.dateTime,
+            end: event.end.dateTime,
+            location: event.location,
+            description: event.description,
+            attendees: event.attendees
+          }
+        )
+
         setNewEventDateTime();
         toggleIsCreating();
       }
