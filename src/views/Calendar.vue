@@ -74,6 +74,7 @@
 
   async function unselectEvent(){
     event.value = null
+    document.body.classList.toggle('no-scroll')
   }
 
   async function handleRemoveEventClick(e, id){
@@ -203,6 +204,7 @@
 
   async function handleViewMore(e){
     event.value = e
+    document.body.classList.toggle('no-scroll')
   }
 
   async function handleChevronClick(step){

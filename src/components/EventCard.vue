@@ -20,6 +20,7 @@
 
 <style scoped>
     #eventCard{
+        user-select: none;
         color: white;
         background-color: rgb(19, 60, 78);
         padding: 6px;
