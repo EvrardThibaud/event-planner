@@ -322,7 +322,7 @@
         <tr v-for="(week, weekIndex) in calendarData" :key="weekIndex" >
           <td v-for="(day, dayIndex) in week" 
             :key="dayIndex" 
-            :class="{ 'hover:bg-zinc-800': day }"
+            :class="{ 'hover:bg-zinc-800 cursor-pointer': day }"
             @click="day && handleDateClick(day)"
           >
             <p v-if="day">{{ day }}</p>
@@ -330,7 +330,6 @@
               <div
                 v-if="getDayFromDateTime(event.start) === day"
                 @click.stop="handleViewMore(event)"  
-                class="bg-teal-900 rounded-lg m-1 p-1 "
               >
               {{event.summary?event.summary:'Unamed Event'}}
               </div>
@@ -517,7 +516,7 @@
           text-overflow: ellipsis;
 
           &:hover {
-            opacity: .9;
+          background-color: #134c5f76;
           }
         }
 

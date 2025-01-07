@@ -22,8 +22,13 @@
     #eventCard{
         user-select: none;
         color: white;
-        background-color: rgb(19, 60, 78);
+        background-color: #133c4e;
         padding: 6px;
+        cursor: pointer;
         border-radius: 10px;
+        
+        &:hover{
+            background-color: #133c4e76;
+        }
     }
 </style>
