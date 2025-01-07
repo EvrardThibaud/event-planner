@@ -1,7 +1,7 @@
 <script setup>
   import { ref, onMounted, computed } from 'vue';
   import { loadScript, gapiLoaded } from '../composable/GoogleAuth.js';
-  import {addTimeToDateTime, calculTimeMin, calculTimeMax, getDayOfWeek,getDayFromDateTime, getMonthInfo, getSortingTime, daysOfTheWeek, formatToTimeName, stepSortingTime, extractHour} from "../composable/DateTime.js";
+  import {addTimeToDateTime, calculTimeMin, calculTimeMax, getDayOfWeek,getDayFromDateTime, getDateFromWeek, getDayNumberFromWeek, getMonthInfo, getSortingTime, daysOfTheWeek, formatToTimeName, stepSortingTime, extractHour} from "../composable/DateTime.js";
   import { createAlert } from '../composable/Alerts.js';
   import Event from '../components/Event.vue';
   import EventCard from '../components/EventCard.vue';
@@ -212,16 +212,25 @@
     listUpcomingEvents()
   }
 
-  async function handleSortingChange(newValue){
+  async function handleSortingChange(){
     sortingTime.value = getSortingTime(sortingType.value)
     listUpcomingEvents()
   }
 
   async function handleDateClick(day){
+    let newSortingTime = ''
+    if (sortingType.value === 'monthly') {
+      const [year, month] = sortingTime.value.split('-');
+      newSortingTime = `${year}-${month}-${String(day).padStart(2, '0')}`;
+    }
+    else if (sortingType.value === 'weekly') {
+      newSortingTime = getDateFromWeek(day,sortingTime.value)
+    } 
+    
     sortingType.value = 'daily';
-    const [year, month] = sortingTime.value.split('-');
-    sortingTime.value = `${year}-${month}-${String(day).padStart(2, '0')}`;
+    sortingTime.value = newSortingTime
     listUpcomingEvents()
+
   }
 
   async function setNewEventDateTime(){
@@ -356,14 +365,17 @@
     </table>
 
     <table v-else-if="sortingType == 'weekly'" id="table_event_weekly">
-      <thead>
-        <tr>
-          <th v-for="day in daysOfTheWeek()">{{ day }}</th>
-        </tr>
-      </thead>
       <tbody >
         <tr>
-          <td class="second_row" v-for="day in daysOfTheWeek()">
+          <td 
+            v-for="day in daysOfTheWeek()" 
+            @click="handleDateClick(day)"
+            class="hover:bg-zinc-800 cursor-pointer" 
+          >
+            <p>
+              {{ day }}
+              {{ getDayNumberFromWeek(day,sortingTime) }}
+            </p>
             <template v-for="event in eventsList">
               <EventCard
                 v-if="event && event.start && getDayOfWeek(event.start) === day"
@@ -516,7 +528,7 @@
           text-overflow: ellipsis;
 
           &:hover {
-          background-color: #134c5f76;
+            background-color: #134c5f76;
           }
         }
 
@@ -534,19 +546,15 @@
     table-layout: fixed; 
     width: 100%;
     border-collapse: collapse;
-
-    thead {
-      font-weight: bold;
-
-      th {
-        padding: 10px;
-        text-align: center;
+    
+    td {
+      
+      p{
+        font-weight: bold;
         text-transform: uppercase;
         font-size: 1.2vw;
       }
-    }
 
-    td {
       padding: 10px;
       text-align: center;
       vertical-align: top;

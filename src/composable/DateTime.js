@@ -305,7 +305,74 @@ export function getMonthInfo(month) {
     };
 }
 
+// receive a dateTime from google api
+// return the date number
 export function getDayFromDateTime(dateTime) {
     const date = new Date(dateTime);
     return date.getDate(); 
+}
+
+// receive a day of the week in commun language and a week in html input
+// return the date number
+export function getDayNumberFromWeek(weekday, isoWeek) {
+    const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+
+    const dayIndex = daysOfWeek.indexOf(weekday);
+    if (dayIndex === -1) {
+        throw new Error('Invalid weekday');
+    }
+
+    const [year, week] = isoWeek.split('-W').map(Number);
+
+    const firstDayOfISOWeek = new Date(Date.UTC(year, 0, 4)); 
+    const dayOfWeek = firstDayOfISOWeek.getUTCDay(); 
+
+
+    const isoWeekStart = new Date(firstDayOfISOWeek);
+    isoWeekStart.setUTCDate(isoWeekStart.getUTCDate() - (dayOfWeek === 0 ? 6 : dayOfWeek - 1)); 
+
+    isoWeekStart.setUTCDate(isoWeekStart.getUTCDate() + (week - 1) * 7 + dayIndex);
+
+    return isoWeekStart.getUTCDate();
+}
+
+// receive a day of the week in commun language and a week in html input
+// return a datetime in html input format
+export function getDateFromWeek(dayName, weekString) {
+    // Vérifier le format de la semaine (yyyy-wxx)
+    if (!/^\d{4}-w\d{2}$/i.test(weekString)) {
+        throw new Error("Le format de la semaine doit être yyyy-wxx");
+    }
+
+    const dayMapping = {
+        'monday': 1,
+        'tuesday': 2,
+        'wednesday': 3,
+        'thursday': 4,
+        'friday': 5,
+        'saturday': 6,
+        'sunday': 7
+    };
+
+    const normalizedDay = dayName.toLowerCase();
+    if (!dayMapping[normalizedDay]) {
+        throw new Error("Le jour doit être un jour de la semaine valide en anglais");
+    }
+
+    const year = parseInt(weekString.substring(0, 4));
+    const week = parseInt(weekString.substring(6, 8));
+
+    const januaryFirst = new Date(year, 0, 1);
+
+    const dayOffset = januaryFirst.getDay() || 7;
+    const firstWeekday = januaryFirst.getDate() - dayOffset + 1;
+
+    const targetDate = new Date(year, 0, firstWeekday + ((week - 1) * 7) + (dayMapping[normalizedDay] - 1));
+
+    let finalYear = targetDate.getFullYear();
+    
+    const month = String(targetDate.getMonth() + 1).padStart(2, '0');
+    const date = String(targetDate.getDate()).padStart(2, '0');
+
+    return `${finalYear}-${month}-${date}`;
 }
