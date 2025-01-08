@@ -1,7 +1,7 @@
 <script setup>
-  import { ref, onMounted, computed } from 'vue';
+  import { ref, onMounted, computed, watch } from 'vue';
   import { loadScript, gapiLoaded } from '../composable/GoogleAuth.js';
-  import {addTimeToDateTime, calculTimeMin, calculTimeMax, getDayOfWeek,getDayFromDateTime, getDateFromWeek, getDayNumberFromWeek, getMonthInfo, getSortingTime, daysOfTheWeek, formatToTimeName, stepSortingTime, extractHour} from "../composable/DateTime.js";
+  import {addTimeToDateTime, calculTimeMin, calculTimeMax, getDayOfWeek, getDayFromDateTime, getDateFromWeek, getDayNumberFromWeek, getMonthInfo, getSortingTime, daysOfTheWeek, formatToTimeName, stepSortingTime, extractHour} from "../composable/DateTime.js";
   import { createAlert } from '../composable/Alerts.js';
   import Event from '../components/Event.vue';
   import EventCard from '../components/EventCard.vue';
@@ -16,7 +16,8 @@
   const isConnected = ref(localStorage.getItem('google_access_token') !== null);
   const noEvent = ref(false)
   const participantsList = ref([]);
-  const sortingType = ref('daily');
+  const sortingType = ref();
+
   const sortingTime = ref()
   const newEvent = ref({
         title: '',
@@ -240,13 +241,6 @@
     newEvent.value.datetime = formattedDateTime;
   }
 
-  async function setSortingTime(){
-    const now = new Date();
-    const localDate = new Date(now.getTime() - now.getTimezoneOffset() * 60000);
-    const formattedDate = localDate.toISOString().slice(0, 10);
-    sortingTime.value = formattedDate;
-  }
-
   async function toggleIsCreating(){
     isCreating.value = !isCreating.value
     document.body.classList.toggle('no-scroll')
@@ -276,13 +270,24 @@
     return calendar
   })
 
+  watch(sortingType, (newValue) => {
+    localStorage.setItem('sorting_type', newValue);
+  });
 
   onMounted(() => {
     loadScript('https://apis.google.com/js/api.js', () => {
       gapiLoaded(listUpcomingEvents); 
     });
+
+    if (localStorage.getItem('sorting_type') === null) {
+      localStorage.setItem('sorting_type', 'daily');
+    } else{
+      sortingType.value = localStorage.getItem('sorting_type')
+    }
+
     setNewEventDateTime();
-    setSortingTime();
+
+    sortingTime.value = getSortingTime(sortingType.value)
   });
 </script>
 
@@ -462,9 +467,6 @@
     }
   }
 
-  #table_event_weekly{
-
-  }
 
   .loader {
     width: 50px;
@@ -514,7 +516,7 @@
         vertical-align: top;
         text-align: left;
         padding: 5px;
-
+        
         div {
           background-color: #134c5f;
           color: #fff;
