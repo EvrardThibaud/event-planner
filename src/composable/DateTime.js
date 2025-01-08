@@ -376,3 +376,13 @@ export function getDateFromWeek(dayName, weekString) {
 
     return `${finalYear}-${month}-${date}`;
 }
+
+export function isTodayMonthly(month, day) {
+    const now = new Date();
+    const localDate = new Date(now.getTime() - now.getTimezoneOffset() * 60000);
+    
+    const currentYearMonth = localDate.toISOString().slice(0, 7); // yyyy-MM
+    const currentDay = localDate.getUTCDate(); // Jour du mois (1-31)
+  
+    return currentYearMonth === month && currentDay === day;
+  }

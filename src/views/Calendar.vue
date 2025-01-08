@@ -1,7 +1,7 @@
 <script setup>
   import { ref, onMounted, computed, watch } from 'vue';
   import { loadScript, gapiLoaded } from '../composable/GoogleAuth.js';
-  import {addTimeToDateTime, calculTimeMin, calculTimeMax, getDayOfWeek, getDayFromDateTime, getDateFromWeek, getDayNumberFromWeek, getMonthInfo, getSortingTime, daysOfTheWeek, formatToTimeName, stepSortingTime, extractHour} from "../composable/DateTime.js";
+  import {addTimeToDateTime, calculTimeMin, calculTimeMax, getDayOfWeek, isTodayMonthly, getDayFromDateTime, getDateFromWeek, getDayNumberFromWeek, getMonthInfo, getSortingTime, daysOfTheWeek, formatToTimeName, stepSortingTime, extractHour} from "../composable/DateTime.js";
   import { createAlert } from '../composable/Alerts.js';
   import Event from '../components/Event.vue';
   import EventCard from '../components/EventCard.vue';
@@ -339,7 +339,10 @@
             :class="{ 'hover:bg-zinc-800 cursor-pointer': day }"
             @click="day && handleDateClick(day)"
           >
-            <p v-if="day">{{ day }}</p>
+            <p v-if="day" >
+              {{ day }}
+              {{ isTodayMonthly(sortingTime,day) ? '(today)' : ''}}
+            </p>
             <template v-for="event in eventsList">
               <div
                 v-if="getDayFromDateTime(event.start) === day"
