@@ -1,7 +1,7 @@
 <script setup>
   import { ref, onMounted, computed, watch } from 'vue';
   import { loadScript, gapiLoaded } from '../composable/GoogleAuth.js';
-  import {addTimeToDateTime, calculTimeMin, calculTimeMax, getDayOfWeek, isTodayMonthly, getDayFromDateTime, getDateFromWeek, getDayNumberFromWeek, getMonthInfo, getSortingTime, daysOfTheWeek, formatToTimeName, stepSortingTime, extractHour} from "../composable/DateTime.js";
+  import {addTimeToDateTime, calculTimeMin, calculTimeMax, getDayOfWeek, isTodayMonthly, getDayFromDateTime, isTodayWeekly, getDateFromWeek, getDayNumberFromWeek, getMonthInfo, getSortingTime, daysOfTheWeek, formatToTimeName, stepSortingTime, extractHour} from "../composable/DateTime.js";
   import { createAlert } from '../composable/Alerts.js';
   import Event from '../components/Event.vue';
   import EventCard from '../components/EventCard.vue';
@@ -380,10 +380,13 @@
             @click="handleDateClick(day)"
             class="hover:bg-zinc-800 cursor-pointer" 
           >
-            <p>
-              {{ day }}
-              {{ getDayNumberFromWeek(day,sortingTime) }}
-            </p>
+          <p>
+            {{ day }}
+            {{ getDayNumberFromWeek(day,sortingTime) }}
+          </p>
+          <p id="today">
+            {{ isTodayWeekly(sortingTime,day) ? '(today)' : '' }}
+          </p>
             <template v-for="event in eventsList">
               <EventCard
                 v-if="event && event.start && getDayOfWeek(event.start) === day"
@@ -489,7 +492,6 @@
     75%   {clip-path: polygon(50% 50%,100% 100%, 100% 100%,  100% 100%, 100% 100%, 50%  100%, 0%   100% )}
     100%  {clip-path: polygon(50% 50%,50%  100%,  50% 100%,   50% 100%,  50% 100%, 50%  100%, 0%   100% )}
   }
-
   @keyframes l20-2{ 
     0%    {transform:scaleY(1)  rotate(0deg)}
     49.99%{transform:scaleY(1)  rotate(135deg)}
@@ -558,6 +560,12 @@
         font-weight: bold;
         text-transform: uppercase;
         font-size: 1.2vw;
+      }
+
+      #today{
+        font-weight: 400;
+        font-size: 14px;
+        text-transform: none;
       }
 
       padding: 10px;

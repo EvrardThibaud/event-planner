@@ -386,3 +386,41 @@ export function isTodayMonthly(month, day) {
   
     return currentYearMonth === month && currentDay === day;
   }
+
+
+export function isTodayWeekly(isoWeek, weekday) {
+    const daysOfWeek = daysOfTheWeek()
+
+    // Vérifier si le jour est valide
+    const dayIndex = daysOfWeek.indexOf(weekday);
+    if (dayIndex === -1) {
+        throw new Error('Invalid weekday');
+    }
+
+    // Extraire l'année et la semaine
+    const [year, week] = isoWeek.split('-W').map(Number);
+    if (!year || !week || week < 1 || week > 53) {
+        throw new Error('Invalid ISO week format');
+    }
+
+    // Trouver le premier jour de la semaine ISO (lundi de la semaine spécifiée)
+    const firstDayOfISOWeek = new Date(Date.UTC(year, 0, 4)); // 4 janvier garantit qu'on est dans la première semaine ISO
+    const dayOfWeek = firstDayOfISOWeek.getUTCDay();
+    const isoWeekStart = new Date(firstDayOfISOWeek);
+    isoWeekStart.setUTCDate(isoWeekStart.getUTCDate() - (dayOfWeek === 0 ? 6 : dayOfWeek - 1)); // Aller au lundi
+
+    // Aller à la semaine voulue
+    isoWeekStart.setUTCDate(isoWeekStart.getUTCDate() + (week - 1) * 7);
+
+    // Aller au jour spécifié
+    const targetDate = new Date(isoWeekStart);
+    targetDate.setUTCDate(targetDate.getUTCDate() + dayIndex);
+
+    // Comparer avec aujourd'hui
+    const today = new Date();
+    return (
+        targetDate.getUTCFullYear() === today.getUTCFullYear() &&
+        targetDate.getUTCMonth() === today.getUTCMonth() &&
+        targetDate.getUTCDate() === today.getUTCDate()
+    );
+}
