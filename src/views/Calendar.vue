@@ -316,6 +316,8 @@
       >
       <span class="material-symbols-outlined hover:cursor-pointer active:scale-95 flex items-center" @click="handleChevronClick(+1)">arrow_forward_ios</span>
     </div>
+    
+    <p class="flex justify-center">{{ getSortingTime(sortingType) === sortingTime ? '(today)' : '' }}</p>
 
     <p v-if="noEvent" class="flex justify-center pt-4 gap-4">
       You don't have any event this 
