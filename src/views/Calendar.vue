@@ -328,7 +328,11 @@
       }}
     </p>
 
-    <table v-if="sortingType === 'monthly'" id="table_event_monthly" >
+    <div v-if="eventLoading" class="w-full fixed top-52 right-0 flex items-center justify-center ">
+      <div class="loader"  ></div> 
+    </div>
+
+    <table v-else-if="sortingType === 'monthly'" id="table_event_monthly" >
       <thead>
         <tr>
           <th v-for="day in daysOfTheWeek()" :key="day">{{ day }}</th>
@@ -410,9 +414,7 @@
       </div>
     </button>
 
-    <div v-if="eventLoading" class="w-full fixed top-52 right-0 flex items-center justify-center ">
-      <div class="loader"  ></div> 
-    </div>
+    
   </section>
 
   <div v-else class="text-gray-200">

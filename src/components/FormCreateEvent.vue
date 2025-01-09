@@ -14,6 +14,10 @@
         'handleDeleteParticipantClick',
         'toggleIsCreating'
       ]);
+    
+    function handleDeleteParticipantClick(i){
+      emit('handleDeleteParticipantClick', i);
+    }
 
     function handleAddEventClick(){
       emit('handleAddEventClick');
@@ -27,9 +31,6 @@
       emit('handleAddParticipant');
     }
 
-    function handleDeleteParticipantClick(){
-      emit('handleDeleteParticipantClick');
-    }
 
     function handleInput(event) {
       emit("update:newParticipant", event.target.value); 
@@ -87,26 +88,26 @@
           ></textarea>
         </div> 
         
-        <form @submit.prevent="submitForm" @submit="handleAddParticipant">
-          <div>
-            <label for="participants">Add participants</label>
-            <ul v-if="participantsList.length !== 0" class="bg-zinc-800 my-2 p-2 w-4/5 rounded">
-              <li class="text-white flex justify-between flex-row" v-for="(participant, i) in participantsList" :key="i">
-                <p> {{ participant.email }} </p>
-                <span class="material-symbols-outlined hover:cursor-pointer active:scale-90" @click="handleDeleteParticipantClick(i)">delete</span>
-              </li>
-            </ul>
-              <input
-              :value="newParticipant"
-              @input="handleInput"
-              type="email"
-              id="participants"
-              placeholder="Participants's email"
-              required
-              ></input>
-              <button class="secondary_button mt-2" @click="handleAddParticipant">Add this particpant</button>
-            </div> 
-          </form>
+        <div>
+          <label for="participants">Add participants</label>
+          <ul v-if="participantsList.length !== 0" class="bg-zinc-800 my-2 p-2 w-4/5 rounded">
+            <li class="text-white flex justify-between flex-row" v-for="(participant, i) in participantsList" :key="i">
+              <p> {{ participant.email }} </p>
+              {{ i }}
+              <span class="material-symbols-outlined hover:cursor-pointer active:scale-90" @click="handleDeleteParticipantClick(i)">delete</span>
+            </li>
+          </ul>
+            <input
+            :value="newParticipant"
+            @input="handleInput"
+            type="email"
+            id="participants"
+            placeholder="Participants's email"
+            required
+            ></input>
+            <button class="secondary_button mt-2" @click="handleAddParticipant">Add this particpant</button>
+          </div> 
+          
           <span class="gap-1 flex ">
             <button class="primary_button" @click="handleAddEventClick">{{ isAdding ? "Adding..." : "Add Event" }}</button>
             <button class="red_button" @click="toggleIsCreating">Cancel</button>
