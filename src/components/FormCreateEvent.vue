@@ -51,22 +51,21 @@
           />
         </div>
         <div>
-          <label for="datetime">Date and time</label>
+          <label for="datetime_start">Start</label>
           <input
-          id="datetime"
+          id="datetime_start"
           type="datetime-local"
-          v-model="newEvent.datetime"
-          :min = newEvent.datetime
+          v-model="newEvent.datetime_start"
           required
           />
         </div>
         <div>
-          <label for="time">Duration</label>
+          <label for="datetime_end">End</label>
           <input
-          id="time"
-          type="time"
-          v-model="newEvent.time"
-          value= "01:00"
+          id="datetime_end"
+          type="datetime-local"
+          v-model="newEvent.datetime_end"
+          :min="newEvent.datetime_start"
           required
           />
         </div>

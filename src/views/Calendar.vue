@@ -21,8 +21,8 @@
   const sortingTime = ref()
   const newEvent = ref({
         title: '',
-        datetime: '',
-        time: '01:00',
+        datetime_start: '',
+        datetime_end: '',
         location: '',
         description: '',
         attendees: []
@@ -103,7 +103,7 @@
   async function handleAddEventClick() {
     isAdding.value = true;
 
-    if (!newEvent.value.datetime || !newEvent.value.time){
+    if (!newEvent.value.datetime_start || !newEvent.value.datetime_end){
       isAdding.value = false;
       return;
     }
@@ -113,11 +113,11 @@
       location: newEvent.value.location,
       description: newEvent.value.description,
       start: {
-        dateTime: newEvent.value.datetime + ':00+01:00',  
+        dateTime: newEvent.value.datetime_start + ':00+01:00',  
         timeZone: 'Europe/London', 
       },
       end: {
-        dateTime: addTimeToDateTime(newEvent.value.datetime,newEvent.value.time) + ':00+01:00',  
+        dateTime: newEvent.value.datetime_end + ':00+01:00',  
         timeZone: 'Europe/London',  
       },
       attendees: participantsList.value,
@@ -134,8 +134,8 @@
         createAlert("Your event named " + newEvent.value.title + " has been added successfully.","success")
         newEvent.value = {
             title: '',
-            datetime: '',
-            time: '01:00',
+            datetime_start: '',
+            datetime_end: '01:00',
             location: '',
             description: '',
             attendees: []
@@ -231,7 +231,8 @@
     const now = new Date();
     const localDate = new Date(now.getTime() - now.getTimezoneOffset() * 60000);
     const formattedDateTime = localDate.toISOString().slice(0, 16); 
-    newEvent.value.datetime = formattedDateTime;
+    newEvent.value.datetime_start = formattedDateTime;
+    newEvent.value.datetime_end = formattedDateTime;
   }
 
   async function toggleIsCreating(){
