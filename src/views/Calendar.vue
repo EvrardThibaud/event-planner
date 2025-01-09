@@ -90,9 +90,12 @@
       if (response.status === 204) {
         eventsList.value = eventsList.value.filter(event => event.id !== id);
         event.value = null
+        createAlert("The event have been deleted",'success')
       }
     } catch (err) {
       console.log(err);
+      e.target.innerText = 'Delete this event';
+      createAlert("Failed to delete the event. Try to reload the page.",'error')
       return;
     }
   }
@@ -138,18 +141,8 @@
             attendees: []
         }
         participantsList.value = [];
-      
-        eventsList.value.push(
-          {
-            summary : event.summary,
-            start: event.start.dateTime,
-            end: event.end.dateTime,
-            location: event.location,
-            description: event.description,
-            attendees: event.attendees
-          }
-        )
 
+        listUpcomingEvents()
         setNewEventDateTime();
         toggleIsCreating();
       }

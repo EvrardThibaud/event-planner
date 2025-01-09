@@ -21,6 +21,8 @@
         return null;
     });
 
+    console.log(props.event.attendees);
+
     const emit = defineEmits(['modifyEvent', 'handleRemoveEventClick','unselectEvent']);
 
     const emitRemoveEvent = (event, eventId) => {
@@ -45,7 +47,9 @@
     }
 
     async function handleAddParticipant(){
+        console.log(props.event.attendees);
         props.event.attendees.push({email : newParticipant.value});
+        console.log(props.event.attendees);
         newParticipant.value = '';
     }
 
@@ -101,25 +105,22 @@
                         placeholder="Describe your event"
                         ></textarea>
                     </div> 
-                    <!-- <form class="w-full" @submit.prevent="submitForm" @submit="handleAddParticipant"> 
-                        <div>
-                            <label for="participants">Add participants</label>
-                            <ul v-if="props.event.attendees" class="bg-zinc-800 my-2 p-2 w-4/5 rounded">
-                                <li class="text-white flex justify-between flex-row" v-for="(attender, i) in props.event.attendees" :key="i">
-                                    <p> {{ attender.email }} </p>
-                                    <i class="fa-solid fa-trash" @click="handeDeleteParticipantClick(i)"></i>
-                                </li>
-                            </ul>
-                            <input
-                                v-model="newParticipant"
-                                type="email"
-                                id="participants"
-                                placeholder="Participants's email"
-                                required
-                            ></input>
-                            <button id="secondary_button">Add this particpant</button>
-                        </div> 
-                    </form> -->
+                    <div>
+                        <label for="participants">Add participants</label>
+                        <ul v-if="props.event.attendees" class="bg-zinc-800 my-2 p-2 w-4/5 rounded">
+                            <li class="text-white flex justify-between flex-row" v-for="(attender, i) in props.event.attendees" :key="i">
+                                <p> {{ attender.email }} </p>
+                                <span class="material-symbols-outlined hover:cursor-pointer active:scale-90" @click="handleDeleteParticipantClick(i)">delete</span>
+                            </li>
+                        </ul>
+                        <input
+                            v-model="newParticipant"
+                            type="email"
+                            id="participants"
+                            placeholder="Participants's email"  
+                        ></input>
+                        <button @click="handleAddParticipant" class="secondary_button">Add this particpant</button>
+                    </div> 
                     <button class="primary_button" @click="handleModifyEventClick">Save Modification</button>
                 </form>
             </div>
