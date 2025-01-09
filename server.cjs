@@ -15,7 +15,6 @@ const mailjet = Mailjet.apiConnect(
 
 app.post('/send-email', async (req, res) => {
     const { from, to, subject, HTMLPart } = req.body; 
-    console.log(from);
 
     try {
         const request = mailjet.post('send', { version: 'v3.1' }).request({
