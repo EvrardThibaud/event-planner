@@ -42,16 +42,7 @@
       try {
           result.value = await chat.sendMessage(tempPrompt);
           console.log('Message envoyé avec succès:', result.value);
-          now = new Date();
-          const apiResponse = {
-            parts: [{text :result.value.response.text()}],
-            datetime: now.toLocaleString(),
-            role: "model",
-          };
-          typing.value = false
-          messages.value = [...messages.value, apiResponse];
-          scrollToBottom()
-      } catch (error) {
+        } catch (error) {
           console.log(error);
           createAlert("An error occurred while sending the message. Please try again.","error")
           typing.value = false
@@ -62,6 +53,15 @@
       createAlert("Failed to retrieve the chat history. Please try refreshing the page.","error")
     }
     
+    now = new Date();
+    const apiResponse = {
+      parts: [{text :result.value.response.text()}],
+      datetime: now.toLocaleString(),
+      role: "model",
+    };
+    typing.value = false
+    messages.value = [...messages.value, apiResponse];
+    scrollToBottom()
     
   }
 
