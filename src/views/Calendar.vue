@@ -68,7 +68,7 @@
       end: event.end?.dateTime || event.end?.date || null,
       location: event.location || null, 
       description: event.description || null, 
-      attendees: event.attendees || null,
+      attendees: event.attendees || [],
     }));
     eventsList.value.push(...output);
   }
@@ -166,7 +166,7 @@
         dateTime: event.value.end,  
         timeZone: 'Europe/London',  
       },
-      attendees: event.attendees,
+      attendees: event.value.attendees,
     }
     
     let response;

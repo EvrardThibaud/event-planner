@@ -7,6 +7,8 @@
     const props = defineProps({
         event: Object,
     })
+
+
     const startEndDisplayFormatted = computed(() => {
         if (props.event && props.event.start && props.event.end) {
             return formatEventDateTimes(props.event.start, props.event.end);
@@ -21,7 +23,6 @@
         return null;
     });
 
-    console.log(props.event.attendees);
 
     const emit = defineEmits(['modifyEvent', 'handleRemoveEventClick','unselectEvent']);
 
@@ -46,10 +47,13 @@
         modifying.value = !modifying.value;
     }
 
+
+    async function handleDeleteParticipantClick(i){
+        props.event.attendees.splice(i,1);
+    }
+
     async function handleAddParticipant(){
-        console.log(props.event.attendees);
         props.event.attendees.push({email : newParticipant.value});
-        console.log(props.event.attendees);
         newParticipant.value = '';
     }
 
@@ -107,7 +111,7 @@
                     </div> 
                     <div>
                         <label for="participants">Add participants</label>
-                        <ul v-if="props.event.attendees" class="bg-zinc-800 my-2 p-2 w-4/5 rounded">
+                        <ul v-if="props.event.attendees && props.event.attendees.length > 0" class="bg-zinc-800 my-2 p-2 w-4/5 rounded">
                             <li class="text-white flex justify-between flex-row" v-for="(attender, i) in props.event.attendees" :key="i">
                                 <p> {{ attender.email }} </p>
                                 <span class="material-symbols-outlined hover:cursor-pointer active:scale-90" @click="handleDeleteParticipantClick(i)">delete</span>
@@ -125,18 +129,19 @@
                 </form>
             </div>
             <div class="text-white" v-else>
-                <p v-if="props.event.summary">📋 {{ props.event.summary }}</p>
+                <p>📋{{ props.event.summary || 'Unamed Event' }}</p>
                 <p v-if="startEndDisplayFormatted.length === 1">⏰ {{ startEndDisplayFormatted[0]}}</p>
                 <p v-else>⏰ {{ startEndDisplayFormatted[0] + " - " + startEndDisplayFormatted[1]}}</p>
-                <p v-if="props.event.location">📍 {{ props.event.location }}</p>
-                <p v-if="props.event.description">📝 {{ props.event.description }}</p>
-                <div v-if="props.event.attendees">
+                <p >📍 {{ props.event.location || 'No Location' }}</p>
+                <p >📝 {{ props.event.description || 'No Description' }}</p>
+                <div >
                     <p>👤 Attendees :</p>
-                    <ul>
+                    <ul v-if="props.event.attendees && props.event.attendees.length > 0">
                         <li v-for="(attender, i) in props.event.attendees" :key="i">
                             - {{ attender.email }}
                         </li>
                     </ul>
+                    <p v-else>No attendees</p>
                 </div>
             </div>
             <div class="flex flex-col">

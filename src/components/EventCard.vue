@@ -10,7 +10,7 @@
 <template>
     <div id="eventCard" >
         
-        <p class="text-lg font-medium " >📋{{ props.event.summary }}</p>
+        <p class="text-lg font-medium " >📋{{ props.event.summary ? props.event.summary : 'Unamed Event' }}</p>
         <p class="text-sm" v-for="(text, i) in formatEventDateTimes(props.event.start,event.end)" :key="i" >
             ⏰ {{text}}
         </p>
