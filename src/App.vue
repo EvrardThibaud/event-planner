@@ -15,7 +15,7 @@
   
   <div class="h-14 w-full"></div>
   
-  <main class="bg-zinc-900 ">
+  <main class="bg-zinc-900 flex flex-col justify-center items-center">
     <RouterView></RouterView>
   </main>
   

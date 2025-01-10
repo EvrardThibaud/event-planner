@@ -10,12 +10,11 @@
     </h1>
   </section>
   
-  <section class=" w-1/2 pt-28 pb-12 flex flex-wrap gap-2">
+  <section class=" w-1/2 pt-28 pb-12 flex flex-wrap flex-col gap-2">
     <h2 class="text-green-300">Our Team</h2>
     <div class=" flex flex-wrap gap-2">
-      <MemberCard></MemberCard>
-      <MemberCard :name="'Thibaud'" :src="'../../public/thibaudevrard.svg'" ></MemberCard>
-      <MemberCard :name="'Mateo'" :src="'../../public/petitcroco.png'" ></MemberCard>
+      <MemberCard :name="'Mateo'" :src="'../../public/mateomartin.jpg'" ></MemberCard>
+      <MemberCard :name="'Thibaud'" :src="'../../public/thibaudevrard.jpg'" ></MemberCard>
     </div>
 
   </section>
@@ -36,7 +35,7 @@
 
     <section>
       <RouterLink :to="{name: 'ContactUs'}" >
-        <button class="m-12 h-10 w-24 text-green-50 bg-green-900 rounded">Contact Us ></button>
+        <button class="primary_button">Contact Us</button>
       </RouterLink>
     </section>
 

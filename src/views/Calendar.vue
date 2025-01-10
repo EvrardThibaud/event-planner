@@ -388,14 +388,11 @@
             {{ day }}
             {{ getDayNumberFromWeek(day,sortingTime) }}
           </p>
-          <!-- <p id="today">
-            {{ isTodayWeekly(sortingTime,day) ? '(today)' : '' }}
-          </p> -->
             <template v-for="event in eventsList">
               <EventCard
                 v-if="event && event.start && getDayOfWeek(event.start) === day"
                 :key="event.id"
-                @click="handleViewMore(event)"
+                @click.stop="handleViewMore(event)"
                 :event="event"
                 class="my-2"
               />
