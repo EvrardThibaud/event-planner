@@ -48,7 +48,7 @@
       response = await gapi.client.calendar.events.list(request);
     } 
     catch (err) {
-      createAlert("Try to reconnect on the google auth page","error",undefined,"Undefined tockenClient")
+      createAlert("Try to reconnect on the profile page","error",undefined,"Undefined tockenClient")
       return;
     }
 

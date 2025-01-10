@@ -14,16 +14,6 @@
     </section>
 
     <section class=" w-1/2 pt-12 pb-12 flex flex-col gap-5">
-        <h2 class="text-green-300">Link EventPlanner+ to your google account :</h2>
-        <p class="text-gray-200 text-justify">
-
-        </p>
-        <RouterLink class="hover:text-green-300 text-gray-200" :to="{name: 'GoogleAuth'}" >
-            Link
-        </RouterLink>
-    </section>
-
-    <section class=" w-1/2 pt-12 pb-12 flex flex-col gap-5">
         <h2 class="text-green-300">Event Management</h2>
         <p class="text-gray-200 text-justify">
             With <bold class="font-bold text-green-300">EventPlanner+</bold>, creating, modifying, and tracking your events is a breeze. Add essential details such as the title, date, time, location, and description, and edit them in real time. You can also invite other users directly through the platform or via email, ensuring seamless coordination.

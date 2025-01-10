@@ -16,10 +16,13 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="text-white">
-    <h1>Google Auth with Persistence</h1>
-    <button ref="authorize_button" id="authorize_button" class="primary_button" @click="handleAuthClick">Authorize</button>
-    <button ref="signout_button" id="signout_button" class="red_button" @click="handleSignoutClick">Sign Out</button>
+  <div class="flex flex-col gap-4 text-gray-200 p-24">
+    <h1 class="text-xl">Connect</h1>
+    <p>To use the EventPlanner+ calendar and events service, you must sign in with Google.</p>
+    <div>
+      <button ref="authorize_button" id="authorize_button" class="primary_button" @click="handleAuthClick">Sign In with Google</button>
+      <button ref="signout_button" id="signout_button" class="red_button" @click="handleSignoutClick">Sign Out</button>
+    </div>
   </div>
 </template>
 

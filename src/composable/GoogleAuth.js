@@ -1,7 +1,7 @@
 import { createAlert } from "./Alerts";
 const API_KEY = 'AIzaSyAdn8fbCMXxyOat2ZyWkmVed54w_Q6tgqg';
-const CLIENT_ID = '241948682819-u21tselap4mi8p5u1ktvd0453begefdr.apps.googleusercontent.com';
-const SCOPES = 'https://www.googleapis.com/auth/calendar';
+export const CLIENT_ID = '241948682819-u21tselap4mi8p5u1ktvd0453begefdr.apps.googleusercontent.com';
+export const SCOPES = 'https://www.googleapis.com/auth/calendar';
 const DISCOVERY_DOC = 'https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest';
 let tokenClient;
 let gapiInited = false;
@@ -37,7 +37,7 @@ async function initializeGapiClient(listUpcomingEvents) {
         const authorizeButton = document.getElementById('authorize_button')
         if (signoutButton && authorizeButton){
             signoutButton.style.visibility = 'visible';
-            authorizeButton.innerText = 'Refresh';
+            authorizeButton.innerText = 'Refresh the connexion';
         } 
 
         const toConnect = document.getElementById('to_connect')
