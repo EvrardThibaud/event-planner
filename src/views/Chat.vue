@@ -67,7 +67,7 @@
 
   const scrollToBottom = () => {
     setTimeout(() => {
-      messagesBox.scrollTo(0, document.body.scrollHeight);
+      messagesBox.value.scrollTo(0, messagesBox.value.scrollHeight);
     }, 0);
   };
 
