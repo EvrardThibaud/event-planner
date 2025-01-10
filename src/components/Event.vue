@@ -1,6 +1,7 @@
 <script setup>
     import {formatToDatetimeLocal, formatEventDateTimes} from "../composable/DateTime.js";
     import { defineProps, ref,computed, defineEmits } from 'vue'
+    import { createAlert } from "../composable/Alerts.js";
 
     const newParticipant = ref('');
     const modifying = ref(false)
@@ -53,6 +54,12 @@
     }
 
     async function handleAddParticipant(){
+        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailPattern.test(newParticipant.value)) {
+            createAlert('Please enter a valid email address.','error');
+            return;
+        }
+
         props.event.attendees.push({email : newParticipant.value});
         newParticipant.value = '';
     }
@@ -123,9 +130,9 @@
                             id="participants"
                             placeholder="Participants's email"  
                         ></input>
-                        <button @click="handleAddParticipant" class="secondary_button">Add this particpant</button>
+                        <button type="button" @click="handleAddParticipant" class="secondary_button">Add this particpant</button>
                     </div> 
-                    <button class="primary_button" @click="handleModifyEventClick">Save Modification</button>
+                    <button type="submit" class="primary_button" @click="handleModifyEventClick">Save Modification</button>
                 </form>
             </div>
             <div class="text-white" v-else>
