@@ -1,7 +1,7 @@
 <script setup>
   import { ref, onMounted, computed, watch } from 'vue';
   import { loadScript, gapiLoaded } from '../composable/GoogleAuth.js';
-  import {addTimeToDateTime, calculTimeMin, calculTimeMax, getDayOfWeek, isTodayMonthly, getDayFromDateTime, isTodayWeekly, getDateFromWeek, getDayNumberFromWeek, getMonthInfo, getSortingTime, daysOfTheWeek, formatToTimeName, stepSortingTime, extractHour} from "../composable/DateTime.js";
+  import {calculTimeMin, calculTimeMax, getDayOfWeek, isTodayMonthly, getDayFromDateTime, isTodayWeekly, getDateFromWeek, getDayNumberFromWeek, getMonthInfo, getSortingTime, daysOfTheWeek, formatToTimeName, stepSortingTime, extractHour} from "../composable/DateTime.js";
   import { createAlert } from '../composable/Alerts.js';
   import Event from '../components/Event.vue';
   import EventCard from '../components/EventCard.vue';
@@ -188,8 +188,13 @@
   }
 
   async function handleAddParticipant(){
-    participantsList.value.push({email : newParticipant.value});
-    newParticipant.value = '';
+      const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailPattern.test(newParticipant.value)) {
+        createAlert('Please enter a valid email address.','error');
+        return;
+      }
+      participantsList.value.push({ email: newParticipant.value });
+      newParticipant.value = '';
   }
 
   async function handleDeleteParticipantClick(i){

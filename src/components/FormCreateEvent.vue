@@ -36,10 +36,11 @@
       emit("update:newParticipant", event.target.value); 
     }
 
+
 </script>
 
 <template>
-    <form @submit.prevent="submitForm" id="form_add_event">
+    <form @submit.prevent="handleAddEventClick" id="form_add_event">
         <h2 class="text-gray-300 font-bold text-2xl">Add an Event</h2>
         <div>
           <label for="title">Title</label>
@@ -95,20 +96,20 @@
               <span class="material-symbols-outlined hover:cursor-pointer active:scale-90" @click="handleDeleteParticipantClick(i)">delete</span>
             </li>
           </ul>
-            <input
+          <input
             :value="newParticipant"
             @input="handleInput"
             type="email"
             id="participants"
             placeholder="Participants's email"
-            ></input>
-            <button class="secondary_button mt-2" @click="handleAddParticipant">Add this particpant</button>
-          </div> 
-          
-          <span class="gap-1 flex ">
-            <button class="primary_button" @click="handleAddEventClick">{{ isAdding ? "Adding..." : "Add Event" }}</button>
-            <button class="red_button" @click="toggleIsCreating">Cancel</button>
-          </span>
+          ></input>
+          <button type="button" class="secondary_button mt-2" @click="handleAddParticipant">Add this particpant</button>
+        </div> 
+        
+        <span class="gap-1 flex ">
+          <button class="primary_button">{{ isAdding ? "Adding..." : "Add Event" }}</button>
+          <button type="submit" class="red_button" @click="toggleIsCreating">Cancel</button>
+        </span>
       </form>
 </template>
 
