@@ -67,7 +67,7 @@
 
   const scrollToBottom = () => {
     setTimeout(() => {
-      window.scrollTo(0, document.body.scrollHeight);
+      messagesBox.scrollTo(0, document.body.scrollHeight);
     }, 0);
   };
 
@@ -78,7 +78,6 @@
     },
     { deep: true } 
   );
-
 
   onMounted(() => {
     const savedMessages = localStorage.getItem("messages");
@@ -101,7 +100,7 @@
 </script>
 
 <template>
-  <section class="w-full flex justify-center">
+  <section class="w-full flex justify-center items-center flex-col">
     <div v-if="messages.length !== 0" id="messagesBox" ref="messagesBox">
       <Message  v-for="(message, i) in messages" :key="i" 
         :text="message.parts[0].text"
@@ -128,15 +127,21 @@
 </template>
 
 <style scoped>
+  #test{
+    background-color: red;
+    height: 100px;
+    width: 100px;
+    overflow: scroll;
+  }
+
   #noMessage{
      height: calc(80vh - 56px);
   }
 
   form{
     background-color: #18181b;
-    position: fixed;
-    top: 80vh;
-    width: 100vw;
+    /* position: fixed; */
+    width: 100%;
     height: 20vh;
     display: flex;
     justify-content: center;
@@ -144,12 +149,13 @@
   }
 
   #messagesBox{
-    /* height: calc(80vh - 56px); */
-    margin-bottom: 20vh;
+    margin-bottom :10vh 0;
     width: calc(60vw);
     display: flex;
-    justify-content: end;
     flex-direction: column;
+    overflow-y: auto;
+    height: 80vh;
+    padding-bottom: 30px;
   }
 
   #typingMessage{
