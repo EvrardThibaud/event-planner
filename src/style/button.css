@@ -35,7 +35,6 @@ button{
 /* PRIMARY BUTTON */
 
 .primary_button{
-    width: fit-content;
     background-color: #86efac;
     font-weight: 600;
 }
@@ -43,7 +42,6 @@ button{
 /* SECONDARY BUTTON */
  
 .secondary_button{
-    width: fit-content;
     background-color: #d1d5db;
     font-weight: normal;
 }

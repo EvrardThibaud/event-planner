@@ -66,18 +66,18 @@
     async function submitForm(){
       sendMailToUser()
       sendMailToTeam()
-      // form.value.title = ''
-      // form.value.email = ''
-      // form.value.content = ''
+      form.value.title = ''
+      form.value.email = ''
+      form.value.content = ''
       createAlert('Your message has been successfully sent. You should receive a confirmation email shortly.', 'success');
     };
 
 </script>
 
 <template>
-    <h1 class="text-2xl text-gray-300">Contact Us</h1>
-    <div id="contact_container">
-      <form @submit.prevent="submitForm" class="w-1/2">
+  <div id="contact_container">
+    <form @submit.prevent="submitForm" class="w-full">
+        <h1 class="text-2xl text-gray-300 text-center">Contact Us</h1>
         <div>
           <label for="title" >Title</label>
           <input
@@ -110,7 +110,7 @@
         </div>
   
         <button
-          class="primary_button"
+          class="primary_button w-full"
           type="submit"
         >
           Submit
