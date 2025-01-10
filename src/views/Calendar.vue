@@ -295,7 +295,7 @@
     <h1 class="text-gray-300 font-bold text-2xl">Calendar</h1>
     
     <div class="flex justify-center">
-      <select name="" id="" v-model="sortingType" class="text-gray-800 " @change="handleSortingChange" >
+      <select name="" id="" v-model="sortingType" class="text-zinc-900 " @change="handleSortingChange" >
         <option value="daily">Daily</option>
         <option value="weekly">Weekly</option>
         <option value="monthly">Monthly</option>
@@ -344,9 +344,8 @@
             :class="{ 'hover:bg-zinc-800 cursor-pointer': day }"
             @click="day && handleDateClick(day)"
           >
-            <p v-if="day" >
+            <p v-if="day"  :class="{'bg-green-200  size-5 flex justify-center items-center rounded-full text-zinc-900' : isTodayMonthly(sortingTime,day)}">
               {{ day }}
-              {{ isTodayMonthly(sortingTime,day) ? '(today)' : ''}}
             </p>
             <template v-for="event in eventsList">
               <div
@@ -385,13 +384,13 @@
             @click="handleDateClick(day)"
             class="hover:bg-zinc-800 cursor-pointer" 
           >
-          <p>
+          <p :class="{'bg-green-200   flex justify-center items-center rounded-full text-zinc-900' : isTodayWeekly(sortingTime,day)}">
             {{ day }}
             {{ getDayNumberFromWeek(day,sortingTime) }}
           </p>
-          <p id="today">
+          <!-- <p id="today">
             {{ isTodayWeekly(sortingTime,day) ? '(today)' : '' }}
-          </p>
+          </p> -->
             <template v-for="event in eventsList">
               <EventCard
                 v-if="event && event.start && getDayOfWeek(event.start) === day"
