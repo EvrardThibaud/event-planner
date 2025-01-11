@@ -27,6 +27,7 @@ button{
     
         &:hover{
             opacity: 0.5;
+            scale: 1;
         }
     }
 }

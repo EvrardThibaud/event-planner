@@ -232,6 +232,11 @@
 
   }
 
+  async function handleTodayClick(){
+    sortingTime.value = getSortingTime(sortingType.value)
+    listUpcomingEvents() 
+  }
+
   async function setNewEventDateTime(){
     const now = new Date();
     const localDate = new Date(now.getTime() - now.getTimezoneOffset() * 60000);
@@ -291,8 +296,8 @@
 </script>
 
 <template>
-  <section v-if="isConnected" id="section_calendar" class="px-4 " >
-    <h1 class="text-gray-300 font-bold text-2xl">Calendar</h1>
+  <h1 class="text-gray-300 font-bold text-2xl w-full px-4">Calendar</h1>
+  <section v-if="isConnected" id="section_calendar" class="px-4 w-full" >
     
     <div class="flex justify-center">
       <select name="" id="" v-model="sortingType" class="text-zinc-900 " @change="handleSortingChange" >
@@ -300,7 +305,6 @@
         <option value="weekly">Weekly</option>
         <option value="monthly">Monthly</option>
       </select>
-
     </div>
     
     <div v-if="sortingTime && sortingType" class="flex justify-center  pt-4 gap-4 select-none">
@@ -315,8 +319,6 @@
       >
       <span class="material-symbols-outlined hover:cursor-pointer active:scale-95 flex items-center" @click="handleChevronClick(+1)">arrow_forward_ios</span>
     </div>
-    
-    <p v-if="getSortingTime(sortingType) === sortingTime && sortingType === 'daily'" class="flex justify-center">(today)</p>
 
     <p v-if="noEvent" class="flex justify-center pt-4 gap-4">
       You don't have any event this 
@@ -402,17 +404,23 @@
       </tbody>
     </table>
 
-    <button class="primary_button" id="buttonOpenAddEventForm" @click="toggleIsCreating">
-      <div class="flex items-center">
-        <span class="material-symbols-outlined">add</span>
-        <p>Create a new event</p>
-      </div>
-    </button>
-
+    <div class="buttonCalendarePageFixed">
+      <button class=" primary_button" @click="toggleIsCreating">
+        <div class="flex items-center">
+          <span class="material-symbols-outlined">add</span>
+          <p>Create a new event</p>
+        </div>
+      </button>
+      
+      <button  class=' secondary_button' :disabled="getSortingTime(sortingType) === sortingTime" @click="handleTodayClick">
+        Today
+      </button>
+    </div>
+      
     
   </section>
 
-  <div v-else class="text-gray-200">
+  <div v-else class="text-gray-200 p-14 flex flex-col gap-4">
     <p>You can't see any calendar because you are not connected</p>
     <RouterLink    :to="{name: 'GoogleAuth'}" >
       <button class="primary_button">Click here to connect.</button>
@@ -449,11 +457,13 @@
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   }
 
-  #buttonOpenAddEventForm{
+  .buttonCalendarePageFixed{
     position: fixed;
     right: 12px;
     top: 90px;
-    transform-origin: center;
+    display: flex;
+    align-items: end;
+    flex-direction: column
   }
 
   #table_event_daily{
