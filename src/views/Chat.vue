@@ -95,6 +95,8 @@
     chat = model.startChat({
       history: history
     });
+
+    scrollToBottom()
   });
 
 </script>
