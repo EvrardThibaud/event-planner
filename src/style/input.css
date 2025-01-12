@@ -17,7 +17,7 @@ input, textarea, select{
     outline: none;
 
 }
-@media (max-width: 600px) {
+@media (max-width: 768px) {
     select {
         min-width: fit-content;
     }

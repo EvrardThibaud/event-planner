@@ -17,6 +17,7 @@
   const noEvent = ref(false)
   const participantsList = ref([]);
   const sortingType = ref();
+  const screenWidth = ref(window.innerWidth);
 
   const sortingTime = ref()
   const newEvent = ref({
@@ -274,19 +275,16 @@
     return calendar
   })
  
-  const screenWidth = ref(window.innerWidth);
 
-  // Recalculer la taille de l'écran lors du redimensionnement
   window.addEventListener('resize', () => {
     screenWidth.value = window.innerWidth;
   });
 
-  // Fonction pour tronquer le texte en fonction de la largeur de l'écran
   const truncatedDay = (day) => {
-    if (screenWidth.value < 600) {
-      return day.substring(0, 3); // Limite à 3 caractères si l'écran est plus petit que 600px
+    if (screenWidth.value < 769) {
+      return day.substring(0, 3); 
     }
-    return day; // Affiche le texte complet sinon
+    return day; 
   };
 
   watch(sortingType, (newValue) => {
@@ -478,13 +476,14 @@
     top: 90px;
     display: flex;
     align-items: end;
-    flex-direction: column
+    flex-direction: column;
+    z-index: 1;
 
     p {
       display: block;
     }
 
-    @media (max-width: 600px) {
+    @media (max-width: 768px) {
       p {
         display: none;
       }
@@ -608,8 +607,8 @@
       border-right: 1px solid #e0e0e0;
       border-left: 1px solid #e0e0e0;
 
-      @media (max-width: 600px) {
-          padding: 10px 0 0 0;
+      @media (max-width: 768px) {
+          padding: 10px 2px 0 2px;
 
           p{
             font-size: x-small;

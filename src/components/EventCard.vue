@@ -73,7 +73,7 @@
 }
 
 /* Pour les petits écrans (moins de 600px), on masque les dates */
-@media (max-width: 600px) {
+@media (max-width: 768px) {
     #eventCard p.text-sm {
         display: none;
     }

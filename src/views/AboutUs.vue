@@ -10,14 +10,14 @@
     </h1>
   </section>
   
-  <section class=" w-1/2 pt-28 pb-12 flex flex-wrap flex-col gap-2">
-    <h2 class="text-green-300">Our Team</h2>
-    <div class=" flex flex-wrap gap-2">
-      <MemberCard :name="'MARTIN Mateo'" :src="'../../public/mateomartin.jpg'" :dsc="'Mateo Martin, visionary CEO of Event Planner, turns every event into a unique experience. Passionate about innovation, he combines creativity and expertise to elevate every key moment.'"></MemberCard>
-      <MemberCard :name="'EVRARD Thibaud'" :src="'../../public/thibaudevrard.jpg'" :dsc="'Thibaud Evrard, head of the Web Development Department, drives digital innovation. Passionate about technology and strategy, he crafts cutting-edge solutions to elevate Event Planner\'s online presence.'" ></MemberCard>
-    </div>
+    <section class=" w-1/2 pt-28 pb-12 flex flex-wrap flex-col gap-2">
+      <h2 class="text-green-300">Our Team</h2>
+      <div class=" flex flex-wrap gap-2">
+        <MemberCard :name="'MARTIN Mateo'" :src="'../../public/mateomartin.jpg'" :dsc="'Mateo Martin, visionary CEO of Event Planner, turns every event into a unique experience. Passionate about innovation, he combines creativity and expertise to elevate every key moment.'"></MemberCard>
+        <MemberCard :name="'EVRARD Thibaud'" :src="'../../public/thibaudevrard.jpg'" :dsc="'Thibaud Evrard, head of the Web Development Department, drives digital innovation. Passionate about technology and strategy, he crafts cutting-edge solutions to elevate Event Planner\'s online presence.'" ></MemberCard>
+      </div>
 
-  </section>
+    </section>
 
     <section class=" w-1/2 pt-12 pb-12 flex flex-col gap-5">
         <h2 class="text-green-300">Our Mission</h2>
@@ -38,6 +38,8 @@
         <button class="primary_button">Contact Us</button>
       </RouterLink>
     </section>
+
+    
 
 </template>
 

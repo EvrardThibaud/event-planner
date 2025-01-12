@@ -163,7 +163,7 @@
     border-bottom-right-radius: 10px;
   }
 
-  @media (max-width: 600px) {
+  @media (max-width: 768px) {
     #messagesBox{
       width: 100%;
     } 
