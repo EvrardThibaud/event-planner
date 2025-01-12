@@ -15,4 +15,10 @@ input, textarea, select{
     border-radius: 5px;
     background-color: #d1d5db;
     outline: none;
+
+}
+@media (max-width: 600px) {
+    select {
+        min-width: fit-content;
+    }
 }

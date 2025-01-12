@@ -464,6 +464,16 @@
     display: flex;
     align-items: end;
     flex-direction: column
+
+    p {
+      display: block;
+    }
+
+    @media (max-width: 600px) {
+      p {
+        display: none;
+      }
+    }
   }
 
   #table_event_daily{
@@ -582,13 +592,17 @@
       vertical-align: top;
       border-right: 1px solid #e0e0e0;
       border-left: 1px solid #e0e0e0;
+
+      @media (max-width: 600px) {
+          padding: 10px 0 0 0;
+      }
       
       &:first-child {
-        border-left: none;  /* Retirer la bordure gauche du premier <td> */
+        border-left: none;  
       }
   
       &:last-child {
-        border-right: none;  /* Retirer la bordure droite du dernier <td> */
+        border-right: none;  
       }
     }
   }
