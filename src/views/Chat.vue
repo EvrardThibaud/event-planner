@@ -163,6 +163,12 @@
     border-bottom-right-radius: 10px;
   }
 
+  @media (max-width: 600px) {
+    #messagesBox{
+      width: 100%;
+    } 
+  }
+
   #typingMessage{
     border-radius: 10px;
     padding: 6px;

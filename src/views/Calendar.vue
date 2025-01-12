@@ -273,6 +273,21 @@
 
     return calendar
   })
+ 
+  const screenWidth = ref(window.innerWidth);
+
+  // Recalculer la taille de l'écran lors du redimensionnement
+  window.addEventListener('resize', () => {
+    screenWidth.value = window.innerWidth;
+  });
+
+  // Fonction pour tronquer le texte en fonction de la largeur de l'écran
+  const truncatedDay = (day) => {
+    if (screenWidth.value < 600) {
+      return day.substring(0, 3); // Limite à 3 caractères si l'écran est plus petit que 600px
+    }
+    return day; // Affiche le texte complet sinon
+  };
 
   watch(sortingType, (newValue) => {
     localStorage.setItem('sorting_type', newValue);
@@ -387,7 +402,7 @@
             class="hover:bg-zinc-800 cursor-pointer" 
           >
           <p :class="{'bg-green-200   flex justify-center items-center rounded-full text-zinc-900' : isTodayWeekly(sortingTime,day)}">
-            {{ day }}
+            {{ truncatedDay(day) }}
             {{ getDayNumberFromWeek(day,sortingTime) }}
           </p>
             <template v-for="event in eventsList">
@@ -595,6 +610,10 @@
 
       @media (max-width: 600px) {
           padding: 10px 0 0 0;
+
+          p{
+            font-size: x-small;
+          }
       }
       
       &:first-child {
