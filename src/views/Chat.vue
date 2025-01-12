@@ -141,7 +141,6 @@
   }
 
   form{
-    background-color: #18181b;
     /* position: fixed; */
     width: 100%;
     height: 20vh;
@@ -151,13 +150,17 @@
   }
 
   #messagesBox{
+    
+    background-color: #35404d;
     margin-bottom :10vh 0;
     width: calc(60vw);
     display: flex;
     flex-direction: column;
     overflow-y: auto;
     height: 80vh;
-    padding-bottom: 30px;
+    padding: 10px 10px 30px 10px;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
   }
 
   #typingMessage{
