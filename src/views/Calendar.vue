@@ -417,20 +417,29 @@
       </tbody>
     </table>
 
-    <div class="buttonCalendarePageFixed">
-      <button class=" primary_button" @click="toggleIsCreating">
-        <div class="flex items-center">
-          <span class="material-symbols-outlined">add</span>
-          <p>Create a new event</p>
-        </div>
-      </button>
-      
-      <button  class=' secondary_button' :disabled="getSortingTime(sortingType) === sortingTime" @click="handleTodayClick">
-        Today
-      </button>
+    <FormCreateEvent v-if="isCreating"
+    :newEvent="newEvent" 
+    :participantsList="participantsList" 
+    :isAdding="isAdding"
+    v-model:newParticipant="newParticipant"
+    @handleAddEventClick="handleAddEventClick"
+    @handleAddParticipant="handleAddParticipant"
+    @handleDeleteParticipantClick="handleDeleteParticipantClick"
+    @toggleIsCreating="toggleIsCreating"
+    />
+    <div v-else class="buttonCalendarePageFixed">
+        <button class=" primary_button" @click="toggleIsCreating">
+          <div class="flex items-center">
+            <span class="material-symbols-outlined">add</span>
+            <p>Create a new event</p>
+          </div>
+        </button>
+        
+        <button  class=' secondary_button' :disabled="getSortingTime(sortingType) === sortingTime" @click="handleTodayClick">
+          Today
+        </button>
     </div>
-      
-    
+
   </section>
 
   <div v-else class="text-gray-200 p-14 flex flex-col gap-4">
@@ -440,16 +449,7 @@
     </RouterLink>
   </div>
 
-  <FormCreateEvent v-if="isCreating"
-    :newEvent="newEvent" 
-    :participantsList="participantsList" 
-    :isAdding="isAdding"
-    v-model:newParticipant="newParticipant"
-    @handleAddEventClick="handleAddEventClick"
-    @handleAddParticipant="handleAddParticipant"
-    @handleDeleteParticipantClick="handleDeleteParticipantClick"
-    @toggleIsCreating="toggleIsCreating"
-  />
+  
 
   <Event v-if="event" 
     :event="event" 
