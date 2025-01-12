@@ -59,4 +59,9 @@
 </template>
 
 <style scoped>
+    /* @media (max-width: 600px) {
+    section {
+      background-color: red;
+    }
+  } */
 </style>
