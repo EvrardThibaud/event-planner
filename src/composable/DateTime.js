@@ -173,7 +173,7 @@ export function getSortingTime(sortingType) {
       case "weekly":
         const firstDayOfYear = new Date(year, 0, 1);
         const pastDaysOfYear = Math.floor((localDate - firstDayOfYear) / 86400000);
-        const weekNumber = Math.ceil((pastDaysOfYear + firstDayOfYear.getDay() + 1) / 7);
+        const weekNumber = Math.ceil((pastDaysOfYear + firstDayOfYear.getDay() ) / 7);
         return `${year}-W${String(weekNumber).padStart(2, '0')}`;
   
       case "monthly":
