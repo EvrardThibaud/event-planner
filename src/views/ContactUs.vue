@@ -1,21 +1,24 @@
 <script setup>
-    import { ref } from 'vue';
-    import axios from 'axios';
-    import { createAlert } from '../composable/Alerts';
+import { ref } from "vue";
+import axios from "axios";
+import { createAlert } from "../composable/Alerts";
 
-    const form = ref({
-        title: '',
-        email: '',
-        content: ''
-    });
+const form = ref({
+  title: "",
+  email: "",
+  content: "",
+});
 
-    async function sendMailToUser(){
-      try {
-        await axios.post('http://localhost:3000/send-email', {
-          from: { email: 'webprojecteventplanner@gmail.com', name: 'EventPlanner+ Support' },
-          to: { email: form.value.email, name: 'client' },
-          subject: `EventPlanner+ ticket : ${form.value.title}`,
-          HTMLPart: `
+async function sendMailToUser() {
+  try {
+    await axios.post("http://localhost:3000/send-email", {
+      from: {
+        email: "webprojecteventplanner@gmail.com",
+        name: "EventPlanner+ Support",
+      },
+      to: { email: form.value.email, name: "client" },
+      subject: `EventPlanner+ ticket : ${form.value.title}`,
+      HTMLPart: `
             <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
               <h2 style="color: #4CAF50;">Thank You for Contacting Us!</h2>
               <p>Hello <strong>Valued User</strong>,</p>
@@ -28,20 +31,29 @@
               <p>Best regards,<br><strong>The Event Planner Team</strong></p>
               <hr>
               <p style="font-size: 0.9em; color: #888;">This is an automated email, please do not reply directly to this message.</p>
-            </div>`
-        });
-      } catch (error) {
-        console.error('Failed to send email:', error.response ? error.response.data : error.message);
-      }
-    }
+            </div>`,
+    });
+  } catch (error) {
+    console.error(
+      "Failed to send email:",
+      error.response ? error.response.data : error.message
+    );
+  }
+}
 
-    async function sendMailToTeam(){
-      try {
-        await axios.post('http://localhost:3000/send-email', {
-          from: { email: 'webprojecteventplanner@gmail.com', name: 'EventPlanner+ Support' },
-          to: { email: 'webprojecteventplanner@gmail.com', name: 'EventPlanner+ Support' },
-          subject: `ticket : ${form.value.title}`,
-          HTMLPart: `
+async function sendMailToTeam() {
+  try {
+    await axios.post("http://localhost:3000/send-email", {
+      from: {
+        email: "webprojecteventplanner@gmail.com",
+        name: "EventPlanner+ Support",
+      },
+      to: {
+        email: "webprojecteventplanner@gmail.com",
+        name: "EventPlanner+ Support",
+      },
+      subject: `ticket : ${form.value.title}`,
+      HTMLPart: `
             <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
               <h2 style="color: #d9534f;">New Support Ticket Created</h2>
               <p>Hello Team,</p>
@@ -55,85 +67,81 @@
               <p>Best regards,<br><strong>Automated Notification System</strong></p>
               <hr>
               <p style="font-size: 0.9em; color: #888;">This is an automated notification. Please do not reply directly to this email.</p>
-            </div>`
-        });
-      } catch (error) {
-        console.error('Failed to send email:', error.response ? error.response.data : error.message);
-      }
-      
-    }
-    
-    async function submitForm(){
-      sendMailToUser()
-      sendMailToTeam()
-      form.value.title = ''
-      form.value.email = ''
-      form.value.content = ''
-      createAlert('Your message has been successfully sent. You should receive a confirmation email shortly.', 'success');
-    };
+            </div>`,
+    });
+  } catch (error) {
+    console.error(
+      "Failed to send email:",
+      error.response ? error.response.data : error.message
+    );
+  }
+}
 
+async function submitForm() {
+  sendMailToUser();
+  sendMailToTeam();
+  form.value.title = "";
+  form.value.email = "";
+  form.value.content = "";
+  createAlert(
+    "Your message has been successfully sent. You should receive a confirmation email shortly.",
+    "success"
+  );
+}
 </script>
 
 <template>
   <div id="contact_container">
     <form @submit.prevent="submitForm" class="w-full">
-        <h1 class="text-2xl text-gray-300 text-center">Contact Us</h1>
-        <div>
-          <label for="title" >Title</label>
-          <input
-            type="text"
-            v-model="form.title"
-            placeholder="Enter the title"
-            required
-          />
-        </div>
-  
-        <div>
-          <label for="email" >Email</label>
-          <input
-            type="email"
-            v-model="form.email"
-            placeholder="Enter your email"
-            required
-          />
-        </div>
-  
-        <div>
-          <label for="content" >Content</label>
-          <textarea
-            id="content"
-            v-model="form.content"
-            placeholder="Write your message"
-            required
-            rows="4"
-          ></textarea>
-        </div>
-  
-        <button
-          class="primary_button w-full"
-          type="submit"
-        >
-          Submit
-        </button>
-      </form>
-    </div>
+      <h1 class="text-2xl text-gray-300 text-center">Contact Us</h1>
+      <div>
+        <label for="title">Title</label>
+        <input
+          type="text"
+          v-model="form.title"
+          placeholder="Enter the title"
+          required
+        />
+      </div>
+
+      <div>
+        <label for="email">Email</label>
+        <input
+          type="email"
+          v-model="form.email"
+          placeholder="Enter your email"
+          required
+        />
+      </div>
+
+      <div>
+        <label for="content">Content</label>
+        <textarea
+          id="content"
+          v-model="form.content"
+          placeholder="Write your message"
+          required
+          rows="4"
+        ></textarea>
+      </div>
+
+      <button class="primary_button w-full" type="submit">Submit</button>
+    </form>
+  </div>
 </template>
 
 <style scoped>
+#contact_container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 25vh 25vw;
 
-  #contact_container{
-
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 25vh 25vw;
-
-    form{
-      div{
-        display: flex;
-        flex-direction: column;
-      }
+  form {
+    div {
+      display: flex;
+      flex-direction: column;
     }
   }
-
+}
 </style>

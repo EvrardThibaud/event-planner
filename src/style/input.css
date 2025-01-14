@@ -1,24 +1,26 @@
-label{
-    color: #d1d5db;
-    font-weight: 500;
-    font-size: large;
+label {
+  color: #d1d5db;
+  font-weight: 500;
+  font-size: large;
 }
 
-input, textarea, select{
-    min-width: 300px;
-    min-height: 40px;
-    height: 40px;
-    max-height: 100px;
-    color: #18181b;
-    padding: 6px;
-    border: 2px solid #18181b;
-    border-radius: 5px;
-    background-color: #d1d5db;
-    outline: none;
-
+input,
+textarea,
+select {
+  min-width: 300px;
+  min-height: 40px;
+  height: 40px;
+  max-height: 100px;
+  color: #18181b;
+  padding: 6px;
+  border: 2px solid #18181b;
+  border-radius: 5px;
+  background-color: #d1d5db;
+  outline: none;
 }
+
 @media (max-width: 768px) {
-    select {
-        min-width: fit-content;
-    }
+  select {
+    min-width: fit-content;
+  }
 }

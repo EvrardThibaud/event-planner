@@ -1,38 +1,36 @@
 export function createAlert(content, type) {
-    const alertsBox = document.getElementById("alertsBox");
-  
-    const alertDiv = document.createElement("div");
-    alertDiv.classList.add("alert");
-    alertDiv.classList.add(type);
-  
-    const progressBar = document.createElement("div");
-    progressBar.classList.add("progress-bar");
+  const alertsBox = document.getElementById("alertsBox");
 
-    alertDiv.innerHTML = `${content}`;
+  const alertDiv = document.createElement("div");
+  alertDiv.classList.add("alert");
+  alertDiv.classList.add(type);
 
-    alertDiv.appendChild(progressBar);
-  
-    alertsBox.appendChild(alertDiv);
-  
-    let timeLeft = 5; 
-    const intervalDuration = 10; 
+  const progressBar = document.createElement("div");
+  progressBar.classList.add("progress-bar");
 
-    const interval = setInterval(() => {
-    timeLeft -= intervalDuration / 1000; 
-    progressBar.style.width = `calc(${(timeLeft / 5) * 100}% + 8px)`; 
-    
+  alertDiv.innerHTML = `${content}`;
+
+  alertDiv.appendChild(progressBar);
+
+  alertsBox.appendChild(alertDiv);
+
+  let timeLeft = 5;
+  const intervalDuration = 10;
+
+  const interval = setInterval(() => {
+    timeLeft -= intervalDuration / 1000;
+    progressBar.style.width = `calc(${(timeLeft / 5) * 100}% + 8px)`;
+
     if (timeLeft <= 0) {
-        clearInterval(interval);
-        alertDiv.classList.remove('show');
-        setTimeout(() => {
+      clearInterval(interval);
+      alertDiv.classList.remove("show");
+      setTimeout(() => {
         alertsBox.removeChild(alertDiv);
-        }, 500);
+      }, 500);
     }
-    }, intervalDuration); 
+  }, intervalDuration);
 
-  
-    setTimeout(() => {
-      alertDiv.classList.add('show');
-    }, 10);
-  }
-  
+  setTimeout(() => {
+    alertDiv.classList.add("show");
+  }, 10);
+}

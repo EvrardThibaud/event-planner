@@ -47,8 +47,7 @@
         }
         modifying.value = !modifying.value;
     }
-
-
+    
     async function handleDeleteParticipantClick(i){
         props.event.attendees.splice(i,1);
     }
