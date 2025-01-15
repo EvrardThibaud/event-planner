@@ -5,7 +5,7 @@ export const CLIENT_ID =
 export const SCOPES = "https://www.googleapis.com/auth/calendar";
 const DISCOVERY_DOC =
   "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest";
-let tokenClient;
+export let tokenClient;
 let gapiInited = false;
 let gisInited = false;
 
@@ -53,7 +53,7 @@ async function initializeGapiClient(listUpcomingEvents) {
     }
   }
 
-  if (listUpcomingEvents) {
+  if (typeof listUpcomingEvents === "function") {
     listUpcomingEvents();
   }
 }
