@@ -86,6 +86,7 @@ export async function handleAuthClick() {
 
     document.getElementById("signout_button").style.visibility = "visible";
     document.getElementById("authorize_button").innerText = "Refresh";
+    createAlert('Your are now connected !','success')
   };
 
   if (gapi.client.getToken() === null) {
