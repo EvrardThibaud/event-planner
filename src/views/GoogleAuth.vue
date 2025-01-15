@@ -24,7 +24,7 @@ onMounted(() => {
 <template>
   <div class="flex flex-col gap-4 text-gray-200 p-24 w-1/2">
     <h1 class="text-xl">Connect</h1>
-    <p>
+    <p class="text-justify">
       To use the calendar and event features of EventPlanner+, you must sign in
       with your Google account. Once that's done, head over to the
       <RouterLink :to="{ name: 'Calendar' }" class="text-green-300"> Calendar Page </RouterLink> on the

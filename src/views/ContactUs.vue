@@ -91,9 +91,9 @@ async function submitForm() {
 </script>
 
 <template>
+  <h1 class="text-gray-300 font-bold text-2xl w-full px-4">Contact Us</h1>
   <div id="contact_container">
     <form @submit.prevent="submitForm" class="w-full">
-      <h1 class="text-2xl text-gray-300 text-center">Contact Us</h1>
       <div>
         <label for="title">Title</label>
         <input

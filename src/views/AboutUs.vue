@@ -3,13 +3,11 @@ import MemberCard from "../components/MemberCard.vue";
 </script>
 
 <template>
-  <section class="w-1/2 pt-28 pb-12 flex flex-col gap-5">
-    <h1 class="w-full text-center text-5xl text-green-300">About Us</h1>
-  </section>
+  <h1 class="text-gray-300 font-bold text-2xl w-full px-4">About Us</h1>
 
-  <section class="w-1/2 pt-28 pb-12 flex flex-wrap flex-col gap-2">
+  <section  class="w-1/2 pt-28 pb-12 flex flex-wrap flex-col gap-2">
     <h2 class="text-green-300">Our Team</h2>
-    <div class="flex flex-wrap gap-2">
+    <div id="memberscard_container" class="flex flex-wrap gap-2">
       <MemberCard
         :name="'MARTIN Mateo'"
         :src="'../../public/mateomartin.jpg'"
@@ -54,4 +52,12 @@ import MemberCard from "../components/MemberCard.vue";
   </section>
 </template>
 
-<style scoped></style>
+<style scoped>
+
+@media (max-width: 768px) {
+  #memberscard_container {
+    justify-content: center;
+  }
+}
+  
+</style>
