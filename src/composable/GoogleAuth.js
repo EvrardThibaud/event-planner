@@ -86,7 +86,7 @@ export async function handleAuthClick() {
 
     document.getElementById("signout_button").style.visibility = "visible";
     document.getElementById("authorize_button").innerText = "Refresh";
-    createAlert('Your are now connected !','success')
+    createAlert("Login successful! Welcome back.", "success");
   };
 
   if (gapi.client.getToken() === null) {
@@ -105,5 +105,6 @@ export function handleSignoutClick() {
 
     document.getElementById("authorize_button").innerText = "Authorize";
     document.getElementById("signout_button").style.visibility = "hidden";
+    createAlert("Logout successful! See you next time.", "success");
   }
 }
