@@ -92,7 +92,7 @@ async function submitForm() {
 
 <template>
   <h1 class="text-gray-300 font-bold text-2xl w-full px-4">Contact Us</h1>
-  <section id="contact_container">
+  <section >
     <form @submit.prevent="submitForm" class="w-full">
       <div>
         <label for="title">Title</label>
@@ -131,11 +131,7 @@ async function submitForm() {
 </template>
 
 <style scoped>
-#contact_container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 25vh 25vw;
+section {
 
   form {
     div {

@@ -41,8 +41,8 @@
 
     async function handleModifyEventClick() {
         if (modifying.value) {
-            props.event.start = startEndInputFormatted.value[0] + ":00+01:00";
-            props.event.end = startEndInputFormatted.value[1] + ":00+01:00";
+            props.event.start = startEndInputFormatted.value[0];
+            props.event.end = startEndInputFormatted.value[1];
             emit('modifyEvent', props.event);
         }
         modifying.value = !modifying.value;
