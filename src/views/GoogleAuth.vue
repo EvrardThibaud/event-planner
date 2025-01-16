@@ -22,7 +22,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <h1 class="text-gray-300 font-bold text-2xl w-full px-4">Log In</h1>
+  <h1 class=" font-bold text-2xl w-full px-4">Log In</h1>
   <section class="w-1/2 pt-28 pb-12 flex flex-col gap-5">
     <p class="text-justify">
       To use the calendar and event features of EventPlanner+, you must sign in

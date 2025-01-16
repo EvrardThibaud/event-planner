@@ -39,7 +39,7 @@ async function initializeGapiClient(listUpcomingEvents) {
     const authorizeButton = document.getElementById("authorize_button");
     if (signoutButton && authorizeButton) {
       signoutButton.style.visibility = "visible";
-      authorizeButton.innerText = "Refresh the connexion";
+      authorizeButton.innerText = "Refresh the connection";
     }
 
     const toConnect = document.getElementById("to_connect");

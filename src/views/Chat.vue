@@ -125,7 +125,7 @@ onMounted(() => {
     <div
       v-else
       id="noMessage"
-      class="text-white w-full flex justify-center items-center opacity-70"
+      class=" w-full flex justify-center items-center opacity-70"
     >
       <p>It’s quiet here, send a message!</p>
     </div>

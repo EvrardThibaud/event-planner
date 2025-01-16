@@ -7,7 +7,7 @@
       <bold class="font-bold">EventPlanner+</bold>
     </h1>
 
-    <p class="text-gray-200 text-justify">
+    <p class=" text-justify">
       Welcome to <bold class="font-bold text-green-300">EventPlanner+</bold>,
       the ultimate platform for online event management! Whether you're an event
       organizer or a participant, EventPlanner+ streamlines event planning and
@@ -21,7 +21,7 @@
 
   <section >
     <h2 class="text-green-300">Event Management</h2>
-    <p class="text-gray-200 text-justify">
+    <p class="text-justify">
       With <bold class="font-bold text-green-300">EventPlanner+</bold>,
       creating, modifying, and tracking your events is a breeze. Add essential
       details such as the title, date, time, location, and description, and edit
@@ -39,7 +39,7 @@
 
   <section>
     <h2 class="text-green-300">Interactive Calendar</h2>
-    <p class="text-gray-200 text-justify">
+    <p class=" text-justify">
       Our interactive calendar allows you to view your events in multiple
       formats (monthly, weekly, or daily), giving you a clear view of your
       schedule. Simply click on an event to see its details. You can also add
@@ -54,7 +54,7 @@
 
   <section >
     <h2 class="text-green-300">Chat System</h2>
-    <p class="text-gray-200 text-justify">
+    <p class=" text-justify">
       Stay connected with participants through
       <bold class="font-bold text-green-300">EventPlanner+</bold>’s built-in
       chat system. The chat interface enables real-time communication, allowing

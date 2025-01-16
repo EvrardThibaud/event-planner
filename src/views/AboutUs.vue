@@ -3,7 +3,7 @@ import MemberCard from "../components/MemberCard.vue";
 </script>
 
 <template>
-  <h1 class="text-gray-300 font-bold text-2xl w-full px-4">About Us</h1>
+  <h1 class=" font-bold text-2xl w-full px-4">About Us</h1>
 
   <section>
     <h2 class="text-green-300">Our Team</h2>
@@ -23,7 +23,7 @@ import MemberCard from "../components/MemberCard.vue";
 
   <section >
     <h2 class="text-green-300">Our Mission</h2>
-    <p class="text-gray-200 text-justify">
+    <p class=" text-justify">
       Our mission at
       <bold class="font-bold text-green-300">EventPlanner+</bold> is to
       revolutionize the way events are organized and managed by providing a
@@ -35,7 +35,7 @@ import MemberCard from "../components/MemberCard.vue";
 
   <section>
     <h2 class="text-green-300">Our Vision</h2>
-    <p class="text-gray-200 text-justify">
+    <p class=" text-justify">
       We envision <bold class="font-bold text-green-300">EventPlanner+</bold> as
       the go-to solution for event planning worldwide, fostering stronger
       connections and collaboration. By integrating advanced tools like

@@ -18,7 +18,7 @@ function handleToggleNavmenu() {
     <span class="material-symbols-outlined"> menu </span>
   </button>
 
-  <nav id="navbar" class="text-1xl text-gray-200 w-1/2 flex justify-evenly">
+  <nav id="navbar" class="text-1xl w-1/2 flex justify-evenly">
     <RouterLink class="hover:text-green-300" :to="{ name: 'Home' }">
       Home
     </RouterLink>
