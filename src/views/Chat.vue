@@ -157,10 +157,6 @@ onMounted(() => {
   overflow: scroll;
 }
 
-#noMessage {
-  height: calc(80vh - 56px);
-}
-
 form {
   /* position: fixed; */
   width: 100%;

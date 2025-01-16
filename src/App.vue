@@ -22,7 +22,7 @@ import Footer from "./components/Footer.vue";
     <NavBar />
 
     <RouterLink
-      class="hover:text-green-300 text-gray-200"
+      class="hover:text-green-300 "
       :to="{ name: 'GoogleAuth' }"
     >
       <span class="material-symbols-outlined text-3xl size-10">
