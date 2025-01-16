@@ -1,7 +1,7 @@
 <script setup></script>
 
 <template>
-  <section class="w-1/2 pt-28 pb-12 flex flex-col gap-5">
+  <section class="">
     <h1 class="w-full text-center text-green-300">
       Welcome To <br />
       <bold class="font-bold">EventPlanner+</bold>
@@ -19,7 +19,7 @@
     </p>
   </section>
 
-  <section class="w-1/2 py-12 flex flex-col gap-5">
+  <section >
     <h2 class="text-green-300">Event Management</h2>
     <p class="text-gray-200 text-justify">
       With <bold class="font-bold text-green-300">EventPlanner+</bold>,
@@ -37,7 +37,7 @@
     </div>
   </section>
 
-  <section class="w-1/2 pt-12 pb-12 flex flex-col gap-5">
+  <section>
     <h2 class="text-green-300">Interactive Calendar</h2>
     <p class="text-gray-200 text-justify">
       Our interactive calendar allows you to view your events in multiple
@@ -52,7 +52,7 @@
     </div>
   </section>
 
-  <section class="w-1/2 pt-12 pb-12 flex flex-col gap-5">
+  <section >
     <h2 class="text-green-300">Chat System</h2>
     <p class="text-gray-200 text-justify">
       Stay connected with participants through

@@ -5,7 +5,7 @@ import MemberCard from "../components/MemberCard.vue";
 <template>
   <h1 class="text-gray-300 font-bold text-2xl w-full px-4">About Us</h1>
 
-  <section  class="w-1/2 pt-28 pb-12 flex flex-wrap flex-col gap-2">
+  <section>
     <h2 class="text-green-300">Our Team</h2>
     <div id="memberscard_container" class="flex flex-wrap gap-2">
       <MemberCard
@@ -21,7 +21,7 @@ import MemberCard from "../components/MemberCard.vue";
     </div>
   </section>
 
-  <section class="w-1/2 pt-12 pb-12 flex flex-col gap-5">
+  <section >
     <h2 class="text-green-300">Our Mission</h2>
     <p class="text-gray-200 text-justify">
       Our mission at
@@ -33,7 +33,7 @@ import MemberCard from "../components/MemberCard.vue";
     </p>
   </section>
 
-  <section class="w-1/2 pt-12 pb-12 flex flex-col gap-5">
+  <section>
     <h2 class="text-green-300">Our Vision</h2>
     <p class="text-gray-200 text-justify">
       We envision <bold class="font-bold text-green-300">EventPlanner+</bold> as
@@ -45,7 +45,7 @@ import MemberCard from "../components/MemberCard.vue";
     </p>
   </section>
 
-  <section class="pb-12">
+  <section class="text-center">
     <RouterLink :to="{ name: 'ContactUs' }">
       <button class="primary_button">Contact Us</button>
     </RouterLink>

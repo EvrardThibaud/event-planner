@@ -92,7 +92,7 @@ async function submitForm() {
 
 <template>
   <h1 class="text-gray-300 font-bold text-2xl w-full px-4">Contact Us</h1>
-  <div id="contact_container">
+  <section id="contact_container">
     <form @submit.prevent="submitForm" class="w-full">
       <div>
         <label for="title">Title</label>
@@ -127,7 +127,7 @@ async function submitForm() {
 
       <button class="primary_button w-full" type="submit">Submit</button>
     </form>
-  </div>
+  </section>
 </template>
 
 <style scoped>

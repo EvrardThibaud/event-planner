@@ -22,8 +22,8 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="flex flex-col gap-4 text-gray-200 p-24 w-1/2">
-    <h1 class="text-xl">Connect</h1>
+  <h1 class="text-gray-300 font-bold text-2xl w-full px-4">Log In</h1>
+  <section class="w-1/2 pt-28 pb-12 flex flex-col gap-5">
     <p class="text-justify">
       To use the calendar and event features of EventPlanner+, you must sign in
       with your Google account. Once that's done, head over to the
@@ -48,7 +48,7 @@ onMounted(() => {
         Sign Out
       </button>
     </div>
-  </div>
+  </section>
 </template>
 
 <style scoped></style>

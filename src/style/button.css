@@ -1,9 +1,7 @@
 /* BUTTON */
 button {
   width: fit-content;
-  min-height: 40px;
-  height: 40px;
-  max-height: 100px;
+  height: fit-content;
   color: #18181b;
   padding: 6px;
   border: 2px solid #18181b;
