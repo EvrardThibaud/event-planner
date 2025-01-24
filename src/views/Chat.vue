@@ -11,7 +11,24 @@ const messagesBox = ref(null);
 const textarea = ref(null);
 const result = ref(null);
 const prompt = ref("");
-const messages = ref([]);
+const messages = ref([
+  // {
+  //   role: "user",
+  //   parts: [{ text: "Hi" }],
+  // },
+  // {
+  //   role: "model",
+  //   parts: [{ text: "Hi there! What's on your mind? 😊" }],
+  // },
+  // {
+  //   role: "user",
+  //   parts: [{ text: "What's up ?" }],
+  // },
+  // {
+  //   role: "model",
+  //   parts: [{ text: "Not much, just here to help you out! What about you? 😊" }],
+  // },
+]);
 const typing = ref(false);
 var chat = null;
 
@@ -105,7 +122,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <section class="w-full flex justify-center items-center flex-col">
+  <section class="w-full flex justify-center items-center flex-col pt-0">
     <div v-if="messages.length !== 0" id="messagesBox" ref="messagesBox">
       <Message
         v-for="(message, i) in messages"
@@ -125,7 +142,7 @@ onMounted(() => {
     <div
       v-else
       id="noMessage"
-      class=" w-full flex justify-center items-center opacity-70"
+      class="w-full flex justify-center items-center opacity-70"
     >
       <p>It’s quiet here, send a message!</p>
     </div>
